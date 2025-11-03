@@ -1,0 +1,158 @@
+/* src/Home.css */
+
+/* 1. 기본 스타일: 다크 테마 설정 (전체 페이지 배경) */
+.home-container {
+  background-color: #0d1117;
+  color: #f0f6fc;
+  font-family: "Arial", sans-serif;
+  min-height: 100vh;
+  padding-top: 50px;
+  overflow: hidden;
+}
+
+/* 2. 히어로 섹션 (Header) */
+.hero-section {
+  /* 이미지는 Home.js에서 style={ { backgroundImage: ... } } 로 설정 */
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+  /* 영역 높이 (이전 단계에서 설정한 값 유지) */
+  padding: 250px 20px;
+  margin-bottom: 50px;
+  border-bottom: 5px solid #00aaff;
+  position: relative;
+  z-index: 1;
+}
+
+/* 이미지 위에 덮을 오버레이 (투명도를 50% -> 20%로 낮춤) */
+.hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* 투명도 20%의 검은색 오버레이 (이미지가 더 선명하게 보임) */
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: -1;
+}
+
+/* 텍스트 스타일 */
+.hero-title {
+  font-size: 5rem;
+  font-weight: 900;
+  color: #ffffff;
+  /* UI의 빛나는 효과 */
+  text-shadow: 0 0 15px rgba(0, 170, 255, 0.8), 0 0 5px rgba(0, 170, 255, 0.5);
+  margin-bottom: 10px;
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  color: #cccccc;
+  margin-bottom: 40px;
+}
+
+/* 버튼 스타일 */
+.hero-actions a {
+  text-decoration: none;
+  padding: 15px 30px;
+  margin: 0 15px;
+  border-radius: 5px;
+  font-weight: bold;
+  display: inline-block;
+  transition: background-color 0.3s, transform 0.1s;
+  font-size: 1.1rem;
+}
+
+.pre-purchase-btn {
+  background-color: #00aaff;
+  color: #0d1117;
+  border: 2px solid #00aaff;
+}
+
+.pre-purchase-btn:hover {
+  background-color: #33bbff;
+  transform: translateY(-2px);
+}
+
+.learn-more-btn {
+  background-color: transparent;
+  color: #00aaff;
+  border: 2px solid #00aaff;
+}
+
+.learn-more-btn:hover {
+  background-color: rgba(0, 170, 255, 0.15);
+}
+
+/* 3. 주요 기능 섹션 (카드/타일 레이아웃) */
+.features-section {
+  padding: 50px 20px;
+  text-align: center;
+  background-color: #0d1117;
+}
+
+.features-title {
+  font-size: 2.5rem;
+  color: #f0f6fc;
+  margin-bottom: 40px;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background-color: #161b22;
+  padding: 30px;
+  border-radius: 8px;
+  text-align: left;
+  border-left: 5px solid #00aaff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 170, 255, 0.2);
+}
+
+.feature-card h3 {
+  color: #00aaff;
+  margin-top: 0;
+  font-size: 1.5rem;
+}
+
+.feature-card p {
+  color: #cccccc;
+  font-size: 0.95rem;
+}
+
+/* 4. 커뮤니티 섹션 */
+.community-section {
+  text-align: center;
+  padding: 80px 20px;
+  background-color: #161b22;
+  margin-top: 50px;
+}
+
+.join-fmfc-btn {
+  text-decoration: none;
+  display: inline-block;
+  padding: 12px 30px;
+  background-color: #00aaff;
+  color: #0d1117;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-top: 30px;
+  transition: background-color 0.3s;
+}
+
+.join-fmfc-btn:hover {
+  background-color: #33bbff;
+}
