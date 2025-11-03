@@ -1,0 +1,129 @@
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 100px);
+  padding: 40px 20px;
+  background-color: #f8f8f8;
+}
+
+.signup-box {
+  width: 100%;
+  max-width: 500px;
+  background-color: white;
+  padding: 50px 45px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.signup-title {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 40px;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.signup-input {
+  width: 100%;
+  padding: 15px 18px;
+  font-size: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.signup-input:focus {
+  border-color: #333;
+}
+
+.signup-input::placeholder {
+  color: #999;
+}
+
+.signup-error {
+  color: #e74c3c;
+  font-size: 13px;
+  margin-top: -8px;
+  margin-bottom: 5px;
+  padding-left: 5px;
+}
+
+.signup-submit-btn {
+  width: 100%;
+  padding: 15px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 10px;
+  transition: background-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.signup-submit-btn:hover {
+  background-color: #555;
+}
+
+.signup-login-link {
+  text-align: center;
+  margin-top: 25px;
+  padding-top: 25px;
+  border-top: 1px solid #e0e0e0;
+  color: #666;
+  font-size: 14px;
+}
+
+.signup-login-link a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 5px;
+  transition: color 0.2s ease;
+}
+
+.signup-login-link a:hover {
+  color: #555;
+  text-decoration: underline;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .signup-container {
+    padding: 20px 15px;
+  }
+
+  .signup-box {
+    padding: 40px 30px;
+  }
+
+  .signup-title {
+    font-size: 1.5rem;
+    margin-bottom: 35px;
+  }
+
+  .signup-input {
+    padding: 13px 16px;
+    font-size: 14px;
+  }
+
+  .signup-submit-btn {
+    padding: 13px;
+    font-size: 14px;
+  }
+
+  .signup-error {
+    font-size: 12px;
+  }
+}
