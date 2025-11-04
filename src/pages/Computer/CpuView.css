@@ -1,0 +1,182 @@
+/* 상세보기 컨텐츠 */
+.cpu-view-content {
+  flex: 1;
+  padding: 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* 상단 헤더 */
+.view-header {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.view-header h1 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* 정보 섹션 */
+.info-section,
+.spec-section {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.info-section h2,
+.spec-section h2 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #007bff;
+  margin: 0 0 20px 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #007bff;
+}
+
+/* 테이블 공통 스타일 */
+.info-table,
+.spec-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.info-table tbody tr,
+.spec-table tbody tr {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.info-table tbody tr:last-child,
+.spec-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.info-label,
+.spec-label {
+  width: 200px;
+  padding: 16px 20px;
+  font-weight: 600;
+  color: #555;
+  background-color: #f8f9fa;
+  vertical-align: middle;
+}
+
+.info-value,
+.spec-value {
+  padding: 16px 20px;
+  color: #333;
+}
+
+.no-specs {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+  font-style: italic;
+}
+
+/* 하단 버튼 영역 */
+.view-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 30px 0;
+}
+
+.list-btn,
+.edit-btn,
+.delete-btn,
+.back-btn {
+  padding: 12px 30px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.list-btn,
+.back-btn {
+  background-color: #6c757d;
+  color: white;
+}
+
+.list-btn:hover,
+.back-btn:hover {
+  background-color: #5a6268;
+}
+
+.edit-btn {
+  background-color: #007bff;
+  color: white;
+  display: inline-block;
+  line-height: 1;
+}
+
+.edit-btn:hover {
+  background-color: #0056b3;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+/* 로딩 & 에러 */
+.loading,
+.error {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 18px;
+  color: #666;
+}
+
+.error {
+  color: #dc3545;
+  margin-bottom: 20px;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .cpu-view-content {
+    padding: 20px;
+  }
+
+  .view-header,
+  .info-section,
+  .spec-section {
+    padding: 20px;
+  }
+
+  .info-label,
+  .spec-label {
+    width: 120px;
+    font-size: 14px;
+  }
+
+  .view-actions {
+    flex-wrap: wrap;
+  }
+
+  .list-btn,
+  .edit-btn,
+  .delete-btn {
+    flex: 1;
+    min-width: 100px;
+  }
+}

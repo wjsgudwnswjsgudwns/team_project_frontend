@@ -1,0 +1,292 @@
+/* 전체 컨테이너 */
+.cpu-page-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* 메인 콘텐츠 영역 - 중앙 정렬 */
+.input-cpu-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+/* 제목 스타일 */
+.input-cpu-content h2 {
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+/* 폼 전체 - 최대 너비 설정으로 중앙 배치 */
+.cpu-spec-form {
+  width: 100%;
+  max-width: 800px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  padding: 40px;
+}
+
+/* 스펙 그룹 */
+.spec-group {
+  margin-bottom: 40px;
+}
+
+.spec-group:last-of-type {
+  margin-bottom: 0;
+}
+
+.spec-group h3 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #007bff;
+}
+
+/* 테이블 스타일 */
+.spec-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.spec-table tbody tr {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.spec-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+/* 라벨 셀 */
+.label-cell {
+  width: 200px;
+  padding: 15px 20px;
+  font-weight: 600;
+  color: #555;
+  background-color: #f8f9fa;
+  vertical-align: middle;
+}
+
+/* 입력 셀 */
+.input-cell {
+  padding: 15px 20px;
+}
+
+/* 인풋 필드 공통 스타일 */
+.spec-input,
+.spec-select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 15px;
+  transition: border-color 0.3s;
+}
+
+.spec-input:focus,
+.spec-select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.spec-input:disabled,
+.spec-select:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+/* 새 필드 추가 영역 */
+.add-field-section {
+  margin-top: 30px;
+  padding: 25px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 10px;
+  border: 2px dashed #dee2e6;
+}
+
+.add-field-section h4 {
+  margin-bottom: 20px;
+  color: #495057;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.add-field-inputs {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.field-key-input,
+.field-value-input {
+  flex: 1;
+  padding: 12px 15px;
+  border: 2px solid #dee2e6;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.3s;
+  background-color: white;
+}
+
+.field-key-input:focus,
+.field-value-input:focus {
+  outline: none;
+  border-color: #28a745;
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+}
+
+.add-field-btn {
+  padding: 12px 24px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: background-color 0.3s;
+}
+
+.add-field-btn:hover {
+  background-color: #218838;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.2);
+}
+
+.add-field-btn:active {
+  transform: translateY(0);
+}
+
+.add-field-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.hint-text {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* 액션 셀 (삭제 버튼) */
+.action-cell {
+  width: 100px;
+  text-align: center;
+  padding: 15px 10px;
+}
+
+.remove-btn {
+  padding: 8px 16px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.remove-btn:hover {
+  background-color: #c82333;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
+}
+
+.remove-btn:active {
+  transform: translateY(0);
+}
+
+.remove-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 제출 버튼 */
+.submit-btn {
+  margin-top: 40px;
+  padding: 16px 40px;
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  width: 100%;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+.submit-btn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .cpu-spec-form {
+    padding: 25px;
+  }
+
+  .label-cell {
+    width: 120px;
+    font-size: 14px;
+  }
+
+  .add-field-inputs {
+    flex-direction: column;
+  }
+
+  .field-key-input,
+  .field-value-input,
+  .add-field-btn {
+    width: 100%;
+  }
+}
+
+/* 스펙 테이블에 호버 효과 추가 */
+.spec-table tbody tr {
+  transition: background-color 0.2s;
+}
+
+.spec-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* 필수 항목 표시 */
+.label-cell::after {
+  content: "";
+}
+
+.spec-table tbody tr:first-child .label-cell::after,
+.spec-table tbody tr:nth-child(3) .label-cell::after {
+  content: " *";
+  color: #dc3545;
+  font-weight: bold;
+}

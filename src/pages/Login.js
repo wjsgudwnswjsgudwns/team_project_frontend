@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../api/axiosConfig";
 import "./Login.css";
 
-function Login({ onLogin }) {
+function Login({ onLogin, setRole }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -26,9 +26,12 @@ function Login({ onLogin }) {
 
       console.log("로그인 응답:", loginResponse.data);
 
-      // 토큰 저장
+      // 토큰 저장, 유저 역할 저장
       const token = loginResponse.data.token;
+      const userRole = loginResponse.data.role;
+
       localStorage.setItem("token", token);
+      localStorage.setItem("role", userRole);
 
       // Authorization 헤더에 토큰 설정
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -38,6 +41,8 @@ function Login({ onLogin }) {
       console.log("사용자 정보:", userResponse.data);
 
       onLogin(userResponse.data.nickname);
+      setRole(userRole); // 역할 설정
+
       alert("로그인 성공!");
       navigate("/", { replace: true });
     } catch (err) {

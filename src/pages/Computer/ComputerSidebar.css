@@ -1,0 +1,30 @@
+.computer-sidebar {
+  width: 200px; /* 사이드바의 너비 */
+  padding: 20px 0;
+  border-right: 1px solid #eee; /* 경계선 선택 사항 */
+  background-color: #f7f7f7;
+  flex-shrink: 0; /* 내용 영역이 줄어들 때 사이드바는 줄어들지 않도록 */
+}
+
+.sidebar-title {
+  padding: 0 20px 10px;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+.sidebar-menu-item {
+  display: block;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #555;
+  font-size: 0.95em;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.sidebar-menu-item:hover {
+  background-color: #e0e0e0;
+  color: #000;
+}

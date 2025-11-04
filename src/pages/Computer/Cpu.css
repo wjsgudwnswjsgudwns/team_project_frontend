@@ -1,0 +1,197 @@
+/* 전체 컨테이너 */
+.cpu-page-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* 메인 콘텐츠 */
+.cpu-content {
+  flex: 1;
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* 페이지 헤더 */
+.page-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 3px solid #333;
+}
+
+.page-header h1 {
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+}
+
+/* 검색 & 버튼 영역 */
+.board-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-box {
+  display: flex;
+  gap: 8px;
+}
+
+.search-input {
+  width: 300px;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.search-btn {
+  padding: 10px 20px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.search-btn:hover {
+  background-color: #5a6268;
+}
+
+.write-btn {
+  padding: 10px 24px;
+  background-color: #333;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.write-btn:hover {
+  background-color: #555;
+}
+
+/* 게시판 테이블 */
+.board-wrapper {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.board-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.board-table thead {
+  background-color: #cccccc;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.board-table thead th {
+  padding: 16px;
+  font-weight: 600;
+  color: #495057;
+  text-align: center;
+  font-size: 14px;
+}
+
+.board-table tbody tr {
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s;
+}
+
+/* .board-table tbody tr:hover {
+  background-color: #fcfcfc;
+} */
+
+.board-row {
+  cursor: pointer;
+}
+
+.board-table tbody td {
+  padding: 16px;
+  text-align: center;
+  color: #333;
+  font-size: 14px;
+}
+
+.col-no {
+  width: 80px;
+  color: #6c757d;
+}
+
+.col-title {
+  text-align: left !important;
+  font-weight: 500;
+}
+
+.col-manufacturer {
+  width: 150px;
+  color: #6c757d;
+}
+
+.col-price {
+  width: 150px;
+  color: #6c757d;
+  font-weight: 600;
+}
+
+.no-data {
+  padding: 60px !important;
+  text-align: center !important;
+  color: #999;
+  font-style: italic;
+}
+
+/* 로딩 & 에러 */
+.loading,
+.error {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 18px;
+  color: #666;
+}
+
+.error {
+  color: #dc3545;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .cpu-content {
+    padding: 20px;
+  }
+
+  .board-controls {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+
+  .col-manufacturer,
+  .col-price {
+    display: none;
+  }
+}
