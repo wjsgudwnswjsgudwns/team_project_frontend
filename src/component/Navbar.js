@@ -64,8 +64,6 @@ function Navbar({ user, onLogout }) {
         </div>
       </div>
 
-      {/* ⭐⭐⭐ 새로 추가된 햄버거 드롭다운 메뉴 ⭐⭐⭐ */}
-      {/* 메뉴가 열려 있을 때만 보이도록 조건부 렌더링 */}
       {isMenuOpen && (
         <div className="side-dropdown-menu">
           <div className="side-menu-section">
