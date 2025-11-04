@@ -10,6 +10,7 @@ function Login({ onLogin }) {
 
   const navigate = useNavigate();
 
+  // 일반 로그인
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -36,7 +37,7 @@ function Login({ onLogin }) {
       const userResponse = await api.get("/api/auth/me");
       console.log("사용자 정보:", userResponse.data);
 
-      onLogin(userResponse.data.username);
+      onLogin(userResponse.data.nickname);
       alert("로그인 성공!");
       navigate("/", { replace: true });
     } catch (err) {
@@ -56,8 +57,14 @@ function Login({ onLogin }) {
     }
   };
 
+  // 네이버 로그인
+  const handleNaverLogin = () => {
+    window.location.href = "http://localhost:8880/oauth2/authorization/naver";
+  };
+
   return (
     <div className="login-container">
+      {/* 일반 로그인 시작 */}
       <div className="login-box">
         <div className="login-logo">OPTICORE</div>
         <form onSubmit={handleLogin} className="login-form">
@@ -87,10 +94,36 @@ function Login({ onLogin }) {
             {isLoading ? "로그인 중..." : "로그인"}
           </button>
         </form>
+        {/* 일반 로그인 끝 */}
+
+        {/* 네이버 로그인 시작 */}
+        <div className="divider">
+          <span>또는</span>
+        </div>
+
+        <button
+          className="naver-login-btn"
+          onClick={handleNaverLogin}
+          type="button"
+        >
+          <svg viewBox="0 0 20 20" className="naver-icon">
+            <g>
+              <path
+                fill="#fff"
+                d="M13.48 10.77L8.57 3.25H4.8V16.8h5.16V9.28l4.91 7.52h3.77V3.25h-5.16v7.52z"
+              />
+            </g>
+          </svg>
+          네이버 로그인
+        </button>
+        {/* 네이버 로그인 끝 */}
+
+        {/* 회원 가입 시작 */}
         <div className="login-signup-link">
           <span>아직 계정이 없으신가요? </span>
           <Link to="/signup">회원가입</Link>
         </div>
+        {/* 회원 가입 끝 */}
       </div>
     </div>
   );

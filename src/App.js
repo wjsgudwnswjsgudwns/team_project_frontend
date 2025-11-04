@@ -7,6 +7,7 @@ import Navbar from "./component/Navbar";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import OAuth2RedirectHandler from "./pages/OAuth2RedirectHandler";
 
 function App() {
   const [user, setUser] = useState(null); // 현재 로그인한 유저의 이름
@@ -18,7 +19,7 @@ function App() {
     try {
       const res = await api.get("/api/auth/me");
       console.log("/api/auth/me 응답:", res.data);
-      setUser(res.data.userId);
+      setUser(res.data.nickname);
     } catch {
       setUser(null);
     }
@@ -30,7 +31,8 @@ function App() {
 
   // 로그 아웃
   const handleLogout = async () => {
-    await api.get("/api/auth/logout");
+    localStorage.removeItem("token");
+    // await api.get("/api/auth/logout");
     setUser(null);
     navigate("/");
   };
@@ -42,6 +44,10 @@ function App() {
         <Route path="/" element={<Home user={user} />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
         <Route path="/login" element={<Login onLogin={setUser} />}></Route>
+        <Route
+          path="/oauth2/redirect"
+          element={<OAuth2RedirectHandler onLogin={setUser} />}
+        />
       </Routes>
     </div>
   );
