@@ -3,7 +3,7 @@ import logo from "../images/logo.png";
 import "./Navbar.css";
 import { useState } from "react";
 
-function Navbar({ user, onLogout }) {
+function Navbar({ user, onLogout, role }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -58,7 +58,7 @@ function Navbar({ user, onLogout }) {
           <Link to="/infoboard" className="sub-menu-item">
             정보 게시판
           </Link>
-          <Link to="/computer" className="sub-menu-item">
+          <Link to="/cpu" className="sub-menu-item">
             PC 주요 구성
           </Link>
         </div>
@@ -67,11 +67,7 @@ function Navbar({ user, onLogout }) {
       {isMenuOpen && (
         <div className="side-dropdown-menu">
           <div className="side-menu-section">
-            <Link
-              to="/components/cpu"
-              className="side-menu-item"
-              onClick={toggleMenu}
-            >
+            <Link to="/cpu" className="side-menu-item" onClick={toggleMenu}>
               CPU
             </Link>
             <Link

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import api from "../api/axiosConfig";
 
-function OAuth2RedirectHandler({ onLogin }) {
+function OAuth2RedirectHandler({ onLogin, setRole }) {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -22,6 +22,12 @@ function OAuth2RedirectHandler({ onLogin }) {
           const response = await api.get("/api/auth/me");
           console.log("OAuth2 사용자 정보:", response.data);
           onLogin(response.data.nickname);
+
+          const savedRole = localStorage.getItem("role");
+          if (savedRole) {
+            setRole(savedRole);
+          }
+
           navigate("/", { replace: true });
         } catch (err) {
           console.error("사용자 정보 가져오기 실패:", err);
@@ -35,7 +41,7 @@ function OAuth2RedirectHandler({ onLogin }) {
       console.error("토큰이 없습니다.");
       navigate("/login");
     }
-  }, [searchParams, navigate, onLogin]);
+  }, [searchParams, navigate, onLogin, setRole]);
 
   return (
     <div
