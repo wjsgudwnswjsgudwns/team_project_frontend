@@ -1,105 +1,171 @@
-/* 전체 컨테이너 */
-.ai-consult-container {
+/* AiConsult.css */
+
+/* --- 전역 스타일 및 기본 레이아웃 --- */
+.ai-consult-form-grid {
+  max-width: 1200px;
+  margin: 30px auto;
+  position: relative;
+}
+
+/* 상단 메인 검색바 스타일 (모던 흑백) */
+.form-grid-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 90vh;
-  background-color: #ffffff;
-  font-family: "Pretendard", "Noto Sans KR", sans-serif;
+  border: 1px solid #333; /* 짙은 회색/검정 테두리 */
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #bebebe; /* 배경: 아주 연한 회색 */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* 채팅 박스 */
-.chat-box {
-  width: 100%;
-  max-width: 700px;
-  height: 80vh;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #eaeaea;
-  border-radius: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  padding: 20px;
-  background: #fff;
-}
-
-/* 제목 */
-.chat-title {
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #222;
-  margin-bottom: 15px;
-}
-
-/* 메시지 리스트 */
-.messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* 공통 메시지 스타일 */
-.message {
-  max-width: 80%;
+.form-item {
+  flex-grow: 1;
   padding: 10px 15px;
-  border-radius: 16px;
-  line-height: 1.5;
-  white-space: pre-wrap;
+  border-right: 1px solid #ddd; /* 구분선: 연한 회색 */
+  min-height: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
-/* 사용자 메시지 */
-.message.user {
-  align-self: flex-end;
-  background-color: #007aff;
-  color: white;
-  border-bottom-right-radius: 4px;
+.form-item:last-of-type {
+  border-right: none;
 }
 
-/* AI 메시지 */
-.message.bot {
-  align-self: flex-start;
-  background-color: #f3f4f6;
-  color: #333;
-  border-bottom-left-radius: 4px;
+.form-item:hover {
+  background-color: #eee; /* 호버 시 미세하게 밝은 회색 */
 }
 
-/* 입력창 영역 */
-.input-area {
+/* 활성화된 항목 스타일 (모던 강조) */
+.form-item.active {
+  background-color: #fff; /* 활성화 시 흰색 배경 */
+  border: 2px solid #555; /* 짙은 회색 강조 테두리 */
+  padding: 9px 14px;
+}
+
+.input-label {
+  font-size: 0.8em;
+  color: #666; /* 라벨 색상: 중간 회색 */
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.selected-value {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #111; /* 선택 값 색상: 거의 검정 */
+  white-space: nowrap;
+}
+
+/* 스왑 아이콘 스타일 */
+.divider-icon {
   display: flex;
   align-items: center;
-  gap: 10px;
-  border-top: 1px solid #eee;
-  padding-top: 10px;
+  justify-content: center;
+  width: 50px;
+  border-right: 1px solid #ddd;
+  color: #999; /* 아이콘 색상: 회색 */
+  font-size: 1.2em; /* 크기 조정 */
 }
 
-.input-area input {
-  flex: 1;
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  font-size: 1rem;
-  outline: none;
-}
-
-.input-area input:focus {
-  border-color: #007aff;
-  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2);
-}
-
-.input-area button {
-  background-color: #007aff;
+/* 검색하기 버튼 */
+.search-button {
+  width: 150px;
+  background-color: #333; /* 버튼 배경: 짙은 회색/검정 */
   color: white;
+  font-size: 1.1em;
+  font-weight: bold;
   border: none;
-  border-radius: 12px;
-  padding: 10px 18px;
-  font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background-color 0.2s;
 }
 
-.input-area button:hover {
-  background-color: #005fcc;
+.search-button:hover {
+  background-color: #555; /* 호버 시 조금 밝은 회색 */
+}
+
+/* --- 드롭다운/모달 패널 스타일 --- */
+
+.dropdown-wrapper {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #333; /* 테두리: 짙은 회색 */
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  padding: 10px 0;
+}
+
+.option-panel {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.option-item {
+  padding: 12px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.1s;
+  color: #333;
+}
+
+.option-item:hover {
+  background-color: #f0f0f0; /* 호버 시 연한 회색 */
+}
+
+/* 선택된 항목 스타일 */
+.option-item.selected {
+  background-color: #e5e5e5; /* 선택된 항목 배경: 중간 회색 */
+  font-weight: bold;
+  color: #111; /* 글자색: 검정 */
+}
+
+/* 금액 범위 패널 스타일 */
+.budget-panel {
+  padding: 15px 20px;
+}
+
+.budget-range-display {
+  text-align: center;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.slider-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.slider-controls label {
+  font-weight: normal;
+  font-size: 0.9em;
+  color: #555;
+}
+
+/* 슬라이더 색상 (브라우저 기본 스타일 대신 회색 계열을 유지) */
+/* input[type="range"]의 트랙과 썸 스타일링은 복잡하므로 기본 스타일 유지 혹은 CSS 벤더 접두사 필요 */
+
+/* 드롭다운 닫기 버튼 */
+.close-panel-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #f0f0f0; /* 배경: 연한 회색 */
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 1.2em;
+  cursor: pointer;
+  line-height: 1;
+  color: #555; /* 글자색: 중간 회색 */
+  transition: background-color 0.2s;
+}
+
+.close-panel-btn:hover {
+  background-color: #ddd;
 }

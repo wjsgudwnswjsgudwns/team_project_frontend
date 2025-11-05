@@ -1,71 +1,209 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import "./AiConsult.css";
 
-function AiConsult() {
-  const [messages, setMessages] = useState([
-    {
-      sender: "bot",
-      text: "안녕하세요! 저는 Opticore AI 견적 도우미입니다 😊\n원하시는 PC 예산대나 용도를 입력해주세요.",
-    },
-  ]);
-  const [input, setInput] = useState("");
+const AiConsult = () => {
+  const [aiResult, setAiResult] = useState("");
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  // 폼 상태: 사용자가 최종 선택한 값
+  const [formData, setFormData] = useState({
+    usage: "고성능 게임",
+    minBudget: 100, // 최소 예산 (만원)
+    maxBudget: 200, // 최대 예산 (만원)
+    cpu: "AMD",
+    gpu: "엔비디아",
+    mainboard: "AMD",
+    memory: "32G",
+  });
 
-    const userMsg = { sender: "user", text: input };
-    setMessages((prev) => [...prev, userMsg]);
+  // UI 상태: 현재 활성화된 필드와 드롭다운 위치
+  const [activeField, setActiveField] = useState(null);
+  const [dropdownPosition, setDropdownPosition] = useState({
+    left: 0,
+    top: 0,
+    minWidth: 0,
+  });
 
-    // AI 답변 예시 (나중에 API 연동 가능)
-    setTimeout(() => {
-      const botMsg = {
-        sender: "bot",
-        text: `좋아요! "${input}" 관련해서 추천 견적을 분석 중입니다... (AI 응답 예시)`,
-      };
-      setMessages((prev) => [...prev, botMsg]);
-    }, 700);
-
-    setInput("");
+  // 항목별 데이터 (선언 순서 수정)
+  const options = {
+    usage: ["고성능 게임", "영상 편집", "작곡", "사무용", "상관없음"],
+    cpu: ["인텔", "AMD", "상관 없음"],
+    gpu: ["엔비디아", "AMD", "상관없음"],
+    mainboard: ["인텔", "AMD", "상관없음"],
+    memory: ["64G", "32G", "16G", "8G", "상관없음"],
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") handleSend();
+  // 항목 배열 (렌더링 순서) (선언 순서 수정)
+  const fieldOrder = [
+    { id: "usage", label: "사용 용도" },
+    { id: "budget", label: "금액 범위" },
+    { id: "cpu", label: "CPU" },
+    { id: "gpu", label: "그래픽 카드" },
+    { id: "mainboard", label: "메인 보드" },
+    { id: "memory", label: "메모리" },
+  ];
+
+  const itemRefs = useMemo(
+    () => new Map(fieldOrder.map((item) => [item.id, React.createRef()])),
+    [fieldOrder]
+  );
+
+  const handleFieldClick = (field) => {
+    if (activeField === field) {
+      setActiveField(null); // 같은 항목을 다시 누르면 닫기
+      return;
+    }
+
+    const ref = itemRefs.get(field);
+    if (ref && ref.current) {
+      setDropdownPosition({
+        left: ref.current.offsetLeft,
+        top: ref.current.offsetTop + ref.current.offsetHeight + 10,
+        minWidth: ref.current.offsetWidth,
+      });
+      setActiveField(field);
+    }
   };
 
-  return (
-    <div className="ai-consult-container">
-      <div className="chat-box">
-        <h2 className="chat-title">💬 AI 컴퓨터 견적 상담</h2>
+  const handleChange = (name, value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+    if (name !== "minBudget" && name !== "maxBudget") {
+      setActiveField(null);
+    }
+  };
 
-        <div className="messages">
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`message ${msg.sender === "user" ? "user" : "bot"}`}
-            >
-              {msg.text.split("\n").map((line, i) => (
-                <span key={i}>
-                  {line}
-                  <br />
-                </span>
-              ))}
-            </div>
-          ))}
-        </div>
+  const handleBudgetChange = (type, value) => {
+    handleChange(type, Number(value));
+  };
 
-        <div className="input-area">
-          <input
-            type="text"
-            placeholder="예: 150~200만원대 게이밍 PC 견적 추천해줘"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyPress}
-          />
-          <button onClick={handleSend}>전송</button>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:8880/api/ai/consult", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ formData }),
+      });
+
+      const data = await response.json();
+      console.log("AI 응답:", data.result);
+      setAiResult(JSON.stringify(data.result, null, 2));
+    } catch (err) {
+      console.error(err);
+      alert("AI 요청 실패");
+    }
+  };
+
+  // --- 개별 드롭다운 패널 렌더링 함수 ---
+
+  const renderOptionPanel = (fieldId, currentOptions) => (
+    <div className="option-panel">
+      {currentOptions.map((option) => (
+        <div
+          key={option}
+          className={`option-item ${
+            formData[fieldId] === option ? "selected" : ""
+          }`}
+          onClick={() => handleChange(fieldId, option)}
+        >
+          {option}
         </div>
+      ))}
+    </div>
+  );
+
+  const renderBudgetPanel = () => (
+    <div className="option-panel budget-panel">
+      <div className="budget-range-display">
+        {formData.minBudget}만 원 ~ {formData.maxBudget}만 원
+      </div>
+      <div className="slider-controls">
+        <label>최소 예산 ({formData.minBudget}만 원)</label>
+        <input
+          type="range"
+          min="50"
+          max="500"
+          step="10"
+          value={formData.minBudget}
+          onChange={(e) => handleBudgetChange("minBudget", e.target.value)}
+        />
+        <label>최대 예산 ({formData.maxBudget}만 원)</label>
+        <input
+          type="range"
+          min="50"
+          max="500"
+          step="10"
+          value={formData.maxBudget}
+          onChange={(e) => handleBudgetChange("maxBudget", e.target.value)}
+        />
       </div>
     </div>
   );
-}
+
+  // --- 컴포넌트 렌더링 ---
+  return (
+    <form className="ai-consult-form-grid" onSubmit={handleSubmit}>
+      <div className="form-grid-container">
+        {/* 1. 클릭 가능한 항목 버튼 영역 */}
+        {fieldOrder.map((field, index) => (
+          <React.Fragment key={field.id}>
+            <div
+              ref={itemRefs.get(field.id)} // ref 연결
+              className={`form-item ${
+                activeField === field.id ? "active" : ""
+              }`}
+              onClick={() => handleFieldClick(field.id)}
+            >
+              <label className="input-label">{field.label}</label>
+              <div className="selected-value">
+                {field.id === "budget"
+                  ? `${formData.minBudget}만 ~ ${formData.maxBudget}만`
+                  : formData[field.id]}
+              </div>
+            </div>
+          </React.Fragment>
+        ))}
+
+        {/* 2. 검색하기 버튼 */}
+        <button type="submit" className="search-button">
+          검색하기
+        </button>
+      </div>
+
+      {/* 3. 활성화된 필드에 따른 드롭다운 패널 */}
+      {activeField && (
+        <div
+          className="dropdown-wrapper"
+          style={{
+            left: dropdownPosition.left,
+            top: dropdownPosition.top,
+            minWidth: dropdownPosition.minWidth,
+          }}
+        >
+          {/* 닫기 버튼 */}
+          <button
+            className="close-panel-btn"
+            onClick={() => setActiveField(null)}
+          >
+            &times;
+          </button>
+
+          {activeField === "budget" && renderBudgetPanel()}
+          {options[activeField] &&
+            renderOptionPanel(activeField, options[activeField])}
+        </div>
+      )}
+
+      {aiResult && (
+        <div className="ai-result-panel">
+          <pre>{aiResult}</pre>
+        </div>
+      )}
+    </form>
+  );
+};
 
 export default AiConsult;
