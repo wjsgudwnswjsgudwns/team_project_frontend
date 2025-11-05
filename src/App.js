@@ -12,6 +12,7 @@ import Cpu from "./pages/Computer/Cpu";
 import AiConsult from "./pages/AiConsult";
 import Input from "./pages/Computer/Input";
 import CpuView from "./pages/Computer/CpuView";
+import FreeBoard from "./pages/FreeBoard"; // 게시판 추가
 
 function App() {
   const [user, setUser] = useState(null); // 현재 로그인한 유저의 이름
@@ -67,6 +68,7 @@ function App() {
         <Route path="/inputCpu" element={<Input />}></Route>
         <Route path="/ai" element={<AiConsult />}></Route>
         <Route path="/cpu/:id" element={<CpuView role={role} />}></Route>
+        <Route path="/freeboard" element={<FreeBoard />}></Route>
       </Routes>
     </div>
   );
