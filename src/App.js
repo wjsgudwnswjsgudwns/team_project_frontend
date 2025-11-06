@@ -11,8 +11,22 @@ import OAuth2RedirectHandler from "./pages/OAuth2RedirectHandler";
 import Cpu from "./pages/Computer/Cpu";
 import AiConsult from "./pages/AiConsult";
 import Input from "./pages/Computer/Input";
-import CpuView from "./pages/Computer/CpuView";
 import FreeBoard from "./pages/FreeBoard"; // 게시판 추가
+import CpuView from "./pages/Computer/ViewDetail/CpuView";
+import Cooler from "./pages/Computer/Cooler";
+import CoolerView from "./pages/Computer/ViewDetail/CoolerView";
+import MainBoard from "./pages/Computer/MainBoard";
+import MainBoardView from "./pages/Computer/ViewDetail/MainBoardView";
+import Memory from "./pages/Computer/Memory";
+import MemoryView from "./pages/Computer/ViewDetail/MemoryView";
+import Gpu from "./pages/Computer/Gpu";
+import GpuView from "./pages/Computer/ViewDetail/GpuView";
+import Disk from "./pages/Computer/Disk";
+import DiskView from "./pages/Computer/ViewDetail/DiskView";
+import HardCase from "./pages/Computer/HardCase";
+import HardCaseView from "./pages/Computer/ViewDetail/HardCaseView";
+import Power from "./pages/Computer/Power";
+import PowerView from "./pages/Computer/ViewDetail/PowerView";
 
 function App() {
   const [user, setUser] = useState(null); // 현재 로그인한 유저의 이름
@@ -64,11 +78,39 @@ function App() {
             <OAuth2RedirectHandler onLogin={setUser} setRole={setRole} />
           }
         />
+
+        <Route path="/input" element={<Input />}></Route>
+
         <Route path="/cpu" element={<Cpu role={role} />}></Route>
-        <Route path="/inputCpu" element={<Input />}></Route>
-        <Route path="/ai" element={<AiConsult />}></Route>
         <Route path="/cpu/:id" element={<CpuView role={role} />}></Route>
+
+        <Route path="/cooler" element={<Cooler role={role} />}></Route>
+        <Route path="/cooler/:id" element={<CoolerView role={role} />}></Route>
+
+        <Route path="/mainboard" element={<MainBoard role={role} />}></Route>
+        <Route
+          path="/mainboard/:id"
+          element={<MainBoardView role={role} />}
+        ></Route>
+
+        <Route path="/memory" element={<Memory role={role} />}></Route>
+        <Route path="/memory/:id" element={<MemoryView role={role} />}></Route>
+
+        <Route path="/gpu" element={<Gpu role={role} />}></Route>
+        <Route path="/gpu/:id" element={<GpuView role={role} />}></Route>
+
+        <Route path="/disk" element={<Disk role={role} />}></Route>
+        <Route path="/disk/:id" element={<DiskView role={role} />}></Route>
+
+        <Route path="/case" element={<HardCase role={role} />}></Route>
+        <Route path="/case/:id" element={<HardCaseView role={role} />}></Route>
+
+        <Route path="/power" element={<Power role={role} />}></Route>
+        <Route path="/power/:id" element={<PowerView role={role} />}></Route>
+
         <Route path="/freeboard" element={<FreeBoard />}></Route>
+
+        <Route path="/ai" element={<AiConsult />}></Route>
       </Routes>
     </div>
   );

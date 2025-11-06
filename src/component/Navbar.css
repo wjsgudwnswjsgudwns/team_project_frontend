@@ -1,265 +1,225 @@
-/* ========== NAVBAR (상단 바) ========== */
+/* 1. 메인 내비게이션 바 (최상단) */
 nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 3rem;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background-color: #050505;
+  padding: 10px 40px;
+  border-bottom: 1px solid var(--color-border-dark);
+  height: 120px; /* 🔴 수정: 80px -> 120px (높이 대폭 증가) */
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 
-nav > a {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #333;
-  text-decoration: none;
-  font-family: "Arial", sans-serif;
-  letter-spacing: -0.5px;
-  transition: color 0.2s ease;
+.navbar-logo {
+  height: 100px;
+  filter: none; /* 🔴 수정: 하얀색 그림자 효과 제거 */
+  transition: transform 0.3s, filter 0.3s; /* filter 전환 효과도 추가 */
 }
 
-nav > a:hover {
-  color: #666;
+.navbar-logo:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 12px var(--color-primary));
 }
 
+/* 로그인/사용자 섹션 */
 nav > div {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 20px;
 }
 
-/* ========== NAV LINK ========== */
-nav > div a {
-  color: #666;
-  text-decoration: none;
-  font-size: 0.95rem;
-  font-weight: 500;
-  transition: color 0.2s ease;
+/* 로그인 링크 버튼 스타일 */
+nav > div > a {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 8px 15px;
+  border: 1px solid var(--color-border-dark);
+  background: #111;
+  text-transform: uppercase;
+  transition: all 0.3s;
 }
 
-nav > div a:hover {
-  color: #333;
+nav > div > a:hover {
+  color: var(--color-text-main);
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 10px rgba(255, 59, 48, 0.5);
 }
 
-/* ========== LOGOUT BUTTON (직접 보이는 경우) ========== */
-.logout-btn {
-  display: none;
-  padding: 0.5rem 1.2rem;
-  background-color: #333;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.95rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.logout-btn:hover {
-  background-color: #555;
-}
-
-.logout-btn:active {
-  transform: scale(0.98);
-}
-
-/* ========== 로고 ========== */
-.navbar-logo {
-  height: 70px;
-  width: auto;
-  object-fit: contain;
-  transition: transform 0.3s ease;
-}
-
-/* ========== USER MENU (닉네임 + 드롭다운) ========== */
+/* 사용자 메뉴 컨테이너 */
 .user-menu-container {
   position: relative;
   display: flex;
   align-items: center;
-  height: 100%;
-  z-index: 2000; /* ⭐ sub-navbar보다 위에 표시되도록 */
 }
 
 .user-nickname {
-  color: #333;
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  padding: 0.5rem 0.5rem;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-sub);
+  padding: 10px 15px;
+  display: block;
+  cursor: default;
+  letter-spacing: 1px;
+  border: 1px solid var(--color-border-dark);
+  background: #1a1a1a;
 }
 
-/* 드롭다운 메뉴 */
+/* 드롭다운 메뉴 스타일 */
 .dropdown-menu {
   position: absolute;
   top: 100%;
   right: 0;
-  min-width: 180px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 3000;
-  padding: 5px 0;
+  min-width: 150px;
+  background: #0a0a0a;
+  border: 1px solid var(--color-primary);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
   display: none;
-}
-
-/* 드롭다운 메뉴 항목 */
-.dropdown-menu .menu-item {
-  display: block;
-  width: 100%;
-  padding: 10px 15px;
-  color: #333;
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 400;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  text-align: left;
-  transition: background-color 0.15s ease;
-}
-
-.dropdown-menu .menu-item:hover {
-  background-color: #f5f5f5;
-  color: #000;
-}
-
-/* 로그아웃 항목 */
-.logout-btn-dropdown {
-  border-top: 1px solid #eee;
-  color: #e34c4c;
-  font-weight: 500;
-}
-
-.logout-btn-dropdown:hover {
-  background-color: #ffe8e8;
-  color: #e34c4c;
+  flex-direction: column;
+  z-index: 30;
+  margin-top: 2px;
 }
 
 /* 호버 시 드롭다운 표시 */
 .user-menu-container:hover .dropdown-menu {
-  display: block;
+  display: flex;
 }
 
-/* ========== SUB NAVBAR (하단 메뉴 바) ========== */
+.dropdown-menu .menu-item {
+  padding: 12px 15px;
+  font-size: 14px;
+  color: var(--color-text-sub);
+  text-align: left;
+  transition: all 0.2s;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.dropdown-menu .menu-item:hover {
+  background-color: var(--color-primary);
+  color: var(--color-text-main);
+  padding-left: 20px;
+}
+
+.logout-btn-dropdown {
+  width: 100%;
+  text-align: left;
+}
+
+/* 2. 서브 내비게이션 바 (메인 메뉴) */
 .sub-navbar-container {
   display: flex;
   align-items: center;
-  padding: 0 3rem;
-  height: 50px;
-  border-bottom: 1px solid #e5e5e5;
-  background-color: #fff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-  justify-content: flex-start;
-  position: relative;
-  z-index: 1000; /* ⭐ 드롭다운보다 낮게 */
+  justify-content: space-between;
+  background-color: var(--color-bg-med);
+  padding: 0 40px;
+  height: 40px;
+  border-bottom: 1px solid #222;
+  position: sticky;
+  top: 120px; /* 🔴 수정: 80px -> 120px (메인 Navbar 높이에 맞춰 조정) */
+  z-index: 15;
 }
 
-/* 메뉴 버튼 (햄버거 아이콘 등) */
+/* 햄버거 메뉴 버튼: 항상 보이도록 */
 .menu-toggle-btn {
-  font-size: 1.5rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #cc3333;
+  display: block;
+  font-size: 24px;
+  padding: 0 10px;
+  color: var(--color-primary);
   margin-right: 20px;
-  padding: 0 5px;
-  height: 100%;
 }
 
-/* 주요 메뉴 항목 */
 .sub-navbar-menu {
   display: flex;
-  gap: 40px;
-  align-items: center;
-  margin-left: 20px;
   height: 100%;
+  flex: 1;
+  justify-content: flex-start;
 }
 
 .sub-menu-item {
-  color: #333;
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 500;
-  line-height: 50px;
-  transition: color 0.2s ease;
-  white-space: nowrap;
-}
-
-.sub-menu-item:hover,
-.sub-menu-item.active {
-  color: #cc3333;
-  font-weight: 700;
-}
-
-/* NEW 뱃지 */
-.new-badge::after {
-  content: "New";
-  font-size: 0.6rem;
-  color: #fff;
-  background-color: #cc3333;
-  padding: 2px 4px;
-  border-radius: 3px;
-  margin-left: 5px;
-  vertical-align: top;
-  font-weight: 500;
-}
-
-/* ========== SIDE DROPDOWN (모바일용) ========== */
-.side-dropdown-menu {
-  position: absolute;
-  top: 120px;
-  left: 0;
-  width: 40%;
-  background-color: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 999;
-  padding: 20px 3rem;
+  height: 100%;
   display: flex;
-  border-bottom: 1px solid #e5e5e5;
-  text-align: left;
+  align-items: center;
+  padding: 0 20px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-main);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+}
+
+.sub-menu-item:hover {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+/* 3. 사이드 드롭다운 메뉴 (CPU 등 세부 메뉴) */
+.side-dropdown-menu {
+  position: fixed;
+  top: 160px; /* 🔴 수정: 120px -> 160px (Navbar 120px + SubNavbar 40px) */
+  left: 0;
+  width: 250px;
+  height: calc(100vh - 160px); /* 🔴 수정: 120px -> 160px */
+  background: #0a0a0a;
+  border-right: 2px solid var(--color-primary);
+  box-shadow: 5px 0 15px rgba(0, 0, 0, 0.5);
+  padding: 20px 0;
+  z-index: 25;
+  overflow-y: auto;
 }
 
 .side-menu-section {
   display: flex;
   flex-direction: column;
-  gap: 10px;
 }
 
 .side-menu-item {
-  color: #333;
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: 500;
-  padding: 5px 0;
-  transition: color 0.2s ease;
+  padding: 12px 25px;
+  color: var(--color-text-sub);
+  font-size: 14px;
+  font-weight: 600;
+  border-left: 4px solid transparent;
+  transition: all 0.2s;
 }
 
 .side-menu-item:hover {
-  color: #cc3333;
-  font-weight: 700;
+  background: rgba(255, 59, 48, 0.1);
+  color: var(--color-primary);
+  border-left-color: var(--color-primary);
+  padding-left: 30px;
 }
 
-/* ========== RESPONSIVE ========== */
+/* === 반응형 스타일 === */
+@media (max-width: 1024px) {
+  .sub-navbar-menu {
+    display: none;
+  }
+
+  .sub-navbar-container {
+    justify-content: flex-start;
+    padding: 0 20px;
+  }
+}
+
 @media (max-width: 768px) {
   nav {
-    padding: 1rem 1.5rem;
+    padding: 10px 20px;
   }
 
-  nav > a {
-    font-size: 1.2rem;
+  .user-nickname {
+    display: none;
   }
 
-  nav > div {
-    gap: 0;
+  .sub-navbar-container {
+    padding: 0 10px;
   }
 
-  nav > div a {
-    font-size: 0.85rem;
-  }
-
-  .logout-btn {
-    padding: 0.4rem 1rem;
-    font-size: 0.85rem;
+  .side-dropdown-menu {
+    width: 100%;
   }
 }

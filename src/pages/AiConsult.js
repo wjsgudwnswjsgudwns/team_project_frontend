@@ -4,11 +4,12 @@ import "./AiConsult.css";
 const AiConsult = () => {
   const [aiResult, setAiResult] = useState([]);
   const [productImages, setProductImages] = useState({});
+  const [isLoading, setIsLoading] = useState(false); // ✅ 로딩 상태 추가
 
   // 폼 상태
   const [formData, setFormData] = useState({
     usage: "고성능 게임",
-    customUsage: "", // 기타 용도 입력값
+    customUsage: "",
     minBudget: 100,
     maxBudget: 200,
     cpu: "상관없음",
@@ -84,6 +85,9 @@ const AiConsult = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setIsLoading(true); // ✅ 로딩 시작
+    setAiResult([]); // 기존 결과 초기화
+
     try {
       const response = await fetch("http://localhost:8880/api/ai/consult", {
         method: "POST",
@@ -145,7 +149,7 @@ const AiConsult = () => {
               };
             } catch (error) {
               console.error("정보 조회 실패:", item["제품명"], error);
-              return item; // 실패 시 원본 반환
+              return item;
             }
           })
         );
@@ -159,10 +163,12 @@ const AiConsult = () => {
     } catch (err) {
       console.error(err);
       alert("AI 요청 실패");
+    } finally {
+      setIsLoading(false); // ✅ 로딩 종료
     }
   };
 
-  // 기본 이미지 반환 함수 (SVG 데이터 URI 사용)
+  // 기본 이미지 반환 함수
   const getDefaultImage = (productType) => {
     const colors = {
       CPU: "#4CAF50",
@@ -295,8 +301,12 @@ const AiConsult = () => {
           </React.Fragment>
         ))}
 
-        <button type="submit" className="search-button">
-          검색하기
+        <button
+          type="submit"
+          className="search-button"
+          disabled={isLoading} // ✅ 로딩 중에는 버튼 비활성화
+        >
+          {isLoading ? "AI 견적 생성 중..." : "검색하기"}
         </button>
       </div>
 
@@ -322,54 +332,70 @@ const AiConsult = () => {
         </div>
       )}
 
-      {/* 테이블형 목록 렌더링 영역 */}
-      {aiResult && Array.isArray(aiResult) && aiResult.length > 0 && (
-        <div className="ai-result-list-container">
-          {/* 목록 헤더 */}
-          <div className="product-list-header">
-            <div className="col-image"></div>
-            <div className="col-type">종류</div>
-            <div className="col-name">제품명</div>
-            <div className="col-price" style={{ textAlign: "right" }}>
-              가격
-            </div>
-            <div className="col-link">구매</div>
+      {/* ✅ 로딩 인디케이터 */}
+      {isLoading && (
+        <div className="loading-overlay">
+          <div className="loading-content">
+            <div className="loading-spinner"></div>
+            <p className="loading-text">
+              AI가 최적의 견적을 생성하고 있습니다...
+            </p>
+            <p className="loading-subtext">잠시만 기다려주세요</p>
           </div>
-
-          {/* 목록 아이템 */}
-          {aiResult.map((item, index) => (
-            <div key={index} className="product-list-item">
-              <div className="col-image">
-                <img
-                  src={
-                    item["제품이미지"] ||
-                    productImages[item["제품명"]] ||
-                    getDefaultImage(item["제품종류"])
-                  }
-                  alt={item["제품명"]}
-                  onError={(e) => {
-                    e.target.src = getDefaultImage(item["제품종류"]);
-                  }}
-                />
-              </div>
-
-              <div className="col-type">{item["제품종류"]}</div>
-              <div className="col-name">{item["제품명"]}</div>
-              <div className="col-price">{item["가격"]}</div>
-
-              <div className="col-link">
-                <a
-                  href={item["판매사이트링크"]}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  바로가기
-                </a>
-              </div>
-            </div>
-          ))}
         </div>
       )}
+
+      {/* 테이블형 목록 렌더링 영역 */}
+      {!isLoading &&
+        aiResult &&
+        Array.isArray(aiResult) &&
+        aiResult.length > 0 && (
+          <div className="ai-result-list-container">
+            {/* 목록 헤더 */}
+            <div className="product-list-header">
+              <div className="col-image"></div>
+              <div className="col-type">종류</div>
+              <div className="col-name">제품명</div>
+              <div className="col-price" style={{ textAlign: "right" }}>
+                가격
+              </div>
+              <div className="col-link">구매</div>
+            </div>
+
+            {/* 목록 아이템 */}
+            {aiResult.map((item, index) => (
+              <div key={index} className="product-list-item">
+                <div className="col-image">
+                  <img
+                    src={
+                      item["제품이미지"] ||
+                      productImages[item["제품명"]] ||
+                      getDefaultImage(item["제품종류"])
+                    }
+                    alt={item["제품명"]}
+                    onError={(e) => {
+                      e.target.src = getDefaultImage(item["제품종류"]);
+                    }}
+                  />
+                </div>
+
+                <div className="col-type">{item["제품종류"]}</div>
+                <div className="col-name">{item["제품명"]}</div>
+                <div className="col-price">{item["가격"]}</div>
+
+                <div className="col-link">
+                  <a
+                    href={item["판매사이트링크"]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    바로가기
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
     </form>
   );
 };
