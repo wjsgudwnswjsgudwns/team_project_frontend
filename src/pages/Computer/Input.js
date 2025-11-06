@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import ComputerSidebar from "./ComputerSidebar";
 import "./Input.css";
 import api from "../../api/axiosConfig";
+import axios from "axios";
 
 function Input() {
   // 기본 상품 정보
@@ -20,6 +21,13 @@ function Input() {
   const [newFieldValue, setNewFieldValue] = useState("");
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // 이미지 관련
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
+
+  const keyInputRef = useRef(null);
 
   // 기본 상품 정보 변경
   const handleProductChange = (e) => {
@@ -47,6 +55,7 @@ function Input() {
       }));
       setNewFieldKey("");
       setNewFieldValue("");
+      keyInputRef.current?.focus();
     } else {
       alert("필드명과 값을 모두 입력해주세요.");
     }
@@ -57,6 +66,34 @@ function Input() {
     const newSpecs = { ...specs };
     delete newSpecs[key];
     setSpecs(newSpecs);
+  };
+
+  // 이미지 선택 시 미리보기 & 업로드
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setImagePreview(URL.createObjectURL(file));
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8880/api/products/upload-image",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      setImageUrl(response.data.imageUrl);
+    } catch (error) {
+      console.error("이미지 업로드 실패:", error);
+      alert("이미지 업로드 실패. 다시 시도해주세요.");
+    }
   };
 
   // 엔터키로 필드 추가
@@ -83,7 +120,8 @@ function Input() {
       manufacturer: product.manufacturer,
       price: product.price,
       category: product.category,
-      specs: specs, // 자유로운 형태의 스펙!
+      specs: specs,
+      imageUrl: imageUrl,
     };
 
     console.log("전송할 데이터:", productData);
@@ -186,6 +224,33 @@ function Input() {
                     </select>
                   </td>
                 </tr>
+
+                {/* ✅ 이미지 업로드 섹션 */}
+                <tr>
+                  <td className="label-cell">상품 이미지</td>
+                  <td className="input-cell">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      disabled={isSubmitting}
+                    />
+                    {imagePreview && (
+                      <div style={{ marginTop: "10px" }}>
+                        <img
+                          src={imagePreview}
+                          alt="미리보기"
+                          style={{
+                            width: "180px",
+                            height: "auto",
+                            borderRadius: "6px",
+                            border: "1px solid #eee",
+                          }}
+                        />
+                      </div>
+                    )}
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -240,6 +305,7 @@ function Input() {
                   placeholder="필드명 (예: 코어수)"
                   className="field-key-input"
                   disabled={isSubmitting}
+                  ref={keyInputRef}
                 />
                 <input
                   type="text"
