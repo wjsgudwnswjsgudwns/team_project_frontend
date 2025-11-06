@@ -1,5 +1,5 @@
 export default function PostList({ posts, onPostClick, isSearching }) {
-  if (posts.length === 0) {
+  if (!posts || !Array.isArray(posts) || posts.length === 0) {
     return (
       <div className="empty-message">
         {isSearching ? "검색 결과가 없습니다." : "게시글이 없습니다."}

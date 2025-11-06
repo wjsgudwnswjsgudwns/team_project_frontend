@@ -1,4 +1,5 @@
 import FreeCommentSection from "./FreeCommentSection";
+import BottomPostList from "./BottomPostList";
 
 export default function PostDetail({
   post,
@@ -8,6 +9,7 @@ export default function PostDetail({
   onEdit,
   onDelete,
   onBack,
+  onPostClick,
 }) {
   const isAuthor = currentUsername && post.username === currentUsername;
 
@@ -58,7 +60,11 @@ export default function PostDetail({
         </button>
       </div>
 
+      {/* 댓글 섹션 */}
       <FreeCommentSection boardId={post.id} currentUsername={currentUsername} />
+
+      {/* 하단 게시글 목록 */}
+      <BottomPostList currentPostId={post.id} onPostClick={onPostClick} />
 
       <div className="back-button-area">
         <button onClick={onBack} className="back-btn">

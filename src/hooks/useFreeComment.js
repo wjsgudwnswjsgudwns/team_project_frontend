@@ -4,12 +4,18 @@ import api from "../api/axiosConfig";
 export const useFreeComment = () => {
   const [comments, setComments] = useState([]);
   const [commentCount, setCommentCount] = useState(0);
+  const [commentPage, setCommentPage] = useState(0);
+  const [commentTotalPages, setCommentTotalPages] = useState(0);
 
-  // 댓글 목록 조회
-  const fetchComments = useCallback(async (boardId) => {
+  // 댓글 목록 조회 (페이징)
+  const fetchComments = useCallback(async (boardId, page = 0, size = 10) => {
     try {
-      const res = await api.get(`/api/freeboard/${boardId}/comments`);
-      setComments(res.data);
+      const res = await api.get(
+        `/api/freeboard/${boardId}/comments?page=${page}&size=${size}`
+      );
+      setComments(res.data.content);
+      setCommentPage(res.data.number);
+      setCommentTotalPages(res.data.totalPages);
     } catch (err) {
       console.error("댓글 조회 실패:", err);
       alert("댓글을 불러오는데 실패했습니다.");
@@ -34,7 +40,7 @@ export const useFreeComment = () => {
           fCommentContent,
           parentId,
         });
-        await fetchComments(boardId);
+        await fetchComments(boardId, commentPage);
         await fetchCommentCount(boardId);
         return true;
       } catch (err) {
@@ -43,7 +49,7 @@ export const useFreeComment = () => {
         return false;
       }
     },
-    [fetchComments, fetchCommentCount]
+    [fetchComments, fetchCommentCount, commentPage]
   );
 
   // 댓글 수정
@@ -53,7 +59,7 @@ export const useFreeComment = () => {
         await api.put(`/api/freeboard/${boardId}/comments/${commentId}`, {
           fCommentContent,
         });
-        await fetchComments(boardId);
+        await fetchComments(boardId, commentPage);
         return true;
       } catch (err) {
         console.error("댓글 수정 실패:", err);
@@ -61,7 +67,7 @@ export const useFreeComment = () => {
         return false;
       }
     },
-    [fetchComments]
+    [fetchComments, commentPage]
   );
 
   // 댓글 삭제
@@ -71,7 +77,7 @@ export const useFreeComment = () => {
 
       try {
         await api.delete(`/api/freeboard/${boardId}/comments/${commentId}`);
-        await fetchComments(boardId);
+        await fetchComments(boardId, commentPage);
         await fetchCommentCount(boardId);
         alert("댓글이 삭제되었습니다.");
         return true;
@@ -81,12 +87,15 @@ export const useFreeComment = () => {
         return false;
       }
     },
-    [fetchComments, fetchCommentCount]
+    [fetchComments, fetchCommentCount, commentPage]
   );
 
   return {
     comments,
     commentCount,
+    commentPage,
+    commentTotalPages,
+    setCommentPage,
     fetchComments,
     fetchCommentCount,
     createComment,
