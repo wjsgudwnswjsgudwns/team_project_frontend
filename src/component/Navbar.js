@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import logo from "../images/logo.png";
+import logo from "../images/logo-white.png";
 import "./Navbar.css";
 import { useState } from "react";
 
@@ -70,53 +70,29 @@ function Navbar({ user, onLogout, role }) {
             <Link to="/cpu" className="side-menu-item" onClick={toggleMenu}>
               CPU
             </Link>
-            <Link
-              to="/components/cooler"
-              className="side-menu-item"
-              onClick={toggleMenu}
-            >
+            <Link to="/cooler" className="side-menu-item" onClick={toggleMenu}>
               쿨러
             </Link>
             <Link
-              to="/components/mainboard"
+              to="/mainboard"
               className="side-menu-item"
               onClick={toggleMenu}
             >
               메인보드
             </Link>
-            <Link
-              to="/components/memory"
-              className="side-menu-item"
-              onClick={toggleMenu}
-            >
+            <Link to="/memory" className="side-menu-item" onClick={toggleMenu}>
               메모리
             </Link>
-            <Link
-              to="/components/gpu"
-              className="side-menu-item"
-              onClick={toggleMenu}
-            >
+            <Link to="/gpu" className="side-menu-item" onClick={toggleMenu}>
               그래픽카드
             </Link>
-            <Link
-              to="/components/disk"
-              className="side-menu-item"
-              onClick={toggleMenu}
-            >
+            <Link to="/disk" className="side-menu-item" onClick={toggleMenu}>
               디스크 (SSD/HDD)
             </Link>
-            <Link
-              to="/components/case"
-              className="side-menu-item"
-              onClick={toggleMenu}
-            >
+            <Link to="/case" className="side-menu-item" onClick={toggleMenu}>
               케이스
             </Link>
-            <Link
-              to="/components/power"
-              className="side-menu-item"
-              onClick={toggleMenu}
-            >
+            <Link to="/power" className="side-menu-item" onClick={toggleMenu}>
               파워
             </Link>
           </div>

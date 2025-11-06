@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import ComputerSidebar from "./ComputerSidebar";
 import "./Input.css";
 import api from "../../api/axiosConfig";
-import axios from "axios";
 
 function Input() {
   // 기본 상품 정보
@@ -23,7 +22,6 @@ function Input() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 이미지 관련
-  const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
 
@@ -79,15 +77,11 @@ function Input() {
     formData.append("image", file);
 
     try {
-      const response = await axios.post(
-        "http://localhost:8880/api/products/upload-image",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await api.post("api/products/upload-image", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       setImageUrl(response.data.imageUrl);
     } catch (error) {
@@ -136,6 +130,7 @@ function Input() {
         name: "",
         manufacturer: "",
         price: "",
+        imageUrl: "",
         category: "CPU",
       });
       setSpecs({});

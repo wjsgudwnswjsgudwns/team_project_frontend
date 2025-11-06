@@ -88,7 +88,7 @@ function Cpu({ role }) {
             <button className="search-btn">🔍</button>
           </div>
           {role === "ROLE_ADMIN" && (
-            <Link to="/inputCpu" className="write-btn">
+            <Link to="/input" className="write-btn">
               글쓰기
             </Link>
           )}
@@ -99,8 +99,7 @@ function Cpu({ role }) {
           <table className="board-table">
             <thead>
               <tr>
-                <th className="col-no">No</th>
-                <th className="col-title">이미지</th>
+                <th className="col-no">이미지</th>
                 <th className="col-title">상품</th>
                 <th className="col-manufacturer">제조사</th>
                 <th className="col-price">가격</th>
@@ -123,7 +122,7 @@ function Cpu({ role }) {
                     className="board-row"
                   >
                     <td className="col-no">
-                      {filteredProducts.length - index}
+                      <img src={product.imageUrl} alt={product.name} />
                     </td>
                     <td className="col-title">{product.name}</td>
                     <td className="col-manufacturer">
