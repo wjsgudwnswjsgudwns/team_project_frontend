@@ -240,6 +240,7 @@
   outline: none;
   transition: border-color 0.2s ease;
   box-sizing: border-box;
+  text-align: left; /* 추가 */
 }
 
 .title-input:focus {
@@ -288,6 +289,7 @@
   outline: none;
   transition: border-color 0.2s ease;
   box-sizing: border-box;
+  text-align: left; /* 추가 */
 }
 
 .content-editor:focus {
@@ -338,6 +340,7 @@
   color: #333;
   margin-bottom: 20px;
   margin-top: 0;
+  text-align: left; /* 추가 */
 }
 
 .detail-meta {
@@ -359,6 +362,7 @@
   line-height: 1.8;
   font-size: 15px;
   color: #333;
+  text-align: left; /* 추가 */
 }
 
 .detail-content img {
