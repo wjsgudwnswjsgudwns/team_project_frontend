@@ -2,20 +2,21 @@ import React, { useState, useRef, useMemo } from "react";
 import "./AiConsult.css";
 
 const AiConsult = () => {
-  const [aiResult, setAiResult] = useState("");
+  const [aiResult, setAiResult] = useState([]);
+  const [productImages, setProductImages] = useState({});
 
-  // 폼 상태: 사용자가 최종 선택한 값
+  // 폼 상태
   const [formData, setFormData] = useState({
     usage: "고성능 게임",
-    minBudget: 100, // 최소 예산 (만원)
-    maxBudget: 200, // 최대 예산 (만원)
-    cpu: "AMD",
-    gpu: "엔비디아",
-    mainboard: "AMD",
-    memory: "32G",
+    customUsage: "", // 기타 용도 입력값
+    minBudget: 100,
+    maxBudget: 200,
+    cpu: "상관없음",
+    gpu: "상관없음",
+    mainboard: "상관없음",
+    memory: "상관없음",
   });
 
-  // UI 상태: 현재 활성화된 필드와 드롭다운 위치
   const [activeField, setActiveField] = useState(null);
   const [dropdownPosition, setDropdownPosition] = useState({
     left: 0,
@@ -23,16 +24,14 @@ const AiConsult = () => {
     minWidth: 0,
   });
 
-  // 항목별 데이터 (선언 순서 수정)
   const options = {
-    usage: ["고성능 게임", "영상 편집", "작곡", "사무용", "상관없음"],
-    cpu: ["인텔", "AMD", "상관 없음"],
+    usage: ["고성능 게임", "영상 편집", "작곡", "사무용", "상관없음", "기타"],
+    cpu: ["인텔", "AMD", "상관없음"],
     gpu: ["엔비디아", "AMD", "상관없음"],
     mainboard: ["인텔", "AMD", "상관없음"],
     memory: ["64G", "32G", "16G", "8G", "상관없음"],
   };
 
-  // 항목 배열 (렌더링 순서) (선언 순서 수정)
   const fieldOrder = [
     { id: "usage", label: "사용 용도" },
     { id: "budget", label: "금액 범위" },
@@ -49,7 +48,7 @@ const AiConsult = () => {
 
   const handleFieldClick = (field) => {
     if (activeField === field) {
-      setActiveField(null); // 같은 항목을 다시 누르면 닫기
+      setActiveField(null);
       return;
     }
 
@@ -69,7 +68,11 @@ const AiConsult = () => {
       ...prevData,
       [name]: value,
     }));
-    if (name !== "minBudget" && name !== "maxBudget") {
+    if (
+      name !== "minBudget" &&
+      name !== "maxBudget" &&
+      name !== "customUsage"
+    ) {
       setActiveField(null);
     }
   };
@@ -90,14 +93,106 @@ const AiConsult = () => {
 
       const data = await response.json();
       console.log("AI 응답:", data.result);
-      setAiResult(JSON.stringify(data.result, null, 2));
+
+      let jsonText = data.result || "";
+      const start = jsonText.indexOf("[");
+      const end = jsonText.lastIndexOf("]");
+      if (start !== -1 && end !== -1 && end > start) {
+        jsonText = jsonText.substring(start, end + 1);
+      }
+
+      jsonText = jsonText.replace(/```json|```/g, "").trim();
+
+      let parsedResult = [];
+      try {
+        parsedResult = JSON.parse(jsonText);
+        console.log("✅ JSON 파싱 성공:", parsedResult);
+
+        // ✅ 각 제품의 실제 가격/이미지/링크 가져오기 (병렬 처리)
+        const enrichedResults = await Promise.all(
+          parsedResult.map(async (item) => {
+            try {
+              // 가격 정보 가져오기
+              const priceResponse = await fetch(
+                `http://localhost:8880/api/price/product-info?productName=${encodeURIComponent(
+                  item["제품명"]
+                )}`
+              );
+              const priceData = await priceResponse.json();
+
+              // 이미지 정보 가져오기
+              const imageResponse = await fetch(
+                `http://localhost:8880/api/image/search?productName=${encodeURIComponent(
+                  item["제품명"]
+                )}`
+              );
+              const imageData = await imageResponse.json();
+
+              // 데이터 병합
+              return {
+                ...item,
+                제품이미지: imageData.success ? imageData.imageUrl : "",
+                가격:
+                  priceData.success && priceData.info["최저가"]
+                    ? priceData.info["최저가"]
+                    : "가격 정보 없음",
+                판매사이트링크:
+                  priceData.success && priceData.info["링크"]
+                    ? priceData.info["링크"]
+                    : `https://search.danawa.com/dsearch.php?query=${encodeURIComponent(
+                        item["제품명"]
+                      )}`,
+              };
+            } catch (error) {
+              console.error("정보 조회 실패:", item["제품명"], error);
+              return item; // 실패 시 원본 반환
+            }
+          })
+        );
+
+        parsedResult = enrichedResults;
+      } catch (err) {
+        console.warn("⚠️ JSON 재파싱 실패", jsonText);
+      }
+
+      setAiResult(parsedResult);
     } catch (err) {
       console.error(err);
       alert("AI 요청 실패");
     }
   };
 
-  // --- 개별 드롭다운 패널 렌더링 함수 ---
+  // 기본 이미지 반환 함수 (SVG 데이터 URI 사용)
+  const getDefaultImage = (productType) => {
+    const colors = {
+      CPU: "#4CAF50",
+      그래픽카드: "#2196F3",
+      GPU: "#2196F3",
+      메인보드: "#FF9800",
+      메모리: "#9C27B0",
+      RAM: "#9C27B0",
+      SSD: "#607D8B",
+      저장장치: "#607D8B",
+      파워서플라이: "#F44336",
+    };
+
+    const color = colors[productType] || "#757575";
+    const text = productType || "PC Part";
+
+    const svg = `
+      <svg width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+        <rect width="60" height="60" fill="${color}"/>
+        <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" 
+              font-family="Arial, sans-serif" font-size="10" fill="white" font-weight="bold">
+          ${text}
+        </text>
+      </svg>
+    `;
+
+    return `data:image/svg+xml;base64,${btoa(
+      unescape(encodeURIComponent(svg))
+    )}`;
+  };
 
   const renderOptionPanel = (fieldId, currentOptions) => (
     <div className="option-panel">
@@ -112,6 +207,17 @@ const AiConsult = () => {
           {option}
         </div>
       ))}
+      {fieldId === "usage" && formData.usage === "기타" && (
+        <div className="custom-usage-input">
+          <input
+            type="text"
+            placeholder="사용 용도를 입력하세요"
+            value={formData.customUsage}
+            onChange={(e) => handleChange("customUsage", e.target.value)}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </div>
   );
 
@@ -122,36 +228,56 @@ const AiConsult = () => {
       </div>
       <div className="slider-controls">
         <label>최소 예산 ({formData.minBudget}만 원)</label>
-        <input
-          type="range"
-          min="50"
-          max="500"
-          step="10"
-          value={formData.minBudget}
-          onChange={(e) => handleBudgetChange("minBudget", e.target.value)}
-        />
+        <div className="slider-with-input">
+          <input
+            type="range"
+            min="50"
+            max="500"
+            step="10"
+            value={formData.minBudget}
+            onChange={(e) => handleBudgetChange("minBudget", e.target.value)}
+          />
+          <input
+            type="number"
+            min="50"
+            max="500"
+            step="10"
+            value={formData.minBudget}
+            onChange={(e) => handleBudgetChange("minBudget", e.target.value)}
+            className="budget-number-input"
+          />
+        </div>
         <label>최대 예산 ({formData.maxBudget}만 원)</label>
-        <input
-          type="range"
-          min="50"
-          max="500"
-          step="10"
-          value={formData.maxBudget}
-          onChange={(e) => handleBudgetChange("maxBudget", e.target.value)}
-        />
+        <div className="slider-with-input">
+          <input
+            type="range"
+            min="50"
+            max="500"
+            step="10"
+            value={formData.maxBudget}
+            onChange={(e) => handleBudgetChange("maxBudget", e.target.value)}
+          />
+          <input
+            type="number"
+            min="50"
+            max="500"
+            step="10"
+            value={formData.maxBudget}
+            onChange={(e) => handleBudgetChange("maxBudget", e.target.value)}
+            className="budget-number-input"
+          />
+        </div>
       </div>
     </div>
   );
 
-  // --- 컴포넌트 렌더링 ---
   return (
     <form className="ai-consult-form-grid" onSubmit={handleSubmit}>
       <div className="form-grid-container">
-        {/* 1. 클릭 가능한 항목 버튼 영역 */}
-        {fieldOrder.map((field, index) => (
+        {fieldOrder.map((field) => (
           <React.Fragment key={field.id}>
             <div
-              ref={itemRefs.get(field.id)} // ref 연결
+              ref={itemRefs.get(field.id)}
               className={`form-item ${
                 activeField === field.id ? "active" : ""
               }`}
@@ -161,19 +287,19 @@ const AiConsult = () => {
               <div className="selected-value">
                 {field.id === "budget"
                   ? `${formData.minBudget}만 ~ ${formData.maxBudget}만`
+                  : field.id === "usage" && formData.usage === "기타"
+                  ? `기타: ${formData.customUsage || "(입력 필요)"}`
                   : formData[field.id]}
               </div>
             </div>
           </React.Fragment>
         ))}
 
-        {/* 2. 검색하기 버튼 */}
         <button type="submit" className="search-button">
           검색하기
         </button>
       </div>
 
-      {/* 3. 활성화된 필드에 따른 드롭다운 패널 */}
       {activeField && (
         <div
           className="dropdown-wrapper"
@@ -183,7 +309,6 @@ const AiConsult = () => {
             minWidth: dropdownPosition.minWidth,
           }}
         >
-          {/* 닫기 버튼 */}
           <button
             className="close-panel-btn"
             onClick={() => setActiveField(null)}
@@ -197,9 +322,52 @@ const AiConsult = () => {
         </div>
       )}
 
-      {aiResult && (
-        <div className="ai-result-panel">
-          <pre>{aiResult}</pre>
+      {/* 테이블형 목록 렌더링 영역 */}
+      {aiResult && Array.isArray(aiResult) && aiResult.length > 0 && (
+        <div className="ai-result-list-container">
+          {/* 목록 헤더 */}
+          <div className="product-list-header">
+            <div className="col-image"></div>
+            <div className="col-type">종류</div>
+            <div className="col-name">제품명</div>
+            <div className="col-price" style={{ textAlign: "right" }}>
+              가격
+            </div>
+            <div className="col-link">구매</div>
+          </div>
+
+          {/* 목록 아이템 */}
+          {aiResult.map((item, index) => (
+            <div key={index} className="product-list-item">
+              <div className="col-image">
+                <img
+                  src={
+                    item["제품이미지"] ||
+                    productImages[item["제품명"]] ||
+                    getDefaultImage(item["제품종류"])
+                  }
+                  alt={item["제품명"]}
+                  onError={(e) => {
+                    e.target.src = getDefaultImage(item["제품종류"]);
+                  }}
+                />
+              </div>
+
+              <div className="col-type">{item["제품종류"]}</div>
+              <div className="col-name">{item["제품명"]}</div>
+              <div className="col-price">{item["가격"]}</div>
+
+              <div className="col-link">
+                <a
+                  href={item["판매사이트링크"]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  바로가기
+                </a>
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </form>
