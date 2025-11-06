@@ -67,6 +67,10 @@ function Login({ onLogin, setRole }) {
     window.location.href = "http://localhost:8880/oauth2/authorization/naver";
   };
 
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:8880/oauth2/authorization/google";
+  };
+
   return (
     <div className="login-container">
       {/* 일반 로그인 시작 */}
@@ -122,6 +126,34 @@ function Login({ onLogin, setRole }) {
           네이버 로그인
         </button>
         {/* 네이버 로그인 끝 */}
+
+        {/* 구글 로그인 시작 */}
+        <button
+          className="google-login-btn"
+          onClick={handleGoogleLogin}
+          type="button"
+          style={{
+            marginTop: "10px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "#fff",
+            color: "#000",
+            border: "1px solid #ddd",
+            padding: "10px",
+            borderRadius: "5px",
+            width: "100%",
+            cursor: "pointer",
+          }}
+        >
+          <img
+            src="https://developers.google.com/identity/images/g-logo.png"
+            alt="Google Logo"
+            style={{ width: "20px", height: "20px", marginRight: "8px" }}
+          />
+          Google 로그인
+        </button>
+        {/* 구글 로그인 끝 */}
 
         {/* 회원 가입 시작 */}
         <div className="login-signup-link">

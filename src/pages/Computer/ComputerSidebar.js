@@ -3,14 +3,14 @@ import "./ComputerSidebar.css"; // 새로운 CSS 파일 임포트
 
 function ComputerSidebar() {
   const menuItems = [
-    { name: "CPU", path: "./cpu" },
-    { name: "쿨러", path: "./cooler" },
-    { name: "메인보드", path: "./mainboard" },
-    { name: "메모리", path: "./memory" },
-    { name: "그래픽카드", path: "./gpu" },
-    { name: "디스크 (SSD/HDD)", path: "./disk" },
-    { name: "케이스", path: "./case" },
-    { name: "파워", path: "./power" },
+    { name: "CPU", path: "/cpu" },
+    { name: "쿨러", path: "/cooler" },
+    { name: "메인보드", path: "/mainboard" },
+    { name: "메모리", path: "/memory" },
+    { name: "그래픽카드", path: "/gpu" },
+    { name: "디스크 (SSD/HDD)", path: "/disk" },
+    { name: "케이스", path: "/case" },
+    { name: "파워", path: "/power" },
   ];
 
   return (
