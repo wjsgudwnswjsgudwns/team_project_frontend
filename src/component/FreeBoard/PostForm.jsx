@@ -11,17 +11,16 @@ export default function PostForm({
   const fileInputRef = useRef(null);
   const isComposingRef = useRef(false);
 
-  // 로컬 상태로 제목 관리
   const [localTitle, setLocalTitle] = useState(formData.fTitle);
+  const [showVideoModal, setShowVideoModal] = useState(false);
+  const [videoUrl, setVideoUrl] = useState("");
 
-  // 부모로부터 받은 formData가 변경될 때만 동기화
   useEffect(() => {
     setLocalTitle(formData.fTitle);
   }, [formData.fTitle]);
 
   useEffect(() => {
     if (contentEditableRef.current) {
-      // 기존 내용과 다를 때만 업데이트
       if (contentEditableRef.current.innerHTML !== formData.fContent) {
         contentEditableRef.current.innerHTML = formData.fContent || "";
       }
@@ -60,7 +59,6 @@ export default function PostForm({
             selection.addRange(range);
           }
 
-          // 즉시 부모에게 알림
           onFormChange({
             fTitle: localTitle,
             fContent: contentEditableRef.current.innerHTML,
@@ -75,8 +73,85 @@ export default function PostForm({
     }
   };
 
+  // 동영상 URL을 embed 코드로 변환
+  const convertToEmbedUrl = (url) => {
+    // YouTube
+    const youtubeRegex =
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const youtubeMatch = url.match(youtubeRegex);
+    if (youtubeMatch) {
+      return `https://www.youtube.com/embed/${youtubeMatch[1]}`;
+    }
+
+    // Vimeo
+    const vimeoRegex = /vimeo\.com\/(\d+)/;
+    const vimeoMatch = url.match(vimeoRegex);
+    if (vimeoMatch) {
+      return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+    }
+
+    return null;
+  };
+
+  // 동영상 삽입
+  const handleVideoInsert = () => {
+    if (!videoUrl.trim()) {
+      alert("동영상 URL을 입력해주세요.");
+      return;
+    }
+
+    const embedUrl = convertToEmbedUrl(videoUrl);
+    if (!embedUrl) {
+      alert("지원하는 형식: YouTube, Vimeo URL을 입력해주세요.");
+      return;
+    }
+
+    const videoContainer = document.createElement("div");
+    videoContainer.className = "video-container";
+    videoContainer.style.position = "relative";
+    videoContainer.style.paddingBottom = "56.25%"; // 16:9 비율
+    videoContainer.style.height = "0";
+    videoContainer.style.overflow = "hidden";
+    videoContainer.style.margin = "15px 0";
+
+    const iframe = document.createElement("iframe");
+    iframe.src = embedUrl;
+    iframe.style.position = "absolute";
+    iframe.style.top = "0";
+    iframe.style.left = "0";
+    iframe.style.width = "100%";
+    iframe.style.height = "100%";
+    iframe.setAttribute("frameborder", "0");
+    iframe.setAttribute("allowfullscreen", "true");
+
+    videoContainer.appendChild(iframe);
+
+    if (contentEditableRef.current) {
+      contentEditableRef.current.focus();
+
+      const selection = window.getSelection();
+      if (selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        range.deleteContents();
+        range.insertNode(videoContainer);
+
+        range.setStartAfter(videoContainer);
+        range.setEndAfter(videoContainer);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+
+      onFormChange({
+        fTitle: localTitle,
+        fContent: contentEditableRef.current.innerHTML,
+      });
+    }
+
+    setVideoUrl("");
+    setShowVideoModal(false);
+  };
+
   const handleContentChange = () => {
-    // 한글 조합 중이면 무시
     if (isComposingRef.current) return;
 
     if (contentEditableRef.current) {
@@ -93,7 +168,6 @@ export default function PostForm({
 
   const handleCompositionEnd = () => {
     isComposingRef.current = false;
-    // 조합이 끝났을 때 한 번만 업데이트
     if (contentEditableRef.current) {
       onFormChange({
         fTitle: localTitle,
@@ -106,7 +180,6 @@ export default function PostForm({
     const newTitle = e.target.value;
     setLocalTitle(newTitle);
 
-    // 부모에게 즉시 알림
     onFormChange({
       fTitle: newTitle,
       fContent: contentEditableRef.current?.innerHTML || formData.fContent,
@@ -131,8 +204,15 @@ export default function PostForm({
         >
           📷 이미지 삽입
         </button>
+        <button
+          type="button"
+          onClick={() => setShowVideoModal(true)}
+          className="video-insert-btn"
+        >
+          🎥 동영상 삽입
+        </button>
         <span className="image-insert-note">
-          커서 위치에 이미지가 삽입됩니다 (최대 5MB)
+          커서 위치에 미디어가 삽입됩니다
         </span>
       </div>
 
@@ -166,6 +246,46 @@ export default function PostForm({
           </button>
         )}
       </div>
+
+      {/* 동영상 URL 입력 모달 */}
+      {showVideoModal && (
+        <div
+          className="video-modal-overlay"
+          onClick={() => setShowVideoModal(false)}
+        >
+          <div className="video-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>동영상 삽입</h3>
+            <p>YouTube 또는 Vimeo URL을 입력하세요</p>
+            <input
+              type="text"
+              placeholder="https://www.youtube.com/watch?v=..."
+              value={videoUrl}
+              onChange={(e) => setVideoUrl(e.target.value)}
+              className="video-url-input"
+              onKeyPress={(e) => {
+                if (e.key === "Enter") handleVideoInsert();
+              }}
+            />
+            <div className="video-modal-buttons">
+              <button
+                onClick={handleVideoInsert}
+                className="video-modal-insert-btn"
+              >
+                삽입
+              </button>
+              <button
+                onClick={() => {
+                  setShowVideoModal(false);
+                  setVideoUrl("");
+                }}
+                className="video-modal-cancel-btn"
+              >
+                취소
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

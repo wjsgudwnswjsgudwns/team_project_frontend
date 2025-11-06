@@ -446,6 +446,130 @@
   background-color: #4b5563;
 }
 
+/* ========== 동영상 삽입 버튼 ========== */
+.video-insert-btn {
+  padding: 10px 20px;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.video-insert-btn:hover {
+  background-color: #dc2626;
+}
+
+/* ========== 동영상 모달 ========== */
+.video-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.video-modal {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.video-modal h3 {
+  margin: 0 0 10px 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.video-modal p {
+  margin: 0 0 20px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.video-url-input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-bottom: 20px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.video-url-input:focus {
+  border-color: #333;
+}
+
+.video-modal-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.video-modal-insert-btn {
+  padding: 10px 24px;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.video-modal-insert-btn:hover {
+  background-color: #dc2626;
+}
+
+.video-modal-cancel-btn {
+  padding: 10px 24px;
+  background-color: #6b7280;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.video-modal-cancel-btn:hover {
+  background-color: #4b5563;
+}
+
+/* ========== 게시글 상세 내 동영상 컨테이너 ========== */
+.detail-content .video-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  margin: 15px 0;
+  border-radius: 4px;
+}
+
+.detail-content .video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
 /* ========== 반응형 디자인 ========== */
 @media (max-width: 768px) {
   .freeboard-container {
