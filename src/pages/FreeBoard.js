@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useFreeBoard } from "../hooks/useFreeBoard";
 import { useAuth } from "../hooks/useAuth";
 import { useSearch } from "../hooks/useSearch";
@@ -9,6 +10,9 @@ import SearchBar from "../component/FreeBoard/SearchBar";
 import "./FreeBoard.css";
 
 export default function FreeBoard() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [activeTab, setActiveTab] = useState("posts");
   const [formData, setFormData] = useState({ fTitle: "", fContent: "" });
   const [isEditing, setIsEditing] = useState(false);
@@ -42,14 +46,32 @@ export default function FreeBoard() {
     resetSearch,
   } = useSearch();
 
+  // URL 파라미터로 activeTab 관리
   useEffect(() => {
-    fetchPosts();
-  }, [page, fetchPosts]);
+    const params = new URLSearchParams(location.search);
+    const tab = params.get("tab");
+    const postId = params.get("postId");
 
-  // 게시글 클릭
+    if (postId) {
+      handlePostClick(parseInt(postId));
+    } else if (tab) {
+      setActiveTab(tab);
+    } else {
+      setActiveTab("posts");
+    }
+  }, [location.search]);
+
+  useEffect(() => {
+    if (activeTab === "posts") {
+      fetchPosts();
+    }
+  }, [page, fetchPosts, activeTab]);
+
+  // 게시글 클릭 (URL 업데이트)
   const handlePostClick = async (id) => {
     await fetchPostDetail(id);
     setActiveTab("detail");
+    navigate(`/freeboard?tab=detail&postId=${id}`);
   };
 
   // 글쓰기/수정 제출
@@ -74,6 +96,7 @@ export default function FreeBoard() {
       setEditingId(null);
       fetchPosts();
       setActiveTab("posts");
+      navigate("/freeboard?tab=posts");
     }
   };
 
@@ -86,6 +109,7 @@ export default function FreeBoard() {
       fContent: post.fcontent,
     });
     setActiveTab("write");
+    navigate("/freeboard?tab=write");
   };
 
   // 삭제
@@ -94,6 +118,7 @@ export default function FreeBoard() {
     if (success) {
       fetchPosts();
       setActiveTab("posts");
+      navigate("/freeboard?tab=posts");
     }
   };
 
@@ -103,6 +128,7 @@ export default function FreeBoard() {
     setEditingId(null);
     setFormData({ fTitle: "", fContent: "" });
     setActiveTab("posts");
+    navigate("/freeboard?tab=posts");
   };
 
   // 검색
@@ -122,6 +148,13 @@ export default function FreeBoard() {
     });
   };
 
+  // 목록으로 돌아가기
+  const handleBackToList = () => {
+    setActiveTab("posts");
+    navigate("/freeboard?tab=posts");
+    fetchPosts();
+  };
+
   return (
     <div className="freeboard-container">
       <div className="freeboard-wrapper">
@@ -130,6 +163,7 @@ export default function FreeBoard() {
           <button
             onClick={() => {
               setActiveTab("posts");
+              navigate("/freeboard?tab=posts");
               fetchPosts();
             }}
             className={`tab-btn ${activeTab === "posts" ? "active" : ""}`}
@@ -139,6 +173,7 @@ export default function FreeBoard() {
           <button
             onClick={() => {
               setActiveTab("write");
+              navigate("/freeboard?tab=write");
               setIsEditing(false);
               setFormData({ fTitle: "", fContent: "" });
             }}
@@ -221,10 +256,8 @@ export default function FreeBoard() {
             onLike={() => toggleLike(selectedPost.id)}
             onEdit={() => startEdit(selectedPost)}
             onDelete={handleDeleteClick}
-            onBack={() => {
-              setActiveTab("posts");
-              fetchPosts();
-            }}
+            onBack={handleBackToList}
+            onPostClick={handlePostClick}
           />
         )}
       </div>
