@@ -27,6 +27,7 @@ import HardCase from "./pages/Computer/HardCase";
 import HardCaseView from "./pages/Computer/ViewDetail/HardCaseView";
 import Power from "./pages/Computer/Power";
 import PowerView from "./pages/Computer/ViewDetail/PowerView";
+import { CartProvider } from "./pages/Computer/context/CartContext";
 
 function App() {
   const [user, setUser] = useState(null); // 현재 로그인한 유저의 이름
@@ -86,53 +87,64 @@ function App() {
   return (
     <div className="App">
       <Navbar onLogout={handleLogout} user={user} role={role} />
-      <Routes>
-        <Route path="/" element={<Home user={user} role={role} />}></Route>
-        <Route path="/signup" element={<Signup />}></Route>
-        <Route
-          path="/login"
-          element={<Login onLogin={setUser} setRole={setRole} />}
-        ></Route>
-        <Route
-          path="/oauth2/redirect"
-          element={
-            <OAuth2RedirectHandler onLogin={setUser} setRole={setRole} />
-          }
-        />
+      <CartProvider>
+        <Routes>
+          <Route path="/" element={<Home user={user} role={role} />}></Route>
+          <Route path="/signup" element={<Signup />}></Route>
+          <Route
+            path="/login"
+            element={<Login onLogin={setUser} setRole={setRole} />}
+          ></Route>
+          <Route
+            path="/oauth2/redirect"
+            element={
+              <OAuth2RedirectHandler onLogin={setUser} setRole={setRole} />
+            }
+          />
 
-        <Route path="/input" element={<Input />}></Route>
+          <Route path="/input" element={<Input />}></Route>
 
-        <Route path="/cpu" element={<Cpu role={role} />}></Route>
-        <Route path="/cpu/:id" element={<CpuView role={role} />}></Route>
+          <Route path="/cpu" element={<Cpu role={role} />}></Route>
+          <Route path="/cpu/:id" element={<CpuView role={role} />}></Route>
 
-        <Route path="/cooler" element={<Cooler role={role} />}></Route>
-        <Route path="/cooler/:id" element={<CoolerView role={role} />}></Route>
+          <Route path="/cooler" element={<Cooler role={role} />}></Route>
+          <Route
+            path="/cooler/:id"
+            element={<CoolerView role={role} />}
+          ></Route>
 
-        <Route path="/mainboard" element={<MainBoard role={role} />}></Route>
-        <Route
-          path="/mainboard/:id"
-          element={<MainBoardView role={role} />}
-        ></Route>
+          <Route path="/mainboard" element={<MainBoard role={role} />}></Route>
+          <Route
+            path="/mainboard/:id"
+            element={<MainBoardView role={role} />}
+          ></Route>
 
-        <Route path="/memory" element={<Memory role={role} />}></Route>
-        <Route path="/memory/:id" element={<MemoryView role={role} />}></Route>
+          <Route path="/memory" element={<Memory role={role} />}></Route>
+          <Route
+            path="/memory/:id"
+            element={<MemoryView role={role} />}
+          ></Route>
 
-        <Route path="/gpu" element={<Gpu role={role} />}></Route>
-        <Route path="/gpu/:id" element={<GpuView role={role} />}></Route>
+          <Route path="/gpu" element={<Gpu role={role} />}></Route>
+          <Route path="/gpu/:id" element={<GpuView role={role} />}></Route>
 
-        <Route path="/disk" element={<Disk role={role} />}></Route>
-        <Route path="/disk/:id" element={<DiskView role={role} />}></Route>
+          <Route path="/disk" element={<Disk role={role} />}></Route>
+          <Route path="/disk/:id" element={<DiskView role={role} />}></Route>
 
-        <Route path="/case" element={<HardCase role={role} />}></Route>
-        <Route path="/case/:id" element={<HardCaseView role={role} />}></Route>
+          <Route path="/case" element={<HardCase role={role} />}></Route>
+          <Route
+            path="/case/:id"
+            element={<HardCaseView role={role} />}
+          ></Route>
 
-        <Route path="/power" element={<Power role={role} />}></Route>
-        <Route path="/power/:id" element={<PowerView role={role} />}></Route>
+          <Route path="/power" element={<Power role={role} />}></Route>
+          <Route path="/power/:id" element={<PowerView role={role} />}></Route>
 
-        <Route path="/freeboard" element={<FreeBoard />}></Route>
+          <Route path="/freeboard" element={<FreeBoard />}></Route>
 
-        <Route path="/ai" element={<AiConsult />}></Route>
-      </Routes>
+          <Route path="/ai" element={<AiConsult />}></Route>
+        </Routes>
+      </CartProvider>
     </div>
   );
 }
