@@ -2,51 +2,63 @@ import { useState, useEffect } from "react";
 import api from "../../api/axiosConfig";
 import "./BottomPostList.css";
 
-export default function BottomPostList({ currentPostId, onPostClick }) {
+export default function BottomPostList({
+  currentPostId,
+  initialPage = 0,
+  onPostClick,
+}) {
   const [posts, setPosts] = useState([]);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(initialPage); // ✅ 초기값을 initialPage로 설정
   const [totalPages, setTotalPages] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // 🔥 currentPostId가 변경될 때만 초기화
+  // ✅ initialPage 변경 시 page 상태 업데이트
   useEffect(() => {
-    console.log("🔵 currentPostId 변경됨:", currentPostId);
-    setPage(0);
-  }, [currentPostId]);
+    console.log("🔵 BottomPostList - initialPage 변경:", {
+      currentPostId,
+      initialPage,
+    });
+    setPage(initialPage);
+  }, [currentPostId, initialPage]);
 
-  // 🔥 page 또는 currentPostId 변경 시 fetch
+  // ✅ page 또는 currentPostId 변경 시 fetch
   useEffect(() => {
     if (currentPostId) {
-      console.log("🟢 fetchNearbyPosts 호출:", { currentPostId, page });
+      console.log("🟢 페이지로 fetch:", page);
       fetchNearbyPosts(page);
     }
   }, [page, currentPostId]);
 
   const fetchNearbyPosts = async (pageNum) => {
-    try {
-      console.log(
-        "📡 API 요청:",
-        `/api/freeboard/${currentPostId}/nearby?page=${pageNum}&size=10`
-      );
+    if (isLoading) return;
 
-      const res = await api.get(
-        `/api/freeboard/${currentPostId}/nearby?page=${pageNum}&size=10`
-      );
+    setIsLoading(true);
+    try {
+      console.log("📡 API 요청:", `/api/freeboard?page=${pageNum}&size=10`);
+
+      const res = await api.get(`/api/freeboard?page=${pageNum}&size=10`);
 
       console.log("📥 API 응답:", res.data);
 
-      // 🔥 응답 구조 확인 및 데이터 설정
-      if (res.data.content) {
+      if (res.data && res.data.content) {
         setPosts(res.data.content);
         setTotalPages(res.data.totalPages);
         console.log("✅ 데이터 설정 완료:", {
           posts: res.data.content.length,
           totalPages: res.data.totalPages,
+          currentPage: pageNum,
         });
       } else {
         console.error("❌ content가 없음:", res.data);
+        setPosts([]);
+        setTotalPages(0);
       }
     } catch (err) {
       console.error("❌ 하단 게시글 목록 조회 실패:", err);
+      setPosts([]);
+      setTotalPages(0);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -55,11 +67,19 @@ export default function BottomPostList({ currentPostId, onPostClick }) {
     setPage(newPage);
   };
 
+  // ✅ 게시글 클릭 시 현재 page도 함께 전달
+  const handlePostItemClick = (postId) => {
+    console.log("🖱️ 게시글 클릭:", postId, "현재 페이지:", page);
+    onPostClick(postId, page);
+  };
+
   return (
     <div className="bottom-post-section">
       <h3 className="bottom-post-title">다른 게시글</h3>
       <div className="bottom-post-list">
-        {posts.length === 0 ? (
+        {isLoading ? (
+          <div className="empty-message">로딩 중...</div>
+        ) : posts.length === 0 ? (
           <div className="empty-message">게시글이 없습니다.</div>
         ) : (
           posts.map((post) => (
@@ -68,11 +88,11 @@ export default function BottomPostList({ currentPostId, onPostClick }) {
               className={`bottom-post-item ${
                 post.id === currentPostId ? "current" : ""
               }`}
-              onClick={() => onPostClick(post.id)}
+              onClick={() => handlePostItemClick(post.id)}
             >
               <div className="bottom-post-header">
                 <h4 className="bottom-post-title-text">{post.ftitle}</h4>
-                {post.ffile && post.ffile !== "[]" && (
+                {post.fFile && post.fFile !== "[]" && (
                   <span className="bottom-image-badge">📷</span>
                 )}
               </div>
@@ -92,12 +112,11 @@ export default function BottomPostList({ currentPostId, onPostClick }) {
         )}
       </div>
 
-      {/* 페이지네이션 */}
       {totalPages > 1 && (
         <div className="bottom-post-pagination">
           <button
             onClick={() => handlePageChange(page - 1)}
-            disabled={page === 0}
+            disabled={page === 0 || isLoading}
             className="bottom-page-btn"
           >
             이전
@@ -107,7 +126,7 @@ export default function BottomPostList({ currentPostId, onPostClick }) {
           </span>
           <button
             onClick={() => handlePageChange(page + 1)}
-            disabled={page >= totalPages - 1}
+            disabled={page >= totalPages - 1 || isLoading}
             className="bottom-page-btn"
           >
             다음
@@ -115,9 +134,9 @@ export default function BottomPostList({ currentPostId, onPostClick }) {
         </div>
       )}
 
-      {/* 🔥 디버깅용 정보 */}
       <div style={{ fontSize: "12px", color: "#999", marginTop: "10px" }}>
         현재: {page + 1}페이지 / 총 {totalPages}페이지 / 게시글 {posts.length}개
+        / initialPage: {initialPage}
       </div>
     </div>
   );

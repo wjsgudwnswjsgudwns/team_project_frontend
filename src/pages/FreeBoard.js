@@ -80,19 +80,43 @@ export default function FreeBoard() {
     }
   }, [page, fetchPosts, activeTab]);
 
-  // ✅ 게시글 클릭 (히스토리 1개만 추가)
-  const handlePostClick = async (id) => {
+  // // 게시글 클릭 (히스토리 1개만 추가)
+  // const handlePostClick = async (id, fromPage = page) => {
+  //   isNavigatingRef.current = true;
+
+  //   await fetchPostDetail(id);
+  //   setActiveTab("detail");
+
+  //   // fromPage가 명시적으로 전달되지 않으면 현재 page 사용
+  //   const targetPage = fromPage !== undefined ? fromPage : page; // ✅ undefined 체크
+  //   navigate(`/freeboard?tab=detail&postId=${id}&page=${targetPage}`, {
+  //     replace: false,
+  //   });
+  // };
+
+  const handlePostClick = async (id, fromPage = page) => {
+    console.log("🔴 handlePostClick 호출:", {
+      id,
+      fromPage,
+      currentPage: page,
+      fromPageType: typeof fromPage,
+    });
+
     isNavigatingRef.current = true;
 
-    // State 먼저 변경
     await fetchPostDetail(id);
     setActiveTab("detail");
 
-    // navigate는 딱 한 번만
-    navigate(`/freeboard?tab=detail&postId=${id}`, { replace: false });
+    const targetPage = fromPage !== undefined ? fromPage : page;
+
+    console.log("🔴 navigate할 페이지:", targetPage);
+
+    navigate(`/freeboard?tab=detail&postId=${id}&page=${targetPage}`, {
+      replace: false,
+    });
   };
 
-  // ✅ 목록으로 돌아가기 (replace 사용)
+  // 목록으로 돌아가기 (replace 사용)
   const handleBackToList = () => {
     isNavigatingRef.current = true;
     setActiveTab("posts");
@@ -230,6 +254,7 @@ export default function FreeBoard() {
               posts={posts}
               onPostClick={handlePostClick}
               isSearching={isSearching}
+              currentPage={page}
             />
 
             {/* 페이지네이션 */}

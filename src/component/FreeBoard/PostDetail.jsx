@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import FreeCommentSection from "./FreeCommentSection";
 import BottomPostList from "./BottomPostList";
 
@@ -14,11 +14,20 @@ export default function PostDetail({
   onPostClick,
 }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const isAuthor = currentUsername && post.username === currentUsername;
 
-  // ✅ 뒤로가기 처리 - onBack()만 호출
+  // URL에서 페이지 정보 추출
+  const urlParams = new URLSearchParams(location.search);
+  const currentPage = parseInt(urlParams.get("page")) || 0;
+
   const handleBackClick = () => {
-    onBack(); // FreeBoard.js의 handleBackToList 호출
+    onBack();
+  };
+
+  // 하단 목록에서 게시글 클릭 시 현재 페이지 정보도 함께 전달
+  const handleBottomPostClick = (postId, fromPage) => {
+    onPostClick(postId, fromPage);
   };
 
   return (
@@ -72,7 +81,12 @@ export default function PostDetail({
       <FreeCommentSection boardId={post.id} currentUsername={currentUsername} />
 
       {/* 하단 게시글 목록 */}
-      <BottomPostList currentPostId={post.id} onPostClick={onPostClick} />
+      <BottomPostList
+        key={`${post.id}-${currentPage}`} // key 추가로 강제 리마운트
+        currentPostId={post.id}
+        initialPage={currentPage}
+        onPostClick={handleBottomPostClick}
+      />
 
       <div className="back-button-area">
         <button onClick={handleBackClick} className="back-btn">

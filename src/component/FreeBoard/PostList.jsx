@@ -1,5 +1,10 @@
-export default function PostList({ posts, onPostClick, isSearching }) {
-  // ✅ posts가 undefined이거나 배열이 아닐 경우 처리
+export default function PostList({
+  posts,
+  onPostClick,
+  isSearching,
+  currentPage,
+}) {
+  // posts가 undefined이거나 배열이 아닐 경우 처리
   if (!posts || !Array.isArray(posts) || posts.length === 0) {
     return (
       <div className="empty-message">
@@ -14,7 +19,11 @@ export default function PostList({ posts, onPostClick, isSearching }) {
         <div
           key={post.id}
           className="post-item"
-          onClick={() => onPostClick(post.id)}
+          // onClick={() => onPostClick(post.id, currentPage)}
+          onClick={() => {
+            console.log("🟡 PostList 클릭:", { postId: post.id, currentPage });
+            onPostClick(post.id, currentPage);
+          }}
         >
           <div className="post-header">
             <h3 className="post-title">{post.ftitle}</h3>
