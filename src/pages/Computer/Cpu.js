@@ -9,10 +9,10 @@ function Cpu({ role }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [addingToCart, setAddingToCart] = useState({});
 
   const navigate = useNavigate();
 
-  // 상품 목록 가져오기
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -34,14 +34,35 @@ function Cpu({ role }) {
     }
   };
 
-  // 검색 필터링
   const filteredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // 상세보기로 이동
-  const handleRowClick = (productId) => {
+  const handleProductClick = (productId) => {
     navigate(`/cpu/${productId}`);
+  };
+
+  const handleAddToCart = async (e, productId) => {
+    e.stopPropagation();
+
+    try {
+      setAddingToCart((prev) => ({ ...prev, [productId]: true }));
+      await api.post("/api/cart", {
+        productId: productId,
+        quantity: 1,
+      });
+      alert("장바구니에 추가되었습니다.");
+    } catch (err) {
+      console.error("장바구니 추가 실패:", err);
+      if (err.response?.status === 401) {
+        alert("로그인이 필요합니다.");
+        navigate("/login");
+      } else {
+        alert("장바구니 추가에 실패했습니다.");
+      }
+    } finally {
+      setAddingToCart((prev) => ({ ...prev, [productId]: false }));
+    }
   };
 
   if (loading) {
@@ -70,12 +91,10 @@ function Cpu({ role }) {
     <div className="cpu-page-container">
       <ComputerSidebar />
       <div className="cpu-content">
-        {/* 헤더 */}
         <div className="page-header">
           <h1>CPU</h1>
         </div>
 
-        {/* 검색 & 등록 버튼 */}
         <div className="board-controls">
           <div className="search-box">
             <input
@@ -94,48 +113,61 @@ function Cpu({ role }) {
           )}
         </div>
 
-        {/* 게시판 테이블 */}
-        <div className="board-wrapper">
-          <table className="board-table">
-            <thead>
-              <tr>
-                <th className="col-no">이미지</th>
-                <th className="col-title">상품</th>
-                <th className="col-manufacturer">제조사</th>
-                <th className="col-price">가격</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredProducts.length === 0 ? (
-                <tr>
-                  <td colSpan="4" className="no-data">
-                    {searchTerm
-                      ? "검색 결과가 없습니다."
-                      : "등록된 상품이 없습니다."}
-                  </td>
-                </tr>
-              ) : (
-                filteredProducts.map((product, index) => (
-                  <tr
-                    key={product.id}
-                    onClick={() => handleRowClick(product.id)}
-                    className="board-row"
-                  >
-                    <td className="col-no">
-                      <img src={product.imageUrl} alt={product.name} />
-                    </td>
-                    <td className="col-title">{product.name}</td>
-                    <td className="col-manufacturer">
-                      {product.manufacturer || "-"}
-                    </td>
-                    <td className="col-price">
+        <div className="product-list">
+          {filteredProducts.length === 0 ? (
+            <div className="no-data">
+              {searchTerm ? "검색 결과가 없습니다." : "등록된 상품이 없습니다."}
+            </div>
+          ) : (
+            filteredProducts.map((product) => (
+              <div
+                key={product.id}
+                className="product-item"
+                onClick={() => handleProductClick(product.id)}
+              >
+                <div className="product-number">{product.id}</div>
+
+                <div className="product-image">
+                  <img src={product.imageUrl} alt={product.name} />
+                </div>
+
+                <div className="product-info">
+                  <h3 className="product-title">{product.name}</h3>
+
+                  <div className="product-specs">
+                    {product.manufacturer && (
+                      <span className="spec-text">{product.manufacturer}</span>
+                    )}
+                    {product.specifications &&
+                      Object.entries(JSON.parse(product.specifications)).map(
+                        ([key, value], index) => (
+                          <span key={index} className="spec-text">
+                            {value}
+                          </span>
+                        )
+                      )}
+                  </div>
+                </div>
+
+                <div className="product-actions">
+                  <div className="price-section">
+                    <span className="price-label">판매가</span>
+                    <span className="product-price">
                       {parseInt(product.price).toLocaleString()}원
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                    </span>
+                  </div>
+
+                  <button
+                    className="cart-btn"
+                    onClick={(e) => handleAddToCart(e, product.id)}
+                    disabled={addingToCart[product.id]}
+                  >
+                    {addingToCart[product.id] ? "추가중..." : "담기"}
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
