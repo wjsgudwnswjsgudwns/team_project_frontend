@@ -6,7 +6,6 @@
 @keyframes neonPulse {
   0%,
   100% {
-    /* 네온 그린 -> 화이트 펄스 */
     text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 30px #ffffff;
   }
   50% {
@@ -17,7 +16,6 @@
 @keyframes borderGlow {
   0%,
   100% {
-    /* 오렌지 -> 비비드 레드 글로우 */
     box-shadow: 0 0 5px #ff3b30, 0 0 10px #ff3b30, inset 0 0 5px #ff3b30;
   }
   50% {
@@ -63,11 +61,10 @@
 /* === 폼 컨테이너 === */
 .ai-consult-form-grid {
   min-height: 100vh;
-  /* 배경 #0a0a0a -> #000000 */
   background: #000000;
   background-image: repeating-linear-gradient(
       0deg,
-      /* 네온 그린 -> 화이트 옅은 그리드 */ rgba(255, 255, 255, 0.02) 0px,
+      rgba(255, 255, 255, 0.02) 0px,
       transparent 1px,
       transparent 2px,
       rgba(255, 255, 255, 0.02) 3px
@@ -92,7 +89,7 @@
   height: 400px;
   background: radial-gradient(
     ellipse at top,
-    /* 네온 그린 -> 화이트 옅은 글로우 */ rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0.08),
     transparent 70%
   );
   pointer-events: none;
@@ -103,11 +100,8 @@
   max-width: 1200px;
   margin: 0 auto;
   background: rgba(10, 10, 10, 0.95);
-  /* 네온 그린 -> 화이트 테두리 */
   border: 2px solid #ffffff;
-  /* **여백 복구 (원래 값 유지)** */
   padding: 48px;
-  /* 네온 그린 -> 화이트 섀도우 */
   box-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -115,14 +109,12 @@
   position: relative;
 }
 
-/* 코너 장식 */
 .form-grid-container::before,
 .form-grid-container::after {
   content: "";
   position: absolute;
   width: 30px;
   height: 30px;
-  /* 오렌지 -> 비비드 레드 코너 */
   border: 3px solid #ff3b30;
 }
 
@@ -158,7 +150,6 @@
   left: -25px;
   top: 50%;
   transform: translateY(-50%);
-  /* 네온 그린 -> 화이트 커서 */
   color: #ffffff;
   font-weight: 900;
   font-size: 24px;
@@ -167,7 +158,6 @@
 }
 
 .form-item:hover {
-  /* 네온 그린 -> 화이트 호버 */
   border-color: #ffffff;
   background: rgba(255, 255, 255, 0.03);
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
@@ -175,7 +165,6 @@
 }
 
 .form-item.active {
-  /* 오렌지 -> 비비드 레드 활성 */
   border-color: #ff3b30;
   background: rgba(255, 59, 48, 0.03);
   box-shadow: 0 0 25px rgba(255, 59, 48, 0.3);
@@ -194,7 +183,6 @@
 
 .selected-value {
   font-size: 16px;
-  /* #ccc -> #AAAAAA */
   color: #aaaaaa;
   font-weight: 600;
   font-family: "Courier New", monospace;
@@ -204,11 +192,9 @@
 .dropdown-wrapper {
   position: absolute;
   background: rgba(15, 15, 15, 0.98);
-  /* 네온 그린 -> 화이트 테두리 */
   border: 2px solid #ffffff;
   padding: 24px;
   z-index: 1000;
-  /* 네온 그린 -> 화이트 섀도우 */
   box-shadow: 0 0 40px rgba(255, 255, 255, 0.5);
 }
 
@@ -232,7 +218,6 @@
 }
 
 .close-panel-btn:hover {
-  /* 오렌지 -> 비비드 레드 호버 */
   background: rgba(255, 59, 48, 0.2);
   color: #ff3b30;
   border-color: #ff3b30;
@@ -273,7 +258,6 @@
 }
 
 .option-item:hover {
-  /* 네온 그린 -> 화이트 호버 */
   border-color: #ffffff;
   background: rgba(255, 255, 255, 0.05);
   color: #ddd;
@@ -282,24 +266,19 @@
 }
 
 .option-item:hover::before {
-  /* 네온 그린 -> 화이트 그라데이션 */
   background: linear-gradient(to bottom, #ffffff, #666);
 }
 
 .option-item.selected {
-  /* 네온 그린 -> 화이트 선택 색상 */
   color: #ffffff;
   font-weight: 900;
-  /* 오렌지 -> 비비드 레드 테두리 */
   border-color: #ff3b30;
   background: rgba(255, 59, 48, 0.05);
   box-shadow: 0 0 20px rgba(255, 59, 48, 0.3);
-  /* 네온 그린 -> 화이트 텍스트 섀도우 */
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .option-item.selected::before {
-  /* 네온 그린/오렌지 -> 화이트/비비드 레드 그라데이션 */
   background: linear-gradient(to bottom, #ffffff, #ff3b30);
 }
 
@@ -324,7 +303,6 @@
 }
 
 .custom-usage-input input:focus {
-  /* 네온 그린 -> 화이트 포커스 */
   background: rgba(255, 255, 255, 0.05);
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
   border-color: #ffffff;
@@ -345,11 +323,9 @@
   text-align: center;
   font-size: 36px;
   font-weight: 900;
-  /* 네온 그린 -> 화이트 예산 표시 */
   color: #ffffff;
   margin-bottom: 32px;
   letter-spacing: 2px;
-  /* 화이트 펄스 애니메이션 */
   animation: neonPulse 3s infinite;
   font-family: "Courier New", monospace;
 }
@@ -380,12 +356,10 @@
 .slider-with-input input[type="range"] {
   flex: 1;
   height: 4px;
-  /* 네온 그린/오렌지 -> 화이트/비비드 레드 그라데이션 */
   background: linear-gradient(to right, #555 0%, #ffffff 50%, #ff3b30 100%);
   outline: none;
   -webkit-appearance: none;
   cursor: pointer;
-  /* 네온 그린 -> 화이트 섀도우 */
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
@@ -395,16 +369,13 @@
   height: 20px;
   background: #ddd;
   cursor: pointer;
-  /* 네온 그린 -> 화이트 테두리 */
   border: 2px solid #ffffff;
-  /* 네온 그린 -> 화이트 섀도우 */
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
   transition: all 0.3s;
 }
 
 .slider-with-input input[type="range"]::-webkit-slider-thumb:hover {
   transform: scale(1.3);
-  /* 네온 그린 -> 화이트 섀도우 */
   box-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
   background: #fff;
 }
@@ -414,9 +385,7 @@
   height: 20px;
   background: #ddd;
   cursor: pointer;
-  /* 네온 그린 -> 화이트 테두리 */
   border: 2px solid #ffffff;
-  /* 네온 그린 -> 화이트 섀도우 */
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
   border-radius: 50%;
   transition: all 0.3s;
@@ -424,7 +393,6 @@
 
 .slider-with-input input[type="range"]::-moz-range-thumb:hover {
   transform: scale(1.3);
-  /* 네온 그린 -> 화이트 섀도우 */
   box-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
   background: #fff;
 }
@@ -444,7 +412,6 @@
 }
 
 .budget-number-input:focus {
-  /* 오렌지 -> 비비드 레드 포커스 */
   background: rgba(255, 59, 48, 0.05);
   border-color: #ff3b30;
   color: #fff;
@@ -457,11 +424,8 @@
   width: 100%;
   margin-top: 40px;
   padding: 22px;
-  /* 네온 그린 -> 화이트 배경 */
   background: rgba(255, 255, 255, 0.1);
-  /* 네온 그린 -> 화이트 텍스트 */
   color: #ffffff;
-  /* 네온 그린 -> 화이트 테두리 */
   border: 3px solid #ffffff;
   font-size: 16px;
   font-weight: 900;
@@ -472,7 +436,6 @@
   font-family: "Courier New", monospace;
   position: relative;
   overflow: hidden;
-  /* 네온 그린 -> 화이트 텍스트 섀도우 */
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
@@ -486,7 +449,7 @@
   background: linear-gradient(
     45deg,
     transparent,
-    /* 네온 그린 -> 화이트 샤인 */ rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0.3),
     transparent
   );
   transform: rotate(45deg);
@@ -494,7 +457,6 @@
 }
 
 .search-button:hover {
-  /* 네온 그린 -> 화이트 호버 */
   background: rgba(255, 255, 255, 0.2);
   box-shadow: 0 0 40px rgba(255, 255, 255, 0.6),
     inset 0 0 40px rgba(255, 255, 255, 0.1);
@@ -535,9 +497,7 @@
   max-width: 500px;
   padding: 60px;
   background: rgba(15, 15, 15, 0.95);
-  /* 네온 그린 -> 화이트 테두리 */
   border: 3px solid #ffffff;
-  /* 네온 그린 -> 화이트 섀도우 */
   box-shadow: 0 0 50px rgba(255, 255, 255, 0.5);
   position: relative;
 }
@@ -548,7 +508,6 @@
   position: absolute;
   width: 40px;
   height: 40px;
-  /* 오렌지 -> 비비드 레드 코너 */
   border: 3px solid #ff3b30;
 }
 
@@ -571,24 +530,20 @@
   height: 80px;
   margin: 0 auto 32px;
   border: 5px solid rgba(60, 60, 60, 0.3);
-  /* 네온 그린 -> 화이트 스피너 */
   border-top-color: #ffffff;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  /* 네온 그린 -> 화이트 섀도우 */
   box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
 }
 
 .loading-text {
   font-size: 20px;
   font-weight: 900;
-  /* 네온 그린 -> 화이트 텍스트 */
   color: #ffffff;
   margin-bottom: 16px;
   letter-spacing: 2px;
   text-transform: uppercase;
   font-family: "Courier New", monospace;
-  /* 화이트 펄스 애니메이션 */
   animation: neonPulse 2s infinite;
 }
 
@@ -600,20 +555,99 @@
   font-family: "Courier New", monospace;
 }
 
+/* === 견적 탭 버튼 === */
+.estimate-tabs {
+  max-width: 1200px;
+  margin: 60px auto 0;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.estimate-tab-btn {
+  flex: 1;
+  min-width: 180px;
+  max-width: 220px;
+  padding: 20px 24px;
+  background: rgba(20, 20, 20, 0.5);
+  border: 2px solid #555;
+  color: #aaaaaa;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: "Courier New", monospace;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.estimate-tab-btn::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(to right, #ffffff, #ff3b30);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
+
+.estimate-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: #ffffff;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  transform: translateY(-4px);
+}
+
+.estimate-tab-btn:hover::before {
+  transform: scaleX(1);
+}
+
+.estimate-tab-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
+  color: #ffffff;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.estimate-tab-btn.active::before {
+  transform: scaleX(1);
+}
+
+.tab-subtitle {
+  font-size: 11px;
+  font-weight: 600;
+  color: #888;
+  text-transform: none;
+  letter-spacing: 1px;
+}
+
+.estimate-tab-btn.active .tab-subtitle {
+  color: #ff3b30;
+}
+
 /* === 결과 목록 컨테이너 === */
 .ai-result-list-container {
   max-width: 1200px;
   margin: 60px auto 0;
   background: rgba(10, 10, 10, 0.95);
-  /* 네온 그린 -> 화이트 테두리 */
   border: 2px solid #ffffff;
-  /* 네온 그린 -> 화이트 섀도우 */
   box-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
   position: relative;
   overflow: hidden;
 }
 
-/* 스캔라인 효과 */
 .ai-result-list-container::after {
   content: "";
   position: absolute;
@@ -621,7 +655,6 @@
   left: 0;
   right: 0;
   height: 2px;
-  /* 네온 그린 -> 화이트 스캔라인 */
   background: linear-gradient(90deg, transparent, #ffffff, transparent);
   animation: scanline 3s linear infinite;
   pointer-events: none;
@@ -685,14 +718,12 @@
   top: 0;
   width: 4px;
   height: 100%;
-  /* 네온 그린 -> 화이트/그레이 그라데이션 */
   background: linear-gradient(to bottom, #ffffff, #666);
   opacity: 0;
   transition: opacity 0.3s;
 }
 
 .product-list-item:hover {
-  /* 네온 그린 -> 화이트 호버 */
   background: rgba(255, 255, 255, 0.03);
   border-color: #ffffff;
   box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
@@ -721,7 +752,6 @@
   background: rgba(20, 20, 20, 0.8);
   border: 2px solid #555;
   padding: 12px;
-  /* 네온 그린 -> 화이트 섀도우 */
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
   filter: grayscale(0.3) contrast(1.1);
 }
@@ -729,7 +759,6 @@
 .product-list-item .col-type {
   width: 120px;
   font-size: 11px;
-  /* 오렌지 -> 비비드 레드 타입 색상 */
   color: #ff3b30;
   font-weight: 900;
   text-transform: uppercase;
@@ -751,11 +780,9 @@
   text-align: right;
   font-size: 24px;
   font-weight: 900;
-  /* 네온 그린 -> 화이트 가격 색상 */
   color: #ffffff;
   letter-spacing: 1px;
   font-family: "Courier New", monospace;
-  /* 네온 그린 -> 화이트 텍스트 섀도우 */
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
@@ -767,9 +794,7 @@
 .product-list-item .col-link a {
   display: inline-block;
   padding: 14px 32px;
-  /* 네온 그린 -> 화이트 배경 */
   background: rgba(255, 255, 255, 0.05);
-  /* 네온 그린 -> 화이트 텍스트 */
   color: #ffffff;
   text-decoration: none;
   font-weight: 900;
@@ -790,7 +815,6 @@
   left: 50%;
   width: 0;
   height: 0;
-  /* 네온 그린 -> 화이트 리플 효과 */
   background: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   transform: translate(-50%, -50%);
@@ -798,7 +822,6 @@
 }
 
 .product-list-item .col-link a:hover {
-  /* 네온 그린 -> 화이트 호버 */
   background: rgba(255, 255, 255, 0.15);
   border-color: #ffffff;
   box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
@@ -820,13 +843,11 @@
 }
 
 .option-panel::-webkit-scrollbar-thumb {
-  /* 네온 그린 -> 화이트/그레이 그라데이션 */
   background: linear-gradient(to bottom, #ffffff, #666);
   border-radius: 4px;
 }
 
 .option-panel::-webkit-scrollbar-thumb:hover {
-  /* 네온 그린 -> 화이트 섀도우 */
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
@@ -853,6 +874,20 @@
 
   .form-item::before {
     display: none;
+  }
+
+  .estimate-tabs {
+    gap: 12px;
+  }
+
+  .estimate-tab-btn {
+    min-width: 140px;
+    padding: 16px 20px;
+    font-size: 14px;
+  }
+
+  .tab-subtitle {
+    font-size: 10px;
   }
 
   .product-list-header {
