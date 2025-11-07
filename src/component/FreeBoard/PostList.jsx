@@ -1,5 +1,6 @@
 export default function PostList({ posts, onPostClick, isSearching }) {
-  if (posts.length === 0) {
+  // ✅ posts가 undefined이거나 배열이 아닐 경우 처리
+  if (!posts || !Array.isArray(posts) || posts.length === 0) {
     return (
       <div className="empty-message">
         {isSearching ? "검색 결과가 없습니다." : "게시글이 없습니다."}

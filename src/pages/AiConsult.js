@@ -1,12 +1,12 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useRef } from "react";
 import "./AiConsult.css";
 
 const AiConsult = () => {
   const [aiResult, setAiResult] = useState([]);
   const [productImages, setProductImages] = useState({});
-  const [isLoading, setIsLoading] = useState(false); // ✅ 로딩 상태 추가
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedEstimate, setSelectedEstimate] = useState(0);
 
-  // 폼 상태
   const [formData, setFormData] = useState({
     usage: "고성능 게임",
     customUsage: "",
@@ -42,10 +42,7 @@ const AiConsult = () => {
     { id: "memory", label: "메모리" },
   ];
 
-  const itemRefs = useMemo(
-    () => new Map(fieldOrder.map((item) => [item.id, React.createRef()])),
-    [fieldOrder]
-  );
+  const itemRefs = useRef(new Map());
 
   const handleFieldClick = (field) => {
     if (activeField === field) {
@@ -53,12 +50,12 @@ const AiConsult = () => {
       return;
     }
 
-    const ref = itemRefs.get(field);
-    if (ref && ref.current) {
+    const ref = itemRefs.current.get(field);
+    if (ref) {
       setDropdownPosition({
-        left: ref.current.offsetLeft,
-        top: ref.current.offsetTop + ref.current.offsetHeight + 10,
-        minWidth: ref.current.offsetWidth,
+        left: ref.offsetLeft,
+        top: ref.offsetTop + ref.offsetHeight + 10,
+        minWidth: ref.offsetWidth,
       });
       setActiveField(field);
     }
@@ -85,8 +82,9 @@ const AiConsult = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setIsLoading(true); // ✅ 로딩 시작
-    setAiResult([]); // 기존 결과 초기화
+    setIsLoading(true);
+    setAiResult([]);
+    setSelectedEstimate(0);
 
     try {
       const response = await fetch("http://localhost:8880/api/ai/consult", {
@@ -112,49 +110,54 @@ const AiConsult = () => {
         parsedResult = JSON.parse(jsonText);
         console.log("✅ JSON 파싱 성공:", parsedResult);
 
-        // ✅ 각 제품의 실제 가격/이미지/링크 가져오기 (병렬 처리)
-        const enrichedResults = await Promise.all(
-          parsedResult.map(async (item) => {
-            try {
-              // 가격 정보 가져오기
-              const priceResponse = await fetch(
-                `http://localhost:8880/api/price/product-info?productName=${encodeURIComponent(
-                  item["제품명"]
-                )}`
-              );
-              const priceData = await priceResponse.json();
+        const enrichedEstimates = await Promise.all(
+          parsedResult.map(async (estimate) => {
+            const enrichedParts = await Promise.all(
+              estimate.부품목록.map(async (item) => {
+                try {
+                  const priceResponse = await fetch(
+                    `http://localhost:8880/api/price/product-info?productName=${encodeURIComponent(
+                      item["제품명"]
+                    )}`
+                  );
+                  const priceData = await priceResponse.json();
 
-              // 이미지 정보 가져오기
-              const imageResponse = await fetch(
-                `http://localhost:8880/api/image/search?productName=${encodeURIComponent(
-                  item["제품명"]
-                )}`
-              );
-              const imageData = await imageResponse.json();
+                  const imageResponse = await fetch(
+                    `http://localhost:8880/api/image/search?productName=${encodeURIComponent(
+                      item["제품명"]
+                    )}`
+                  );
+                  const imageData = await imageResponse.json();
 
-              // 데이터 병합
-              return {
-                ...item,
-                제품이미지: imageData.success ? imageData.imageUrl : "",
-                가격:
-                  priceData.success && priceData.info["최저가"]
-                    ? priceData.info["최저가"]
-                    : "가격 정보 없음",
-                판매사이트링크:
-                  priceData.success && priceData.info["링크"]
-                    ? priceData.info["링크"]
-                    : `https://search.danawa.com/dsearch.php?query=${encodeURIComponent(
-                        item["제품명"]
-                      )}`,
-              };
-            } catch (error) {
-              console.error("정보 조회 실패:", item["제품명"], error);
-              return item;
-            }
+                  return {
+                    ...item,
+                    제품이미지: imageData.success ? imageData.imageUrl : "",
+                    가격:
+                      priceData.success && priceData.info["최저가"]
+                        ? priceData.info["최저가"]
+                        : "가격 정보 없음",
+                    판매사이트링크:
+                      priceData.success && priceData.info["링크"]
+                        ? priceData.info["링크"]
+                        : `https://search.danawa.com/dsearch.php?query=${encodeURIComponent(
+                            item["제품명"]
+                          )}`,
+                  };
+                } catch (error) {
+                  console.error("정보 조회 실패:", item["제품명"], error);
+                  return item;
+                }
+              })
+            );
+
+            return {
+              ...estimate,
+              부품목록: enrichedParts,
+            };
           })
         );
 
-        parsedResult = enrichedResults;
+        parsedResult = enrichedEstimates;
       } catch (err) {
         console.warn("⚠️ JSON 재파싱 실패", jsonText);
       }
@@ -164,11 +167,10 @@ const AiConsult = () => {
       console.error(err);
       alert("AI 요청 실패");
     } finally {
-      setIsLoading(false); // ✅ 로딩 종료
+      setIsLoading(false);
     }
   };
 
-  // 기본 이미지 반환 함수
   const getDefaultImage = (productType) => {
     const colors = {
       CPU: "#4CAF50",
@@ -278,12 +280,12 @@ const AiConsult = () => {
   );
 
   return (
-    <form className="ai-consult-form-grid" onSubmit={handleSubmit}>
+    <div className="ai-consult-form-grid">
       <div className="form-grid-container">
         {fieldOrder.map((field) => (
           <React.Fragment key={field.id}>
             <div
-              ref={itemRefs.get(field.id)}
+              ref={(el) => itemRefs.current.set(field.id, el)}
               className={`form-item ${
                 activeField === field.id ? "active" : ""
               }`}
@@ -302,9 +304,10 @@ const AiConsult = () => {
         ))}
 
         <button
-          type="submit"
+          type="button"
+          onClick={handleSubmit}
           className="search-button"
-          disabled={isLoading} // ✅ 로딩 중에는 버튼 비활성화
+          disabled={isLoading}
         >
           {isLoading ? "AI 견적 생성 중..." : "검색하기"}
         </button>
@@ -332,7 +335,6 @@ const AiConsult = () => {
         </div>
       )}
 
-      {/* ✅ 로딩 인디케이터 */}
       {isLoading && (
         <div className="loading-overlay">
           <div className="loading-content">
@@ -345,58 +347,81 @@ const AiConsult = () => {
         </div>
       )}
 
-      {/* 테이블형 목록 렌더링 영역 */}
       {!isLoading &&
         aiResult &&
         Array.isArray(aiResult) &&
         aiResult.length > 0 && (
-          <div className="ai-result-list-container">
-            {/* 목록 헤더 */}
-            <div className="product-list-header">
-              <div className="col-image"></div>
-              <div className="col-type">종류</div>
-              <div className="col-name">제품명</div>
-              <div className="col-price" style={{ textAlign: "right" }}>
-                가격
-              </div>
-              <div className="col-link">구매</div>
+          <>
+            <div className="estimate-tabs">
+              {aiResult.map((estimate, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  className={`estimate-tab-btn ${
+                    selectedEstimate === index ? "active" : ""
+                  }`}
+                  onClick={() => setSelectedEstimate(index)}
+                >
+                  추천 {index + 1}
+                  <span className="tab-subtitle">{estimate.견적명}</span>
+                </button>
+              ))}
             </div>
 
-            {/* 목록 아이템 */}
-            {aiResult.map((item, index) => (
-              <div key={index} className="product-list-item">
-                <div className="col-image">
-                  <img
-                    src={
-                      item["제품이미지"] ||
-                      productImages[item["제품명"]] ||
-                      getDefaultImage(item["제품종류"])
-                    }
-                    alt={item["제품명"]}
-                    onError={(e) => {
-                      e.target.src = getDefaultImage(item["제품종류"]);
-                    }}
-                  />
+            <div style={{ marginBottom: "40px" }}>
+              {/* <h3 style={{ marginTop: "30px", marginBottom: "10px" }}>
+                견적 {aiResult[selectedEstimate].견적번호}:{" "}
+                {aiResult[selectedEstimate].견적명} (
+                {aiResult[selectedEstimate].총예상가격})
+              </h3> */}
+
+              <div className="ai-result-list-container">
+                <div className="product-list-header">
+                  <div className="col-image"></div>
+                  <div className="col-type">종류</div>
+                  <div className="col-name">제품명</div>
+                  <div className="col-price" style={{ textAlign: "right" }}>
+                    가격
+                  </div>
+                  <div className="col-link">구매</div>
                 </div>
 
-                <div className="col-type">{item["제품종류"]}</div>
-                <div className="col-name">{item["제품명"]}</div>
-                <div className="col-price">{item["가격"]}</div>
+                {aiResult[selectedEstimate].부품목록.map((item, index) => (
+                  <div key={index} className="product-list-item">
+                    <div className="col-image">
+                      <img
+                        src={
+                          item["제품이미지"] ||
+                          productImages[item["제품명"]] ||
+                          getDefaultImage(item["제품종류"])
+                        }
+                        alt={item["제품명"]}
+                        onError={(e) => {
+                          e.target.src = getDefaultImage(item["제품종류"]);
+                        }}
+                      />
+                    </div>
 
-                <div className="col-link">
-                  <a
-                    href={item["판매사이트링크"]}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    바로가기
-                  </a>
-                </div>
+                    <div className="col-type">{item["제품종류"]}</div>
+                    <div className="col-name">{item["제품명"]}</div>
+                    <div className="col-price">{item["가격"]}</div>
+
+                    <div className="col-link">
+                      <a
+                        href={item["판매사이트링크"]}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        바로가기
+                      </a>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          </>
         )}
-    </form>
+    </div>
   );
 };
 
