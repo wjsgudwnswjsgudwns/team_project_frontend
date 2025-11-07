@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import FreeCommentSection from "./FreeCommentSection";
 import BottomPostList from "./BottomPostList";
 
@@ -11,7 +13,13 @@ export default function PostDetail({
   onBack,
   onPostClick,
 }) {
+  const navigate = useNavigate();
   const isAuthor = currentUsername && post.username === currentUsername;
+
+  // ✅ 뒤로가기 처리 - onBack()만 호출
+  const handleBackClick = () => {
+    onBack(); // FreeBoard.js의 handleBackToList 호출
+  };
 
   return (
     <div className="content-box">
@@ -67,7 +75,7 @@ export default function PostDetail({
       <BottomPostList currentPostId={post.id} onPostClick={onPostClick} />
 
       <div className="back-button-area">
-        <button onClick={onBack} className="back-btn">
+        <button onClick={handleBackClick} className="back-btn">
           목록으로
         </button>
       </div>

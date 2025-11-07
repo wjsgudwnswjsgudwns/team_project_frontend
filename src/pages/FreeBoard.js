@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useFreeBoard } from "../hooks/useFreeBoard";
 import { useAuth } from "../hooks/useAuth";
@@ -17,6 +17,9 @@ export default function FreeBoard() {
   const [formData, setFormData] = useState({ fTitle: "", fContent: "" });
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState(null);
+
+  // ✅ 중복 navigate 방지용 ref
+  const isNavigatingRef = useRef(false);
 
   // Custom Hooks
   const { currentUsername } = useAuth();
@@ -46,16 +49,26 @@ export default function FreeBoard() {
     resetSearch,
   } = useSearch();
 
-  // URL 파라미터로 activeTab 관리
+  // ✅ URL 파라미터로 activeTab 관리 (navigate 호출 없이)
   useEffect(() => {
+    if (isNavigatingRef.current) {
+      isNavigatingRef.current = false;
+      return;
+    }
+
     const params = new URLSearchParams(location.search);
     const tab = params.get("tab");
     const postId = params.get("postId");
 
-    if (postId) {
-      handlePostClick(parseInt(postId));
-    } else if (tab) {
-      setActiveTab(tab);
+    if (postId && tab === "detail") {
+      // 게시글 상세 보기 (navigate 호출 없이 데이터만 fetch)
+      const id = parseInt(postId);
+      if (!selectedPost || selectedPost.id !== id) {
+        fetchPostDetail(id);
+      }
+      setActiveTab("detail");
+    } else if (tab === "write") {
+      setActiveTab("write");
     } else {
       setActiveTab("posts");
     }
@@ -67,11 +80,23 @@ export default function FreeBoard() {
     }
   }, [page, fetchPosts, activeTab]);
 
-  // 게시글 클릭 (URL 업데이트)
+  // ✅ 게시글 클릭 (히스토리 1개만 추가)
   const handlePostClick = async (id) => {
+    isNavigatingRef.current = true;
+
+    // State 먼저 변경
     await fetchPostDetail(id);
     setActiveTab("detail");
-    navigate(`/freeboard?tab=detail&postId=${id}`);
+
+    // navigate는 딱 한 번만
+    navigate(`/freeboard?tab=detail&postId=${id}`, { replace: false });
+  };
+
+  // ✅ 목록으로 돌아가기 (replace 사용)
+  const handleBackToList = () => {
+    isNavigatingRef.current = true;
+    setActiveTab("posts");
+    navigate("/freeboard?tab=posts", { replace: false });
   };
 
   // 글쓰기/수정 제출
@@ -95,13 +120,15 @@ export default function FreeBoard() {
       setIsEditing(false);
       setEditingId(null);
       fetchPosts();
+      isNavigatingRef.current = true;
       setActiveTab("posts");
-      navigate("/freeboard?tab=posts");
+      navigate("/freeboard?tab=posts", { replace: true });
     }
   };
 
   // 수정 시작
   const startEdit = (post) => {
+    isNavigatingRef.current = true;
     setIsEditing(true);
     setEditingId(post.id);
     setFormData({
@@ -109,7 +136,7 @@ export default function FreeBoard() {
       fContent: post.fcontent,
     });
     setActiveTab("write");
-    navigate("/freeboard?tab=write");
+    navigate("/freeboard?tab=write", { replace: false });
   };
 
   // 삭제
@@ -117,18 +144,20 @@ export default function FreeBoard() {
     const success = await deletePost(selectedPost.id);
     if (success) {
       fetchPosts();
+      isNavigatingRef.current = true;
       setActiveTab("posts");
-      navigate("/freeboard?tab=posts");
+      navigate("/freeboard?tab=posts", { replace: true });
     }
   };
 
   // 수정 취소
   const handleCancelEdit = () => {
+    isNavigatingRef.current = true;
     setIsEditing(false);
     setEditingId(null);
     setFormData({ fTitle: "", fContent: "" });
     setActiveTab("posts");
-    navigate("/freeboard?tab=posts");
+    navigate("/freeboard?tab=posts", { replace: false });
   };
 
   // 검색
@@ -148,13 +177,6 @@ export default function FreeBoard() {
     });
   };
 
-  // 목록으로 돌아가기
-  const handleBackToList = () => {
-    setActiveTab("posts");
-    navigate("/freeboard?tab=posts");
-    fetchPosts();
-  };
-
   return (
     <div className="freeboard-container">
       <div className="freeboard-wrapper">
@@ -162,8 +184,9 @@ export default function FreeBoard() {
         <div className="tab-buttons">
           <button
             onClick={() => {
+              isNavigatingRef.current = true;
               setActiveTab("posts");
-              navigate("/freeboard?tab=posts");
+              navigate("/freeboard?tab=posts", { replace: false });
               fetchPosts();
             }}
             className={`tab-btn ${activeTab === "posts" ? "active" : ""}`}
@@ -172,8 +195,9 @@ export default function FreeBoard() {
           </button>
           <button
             onClick={() => {
+              isNavigatingRef.current = true;
               setActiveTab("write");
-              navigate("/freeboard?tab=write");
+              navigate("/freeboard?tab=write", { replace: false });
               setIsEditing(false);
               setFormData({ fTitle: "", fContent: "" });
             }}

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 
 import api from "./api/axiosConfig";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import Navbar from "./component/Navbar";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
@@ -33,6 +33,27 @@ function App() {
   const [role, setRole] = useState(null); // 사용자 역할
 
   const navigate = useNavigate("");
+  const location = useLocation();
+
+  // 스크롤 복원 비활성화 (히스토리 관리 개선)
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+  }, []);
+
+  // 라우트 변경 시 스크롤 최상단으로 (필요한 경우만)
+  useEffect(() => {
+    // freeboard detail에서 detail로 이동할 때는 스크롤 유지
+    if (
+      location.pathname === "/freeboard" &&
+      location.search.includes("tab=detail")
+    ) {
+      return; // 스크롤 유지
+    }
+
+    window.scrollTo(0, 0);
+  }, [location.pathname, location.search]);
 
   // 사용자 확인
   const checkUser = async () => {

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useFreeComment } from "../../hooks/useFreeComment";
 import FreeCommentItem from "./FreeCommentItem";
 import "./FreeComment.css";
+import api from "../../api/axiosConfig";
 
 export default function FreeCommentSection({ boardId, currentUsername }) {
   const {
@@ -21,10 +22,31 @@ export default function FreeCommentSection({ boardId, currentUsername }) {
 
   useEffect(() => {
     if (boardId) {
-      fetchComments(boardId, 0);
-      fetchCommentCount(boardId);
+      const initializeComments = async () => {
+        try {
+          // 최상위 댓글 개수로 페이지 계산
+          const countRes = await api.get(
+            `/api/freeboard/${boardId}/comments/count/toplevel`
+          );
+          const topLevelCount = countRes.data.count;
+
+          // 전체 댓글 개수도 가져오기 (표시용)
+          await fetchCommentCount(boardId);
+
+          // 페이지당 10개씩
+          const totalPages = Math.ceil(topLevelCount / 10);
+          const lastPage = Math.max(0, totalPages - 1);
+
+          setCommentPage(lastPage);
+          await fetchComments(boardId, lastPage);
+        } catch (err) {
+          console.error("댓글 초기화 실패:", err);
+        }
+      };
+
+      initializeComments();
     }
-  }, [boardId, fetchComments, fetchCommentCount]);
+  }, [boardId]);
 
   // 댓글 페이지 변경
   const handleCommentPageChange = (newPage) => {
@@ -42,6 +64,10 @@ export default function FreeCommentSection({ boardId, currentUsername }) {
     const success = await createComment(boardId, newComment);
     if (success) {
       setNewComment("");
+      // 🔥 댓글 작성 후 마지막 페이지로 이동
+      const lastPage = Math.max(0, commentTotalPages - 1);
+      setCommentPage(lastPage);
+      fetchComments(boardId, lastPage);
     }
   };
 

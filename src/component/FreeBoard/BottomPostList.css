@@ -75,6 +75,42 @@
   color: #999;
 }
 
+/* ========== 하단 게시글 페이지네이션 ========== */
+.bottom-post-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.bottom-page-btn {
+  padding: 8px 16px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.2s ease;
+}
+
+.bottom-page-btn:hover:not(:disabled) {
+  background-color: #e0e0e0;
+}
+
+.bottom-page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.bottom-page-info {
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+}
+
 /* ========== 반응형 ========== */
 @media (max-width: 768px) {
   .bottom-post-section {
