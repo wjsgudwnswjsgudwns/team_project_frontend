@@ -1,0 +1,289 @@
+.compatibility-result {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #f8fafc;
+  min-height: 100vh;
+}
+
+.compatibility-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 3rem;
+  text-align: center;
+  color: #1e293b;
+}
+
+.diagram-container {
+  background: white;
+  border-radius: 1.5rem;
+  padding: 3rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.diagram-layout {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* 부품 박스 */
+.component-box {
+  background: #e8edf5;
+  border-radius: 1rem;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  border: 1px solid #d1dae6;
+  width: 200px;
+}
+
+.component-icon {
+  font-size: 3.5rem;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.component-label {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 1rem;
+}
+
+/* 상단 행 (CPU-메모리, 케이스-파워) */
+.top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* 중간 행 (화살표들) */
+.middle-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding: 0 50px;
+}
+
+/* 메인보드 행 */
+.mainboard-row {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* 하단 행 (그래픽카드) */
+.bottom-row {
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 50px;
+}
+
+/* 가로 연결 */
+.horizontal-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  justify-content: center;
+}
+
+.horizontal-link-reverse {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+/* 세로 연결 */
+.left-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 200px;
+}
+
+.right-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 200px;
+}
+
+.arrow-icon {
+  font-size: 2rem;
+  color: #3b82f6;
+}
+
+/* 상태 뱃지 */
+.status-badge {
+  padding: 0.5rem 1.2rem;
+  border-radius: 2rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: white;
+}
+
+.status-success {
+  background: #3b82f6;
+}
+
+.status-error {
+  background: #ef4444;
+}
+
+.status-warning {
+  background: #f59e0b;
+}
+
+.status-unknown {
+  background: #94a3b8;
+}
+
+/* 빈 공간 */
+.spacer {
+  width: 200px;
+}
+
+.empty-space {
+  width: 200px;
+}
+
+/* 상세 정보 섹션 */
+.detail-section {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.detail-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: #1e293b;
+}
+
+.detail-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.detail-item {
+  display: flex;
+  align-items: start;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 0.75rem;
+  border-left: 4px solid #e2e8f0;
+  transition: all 0.2s;
+}
+
+.detail-item:hover {
+  background: #f1f5f9;
+  border-left-color: #3b82f6;
+  transform: translateX(4px);
+}
+
+.detail-item.status-success {
+  border-left-color: #10b981;
+}
+
+.detail-item.status-error {
+  border-left-color: #ef4444;
+}
+
+.detail-item.status-warning {
+  border-left-color: #f59e0b;
+}
+
+.status-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.detail-content {
+  flex: 1;
+}
+
+.detail-question {
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.detail-answer {
+  color: #64748b;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* 버튼 */
+.back-button-container {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.back-button {
+  background: #3b82f6;
+  color: white;
+  padding: 0.875rem 2rem;
+  border-radius: 0.75rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+  transition: all 0.2s;
+}
+
+.back-button:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(59, 130, 246, 0.4);
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .compatibility-result {
+    padding: 1rem;
+  }
+
+  .diagram-container {
+    padding: 1.5rem;
+  }
+
+  .component-box {
+    width: 140px;
+    padding: 1.5rem 1rem;
+  }
+
+  .component-icon {
+    font-size: 2.5rem;
+  }
+
+  .top-row {
+    gap: 1rem;
+  }
+
+  .middle-row {
+    padding: 0 30px;
+  }
+
+  .bottom-row {
+    padding-left: 30px;
+  }
+
+  .left-vertical,
+  .right-vertical,
+  .spacer,
+  .empty-space {
+    width: 140px;
+  }
+}
