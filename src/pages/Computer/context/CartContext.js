@@ -23,6 +23,7 @@ export const CartProvider = ({ children }) => {
   const loadCart = async () => {
     try {
       const res = await api.get("/api/cart");
+      console.log("서버 응답:", res.data);
       const data = Array.isArray(res.data)
         ? res.data
         : Array.isArray(res.data.cart)
@@ -59,7 +60,7 @@ export const CartProvider = ({ children }) => {
 
       // 기존 카테고리에 이미 상품이 있으면 교체
       const existing = cart[category];
-      if (existing) {
+      if (existing && existing.id) {
         await api.delete(`/api/cart/${existing.id}`);
       }
 

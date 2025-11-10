@@ -28,6 +28,7 @@ import HardCaseView from "./pages/Computer/ViewDetail/HardCaseView";
 import Power from "./pages/Computer/Power";
 import PowerView from "./pages/Computer/ViewDetail/PowerView";
 import { CartProvider } from "./pages/Computer/context/CartContext";
+import CompatibilityResult from "./pages/Computer/cartcomponents/CompatibilityResult";
 
 function App() {
   const [user, setUser] = useState(null); // 현재 로그인한 유저의 이름
@@ -143,6 +144,10 @@ function App() {
           <Route path="/freeboard" element={<FreeBoard />}></Route>
 
           <Route path="/ai" element={<AiConsult />}></Route>
+          <Route
+            path="compatibility-result"
+            element={<CompatibilityResult />}
+          ></Route>
         </Routes>
       </CartProvider>
     </div>

@@ -198,3 +198,93 @@
   border-radius: 4px;
   box-shadow: 0 4px 4px rgba(255, 92, 0, 0.15);
 }
+
+/* 검색창 영역 */
+.search-container {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  background-color: #2a2a2a;
+  padding: 12px;
+  border-radius: 6px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #1a1a1a;
+  color: #fff;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #ff5c00;
+}
+
+.search-input::placeholder {
+  color: #888;
+}
+
+.search-btn {
+  background-color: #ff5c00;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.search-btn:hover {
+  background-color: #e34a00;
+}
+
+/* 페이지네이션 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin: 24px 0;
+  padding: 16px;
+  background-color: #2a2a2a;
+  border-radius: 6px;
+}
+
+.page-btn {
+  background-color: #3b3b3b;
+  color: white;
+  border: 1px solid #555;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.page-btn:hover:not(:disabled) {
+  background-color: #ff5c00;
+  border-color: #ff5c00;
+}
+
+.page-btn:disabled {
+  background-color: #1a1a1a;
+  color: #666;
+  cursor: not-allowed;
+  border-color: #333;
+}
+
+.page-info {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  min-width: 180px;
+  text-align: center;
+}

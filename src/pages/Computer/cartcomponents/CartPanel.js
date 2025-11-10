@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCart } from "../context/CartContext";
+import api from "../../../api/axiosConfig";
+import { useNavigate } from "react-router-dom";
 
 function CartPanel() {
   const { cart, removeFromCart, totalPrice } = useCart();
+
+  const [compatResults, setCompatResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const categoryOrder = [
     "CPU",
@@ -14,6 +21,29 @@ function CartPanel() {
     "CASE",
     "POWER",
   ];
+
+  const handleCheckCompatibility = async () => {
+    setLoading(true);
+    setCompatResults([]);
+
+    try {
+      const res = await api.post("/api/ai/checkAll", {
+        cpu: cart.CPU?.productName || "",
+        mainboard: cart.MAINBOARD?.productName || "",
+        memory: cart.MEMORY?.productName || "",
+        gpu: cart.GPU?.productName || "",
+        case: cart.CASE?.productName || "",
+        power: cart.POWER?.productName || "",
+      });
+
+      navigate("/compatibility-result", { state: { results: res.data } });
+    } catch (err) {
+      console.error("호환성 검사 실패:", err);
+      alert("호환성 검사 중 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="cart-panel">
@@ -49,7 +79,13 @@ function CartPanel() {
           </div>
         );
       })}
-
+      <button
+        className="compat-check-btn"
+        onClick={handleCheckCompatibility}
+        disabled={loading}
+      >
+        {loading ? "검사 중..." : "호환성 검사"}
+      </button>
       <div className="cart-total">총합: {totalPrice.toLocaleString()}원</div>
     </div>
   );
