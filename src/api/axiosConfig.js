@@ -7,25 +7,24 @@ const api = axios.create({
   },
 });
 
-// 요청 인터셉터 - 디버깅 강화
+// 요청 인터셉터
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
-    console.log(
-      "🔑 인터셉터 - 토큰:",
-      token ? `${token.substring(0, 20)}...` : "없음"
-    );
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      console.log("🔑 요청 토큰:", token.substring(0, 20) + "...");
+    } else {
+      console.log("🔑 토큰 없음");
     }
 
     console.log("📤 요청:", config.method.toUpperCase(), config.url);
-    console.log("📋 헤더:", config.headers.Authorization);
 
     return config;
   },
   (error) => {
+    console.error("❌ 요청 인터셉터 에러:", error);
     return Promise.reject(error);
   }
 );
@@ -44,10 +43,16 @@ api.interceptors.response.use(
       localStorage.removeItem("token");
       localStorage.removeItem("role");
 
-      if (window.location.pathname !== "/login") {
+      // 로그인 페이지가 아닐 때만 리다이렉트
+      if (
+        window.location.pathname !== "/login" &&
+        !window.location.pathname.startsWith("/oauth2")
+      ) {
+        alert("인증이 만료되었습니다. 다시 로그인해주세요.");
         window.location.href = "/login";
       }
     }
+
     return Promise.reject(error);
   }
 );
