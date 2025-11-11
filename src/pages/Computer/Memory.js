@@ -13,6 +13,7 @@ function Memory({ role }) {
   const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
   const [totalElements, setTotalElements] = useState(0); // 전체 상품 수
   const [pageSize] = useState(10); // 페이지당 상품 수
+  const [loading, setLoading] = useState(false);
 
   const { addToCart } = useCart();
   const navigate = useNavigate();
@@ -22,24 +23,36 @@ function Memory({ role }) {
     loadProducts();
   }, [currentPage, searchName]);
 
-  const loadProducts = () => {
-    // 검색어가 있으면 검색 API, 없으면 전체 조회 API
-    const url = searchName.trim()
-      ? `/api/products/search?name=${searchName}&page=${currentPage}&size=${pageSize}&sortBy=id`
-      : `/api/products/paging?page=${currentPage}&size=${pageSize}&sortBy=id`;
+  const loadProducts = async () => {
+    try {
+      setLoading(true);
 
-    // 페이징 응답에서 CPU 카테고리만 필터링
-    api
-      .get(url)
-      .then((res) => {
-        const memoryProducts = res.data.content.filter(
-          (p) => p.category === "MEMORY"
-        );
-        setProducts(memoryProducts);
-        setTotalPages(res.data.totalPages);
-        setTotalElements(res.data.totalElements);
-      })
-      .catch((err) => console.error(err));
+      // 검색어가 있으면 검색 API, 없으면 전체 조회 API
+      const url = searchName.trim()
+        ? `/api/products/search?name=${searchName}&page=${currentPage}&size=${pageSize}&sortBy=id`
+        : `/api/products/paging?page=${currentPage}&size=${pageSize}&sortBy=id`;
+
+      const response = await api.get(url);
+
+      console.log("API 응답:", response.data); // 디버깅용
+
+      // 안전하게 데이터 접근
+      const content = response.data?.content || [];
+
+      // 카테고리 필터링
+      const memoryProducts = content.filter((p) => p.category === "MEMORY");
+
+      setProducts(memoryProducts);
+      setTotalPages(response.data?.totalPages || 0);
+      setTotalElements(response.data?.totalElements || 0);
+    } catch (error) {
+      console.error("상품 로드 실패:", error);
+      setProducts([]);
+      setTotalPages(0);
+      setTotalElements(0);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // 검색 버튼 클릭
@@ -89,17 +102,34 @@ function Memory({ role }) {
             </button>
           </div>
 
+          {/* 로딩 상태 */}
+          {loading && <div className="loading-message">로딩 중...</div>}
+
           {/* 상품 목록 */}
-          {products.map((p) => (
-            <div key={p.id} className="product-card">
-              <img src={p.imageUrl} alt={p.name} width="120" />
-              <h4 onClick={() => handleRowClick(p.id)}>{p.name}</h4>
-              <div className="product-price-container">
-                <p>{Number(p.price).toLocaleString()}원</p>
-                <button onClick={() => addToCart(p.id, "MEMORY")}>담기</button>
+          {!loading && products.length === 0 ? (
+            <div className="no-products-message">등록된 상품이 없습니다.</div>
+          ) : (
+            products.map((p) => (
+              <div key={p.id} className="product-card">
+                <img
+                  src={p.imageUrl || "/placeholder-image.png"}
+                  alt={p.name}
+                  width="120"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/placeholder-image.png";
+                  }}
+                />
+                <h4 onClick={() => handleRowClick(p.id)}>{p.name}</h4>
+                <div className="product-price-container">
+                  <p>{Number(p.price).toLocaleString()}원</p>
+                  <button onClick={() => addToCart(p.id, "MEMORY")}>
+                    담기
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
 
           {/* 페이지네이션 */}
           {totalPages > 0 && (

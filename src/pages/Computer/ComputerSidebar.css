@@ -1,30 +1,133 @@
+/* ========================================
+   기계적 산업 스타일 - PC 부품 사이드바
+   [모노크롬 & 비비드 레드 테마 적용]
+   ======================================== */
+
+/* Sidebar Container */
 .computer-sidebar {
-  width: 200px; /* 사이드바의 너비 */
-  padding: 20px 0;
-  border-right: 1px solid #eee; /* 경계선 선택 사항 */
-  background-color: #f7f7f7;
-  flex-shrink: 0; /* 내용 영역이 줄어들 때 사이드바는 줄어들지 않도록 */
+  width: 250px; /* 사이드바의 너비를 약간 확장 */
+  min-height: 50vh;
+  padding: 30px 0;
+  background-color: #0d0d0d; /* 어두운 배경 */
+  border-right: 2px solid #ffffff; /* 흰색 경계선 */
+  flex-shrink: 0;
+  box-shadow: 10px 0 30px rgba(255, 255, 255, 0.1);
+  position: relative;
+  font-family: "Courier New", monospace;
 }
 
+.computer-sidebar::before {
+  /* 상단/하단 코너 장식 */
+  content: "";
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ff3b30;
+  border-left: none;
+  border-bottom: none;
+}
+
+.computer-sidebar::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ff3b30;
+  border-left: none;
+  border-top: none;
+}
+
+/* Sidebar Title */
 .sidebar-title {
-  padding: 0 20px 10px;
-  font-size: 1.1em;
-  font-weight: bold;
-  color: #333;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 10px;
+  padding: 0 24px 16px;
+  font-size: 14px;
+  font-weight: 900;
+  color: #ffffff; /* 흰색 타이틀 */
+  border-bottom: 2px solid #ff3b30; /* 비비드 레드 구분선 */
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  animation: neonPulse 3s infinite; /* 애니메이션 적용 */
+  position: relative;
 }
 
+/* Sidebar Menu */
+.sidebar-menu {
+  padding: 0 0px;
+}
+
+/* Menu Item Link */
 .sidebar-menu-item {
-  display: block;
-  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  padding: 14px 24px;
   text-decoration: none;
-  color: #555;
-  font-size: 0.95em;
-  transition: background-color 0.2s, color 0.2s;
+  color: #aaaaaa;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.3s;
+  border-left: 4px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-menu-item::before {
+  /* 호버 시 왼쪽 경계선 효과 */
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #ffffff, #666);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.3s;
 }
 
 .sidebar-menu-item:hover {
-  background-color: #e0e0e0;
-  color: #000;
+  background-color: rgba(255, 255, 255, 0.05); /* 약간 밝아지는 효과 */
+  color: #ffffff;
+  border-left-color: #ffffff; /* 호버 시 흰색 경계선 */
+  box-shadow: inset 5px 0 15px rgba(255, 255, 255, 0.1);
+  transform: translateX(4px); /* 살짝 이동 */
+}
+
+.sidebar-menu-item:hover::before {
+  transform: scaleY(1);
+}
+
+.sidebar-menu-item.active, /* 'active' 클래스가 있다면 */
+.sidebar-menu-item:focus {
+  background-color: rgba(255, 59, 48, 0.1);
+  color: #ff3b30; /* 비비드 레드 텍스트 */
+  border-left-color: #ff3b30; /* 비비드 레드 경계선 */
+  font-weight: 900;
+  text-shadow: 0 0 5px rgba(255, 59, 48, 0.5);
+}
+
+/* === 기존 CSS에서 가져온 애니메이션 키프레임 (Sidebar.css에도 포함되어야 함) === */
+
+@keyframes neonPulse {
+  0%,
+  100% {
+    text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 30px #ffffff;
+  }
+  50% {
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 15px #ffffff;
+  }
+}
+
+@keyframes borderGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 5px #ff3b30, 0 0 10px #ff3b30, inset 0 0 5px #ff3b30;
+  }
+  50% {
+    box-shadow: 0 0 10px #ff3b30, 0 0 20px #ff3b30, inset 0 0 10px #ff3b30;
+  }
 }

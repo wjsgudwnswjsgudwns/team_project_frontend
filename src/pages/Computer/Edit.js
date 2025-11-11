@@ -1,10 +1,13 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import ComputerSidebar from "./ComputerSidebar";
 import "./Input.css";
 import api from "../../api/axiosConfig";
 
-function Input() {
-  // 기본 상품 정보
+function Edit() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [product, setProduct] = useState({
     name: "",
     manufacturer: "",
@@ -12,14 +15,11 @@ function Input() {
     category: "CPU",
   });
 
-  // 동적 스펙 필드들 - 배열로 변경
   const [specs, setSpecs] = useState([]);
-
-  // 새 필드 추가용
   const [newFieldKey, setNewFieldKey] = useState("");
   const [newFieldValue, setNewFieldValue] = useState("");
-
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // 이미지 관련
   const [imagePreview, setImagePreview] = useState(null);
@@ -27,7 +27,35 @@ function Input() {
 
   const keyInputRef = useRef(null);
 
-  // 기본 상품 정보 변경
+  // 기존 상품 데이터 불러오기
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await api.get(`/api/products/${id}`);
+        const data = response.data;
+
+        setProduct({
+          name: data.name,
+          manufacturer: data.manufacturer || "",
+          price: data.price,
+          category: data.category,
+        });
+
+        setSpecs(data.specs || []);
+        setImageUrl(data.imageUrl || "");
+        setImagePreview(data.imageUrl || null);
+
+        setIsLoading(false);
+      } catch (error) {
+        console.error("상품 조회 실패:", error);
+        alert("상품을 불러오는데 실패했습니다.");
+        navigate(-1);
+      }
+    };
+
+    fetchProduct();
+  }, [id, navigate]);
+
   const handleProductChange = (e) => {
     const { name, value } = e.target;
     setProduct((prev) => ({
@@ -36,7 +64,6 @@ function Input() {
     }));
   };
 
-  // 스펙 필드 값 변경
   const handleSpecChange = (index, field, value) => {
     setSpecs((prev) => {
       const newSpecs = [...prev];
@@ -45,7 +72,6 @@ function Input() {
     });
   };
 
-  // 새 스펙 필드 추가
   const addSpecField = () => {
     if (newFieldKey.trim() && newFieldValue.trim()) {
       setSpecs((prev) => [...prev, { key: newFieldKey, value: newFieldValue }]);
@@ -57,12 +83,10 @@ function Input() {
     }
   };
 
-  // 스펙 필드 삭제
   const removeSpecField = (index) => {
     setSpecs((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // 이미지 선택 시 미리보기 & 업로드
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -80,13 +104,13 @@ function Input() {
       });
 
       setImageUrl(response.data.imageUrl);
+      alert("이미지가 업로드되었습니다.");
     } catch (error) {
       console.error("이미지 업로드 실패:", error);
       alert("이미지 업로드 실패. 다시 시도해주세요.");
     }
   };
 
-  // 엔터키로 필드 추가
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -94,7 +118,7 @@ function Input() {
     }
   };
 
-  // 폼 제출
+  // 수정 제출
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -108,43 +132,45 @@ function Input() {
     const productData = {
       name: product.name,
       manufacturer: product.manufacturer,
-      price: parseInt(product.price),
+      price: product.price,
       category: product.category,
-      specs: specs, // [{key: "코어", value: "6"}, ...] 배열
+      specs: specs,
       imageUrl: imageUrl,
     };
 
-    console.log("전송할 데이터:", productData);
+    console.log("수정할 데이터:", productData);
 
     try {
-      const response = await api.post("/api/products", productData);
-      console.log("등록 성공:", response.data);
-      alert(`상품이 성공적으로 등록되었습니다!\n상품명: ${response.data.name}`);
+      const response = await api.patch(`/api/products/${id}`, productData);
+      console.log("수정 성공:", response.data);
+      alert(`상품이 성공적으로 수정되었습니다!\n상품명: ${response.data.name}`);
 
-      // 폼 초기화
-      setProduct({
-        name: "",
-        manufacturer: "",
-        price: "",
-        imageUrl: "",
-        category: "CPU",
-      });
-      setSpecs([]);
-      setImagePreview(null);
-      setImageUrl("");
+      // 수정 후 상세 페이지로 이동
+      navigate(`/${product.category.toLowerCase()}/${id}`);
     } catch (error) {
-      console.error("등록 실패:", error);
-      alert("상품 등록 중 오류가 발생했습니다.");
+      console.error("수정 실패:", error);
+      alert("상품 수정 중 오류가 발생했습니다.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="cpu-page-container">
+        <ComputerSidebar />
+        <div className="input-cpu-content">
+          <p>상품 정보를 불러오는 중...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="cpu-page-container">
       <ComputerSidebar />
       <div className="input-cpu-content">
-        <h2>상품 등록 (관리자용)</h2>
+        <h2>상품 수정 (관리자용)</h2>
 
         <form onSubmit={handleSubmit} className="cpu-spec-form">
           {/* 기본 상품 정보 */}
@@ -322,14 +348,33 @@ function Input() {
             </div>
           </div>
 
-          {/* 제출 버튼 */}
-          <button type="submit" className="submit-btn" disabled={isSubmitting}>
-            {isSubmitting ? "등록 중..." : "상품 등록"}
-          </button>
+          {/* 버튼 그룹 */}
+          <div style={{ display: "flex", gap: "10px" }}>
+            <button
+              type="submit"
+              className="submit-btn"
+              disabled={isSubmitting}
+              style={{ flex: 1 }}
+            >
+              {isSubmitting ? "수정 중..." : "수정 완료"}
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="submit-btn"
+              disabled={isSubmitting}
+              style={{
+                flex: 1,
+                backgroundColor: "#6c757d",
+              }}
+            >
+              취소
+            </button>
+          </div>
         </form>
       </div>
     </div>
   );
 }
 
-export default Input;
+export default Edit;

@@ -1,22 +1,43 @@
+/* Cpu.css */
+
 /* 전체 영역 */
 .page-container {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   background-color: #1a1a1a;
-  min-height: 100vh;
-  padding: 20px 40px;
+  min-height: 0vh;
+  /* 기존: padding: 20px 40px; */
+  /* 수정: ComputerSidebar가 왼쪽에 붙도록 왼쪽 패딩을 0으로 설정 */
+  padding: 20px 40px 20px 0;
   gap: 25px;
 }
 
-/* 제품 리스트 */
+/* 제품 리스트 - 왼쪽 패딩 추가 */
 .product-list {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  /* ComputerSidebar가 붙은 후, 리스트 자체에 왼쪽 패딩 추가 */
+  padding-left: 40px;
 }
 
+/* 🧾 견적 패널 - 오른쪽 끝에 붙도록 마진 조정 */
+.cart-panel {
+  width: 300px;
+  background-color: #2a2a2a;
+  border-radius: 10px;
+  padding: 15px;
+  color: white;
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+  /* 오른쪽 끝 여백을 page-container가 아닌 cart-panel에 부여 */
+  margin-right: 40px;
+}
+
+/* 나머지 스타일은 기존과 동일 */
 /* 개별 제품 카드 */
 .product-card {
   display: grid;
@@ -84,18 +105,7 @@
   background-color: #e34a00;
 }
 
-/* 🧾 견적 패널 */
-.cart-panel {
-  width: 300px;
-  background-color: #2a2a2a;
-  border-radius: 10px;
-  padding: 15px;
-  color: white;
-  position: sticky;
-  top: 100px;
-  height: fit-content;
-}
-
+/* 🧾 견적 패널 (내부) */
 .cart-panel h3 {
   font-size: 18px;
   margin-bottom: 10px;
@@ -287,4 +297,23 @@
   font-weight: 500;
   min-width: 180px;
   text-align: center;
+}
+
+/* 반응형 (기존 Cpu.css에도 적용) */
+@media (max-width: 1024px) {
+  .page-container {
+    flex-direction: column;
+    padding: 20px 20px 20px 0;
+  }
+
+  .product-list {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .cart-panel {
+    width: auto;
+    margin: 0 20px 20px;
+    position: static;
+  }
 }

@@ -31,16 +31,31 @@
 .component-box {
   background: #e8edf5;
   border-radius: 1rem;
-  padding: 2.5rem 2rem;
+  /* padding: 2.5rem 2rem; */
+  padding: 1rem;
   text-align: center;
   border: 1px solid #d1dae6;
-  width: 200px;
+  /* width: 200px; */
+  width: 120px;
 }
 
 .component-icon {
-  font-size: 3.5rem;
+  /* font-size: 3.5rem; */
   margin-bottom: 0.75rem;
   display: block;
+
+  width: 50px;
+  height: 50px;
+  margin: 0 auto;
+  margin-bottom: 0.75rem;
+}
+
+.component-icon img {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
 .component-label {
@@ -54,7 +69,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2rem;
+  /* gap: 2rem; */
+  gap: 1rem;
   margin-bottom: 1rem;
 }
 
@@ -63,29 +79,30 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 1rem;
-  padding: 0 50px;
+  /* padding: 0 50px; */
+  padding: 0 10px;
 }
 
 /* 메인보드 행 */
 .mainboard-row {
   display: flex;
   align-items: center;
-  gap: 2rem;
   margin-bottom: 1rem;
+  position: relative;
 }
 
 /* 하단 행 (그래픽카드) */
 .bottom-row {
   display: flex;
   justify-content: flex-start;
-  padding-left: 50px;
+  padding-left: 0px;
 }
 
 /* 가로 연결 */
 .horizontal-link {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
   flex: 1;
   justify-content: center;
 }
@@ -94,16 +111,29 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  flex: 1;
+  position: absolute;
+  /* right: 50px; */
+  right: 22px;
+}
+
+.horizontal-link-reverse .arrow-icon {
+  margin-right: 200px;
 }
 
 /* 세로 연결 */
 .left-vertical {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
+  align-items: flex-start;
   gap: 0.75rem;
-  width: 200px;
+  /* width: 200px; */
+  width: 130px;
+  margin-left: 15px;
+}
+
+.left-vertical .arrow-icon {
+  margin-left: 25px;
 }
 
 .right-vertical {
@@ -111,7 +141,13 @@
   flex-direction: column;
   align-items: center;
   gap: 0.75rem;
-  width: 200px;
+  /* width: 200px; */
+  width: 130px;
+}
+
+.right-vertical .arrow-icon {
+  margin-left: 40px;
+  margin-top: 50px;
 }
 
 .arrow-icon {
@@ -147,11 +183,11 @@
 
 /* 빈 공간 */
 .spacer {
-  width: 200px;
+  width: 10px;
 }
 
 .empty-space {
-  width: 200px;
+  width: 10px;
 }
 
 /* 상세 정보 섹션 */
@@ -183,6 +219,7 @@
   border-radius: 0.75rem;
   border-left: 4px solid #e2e8f0;
   transition: all 0.2s;
+  height: 100px;
 }
 
 .detail-item:hover {
@@ -281,9 +318,7 @@
   }
 
   .left-vertical,
-  .right-vertical,
-  .spacer,
-  .empty-space {
+  .right-vertical {
     width: 140px;
   }
 }
