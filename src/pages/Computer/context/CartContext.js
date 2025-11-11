@@ -21,6 +21,12 @@ export const CartProvider = ({ children }) => {
   }, []);
 
   const loadCart = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      // 토큰 없으면 장바구니 로드 시도 안 함
+      console.warn("인증 토큰이 없어 장바구니 로드를 건너뜁니다.");
+      return;
+    }
     try {
       const res = await api.get("/api/cart");
       console.log("서버 응답:", res.data);

@@ -7,6 +7,7 @@ function OAuth2RedirectHandler({ onLogin, setRole }) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // SecurityConfig에서 리다이렉트할 때 token을 쿼리 파라미터로 전달
     const token = searchParams.get("token");
 
     if (!token) {
@@ -16,44 +17,39 @@ function OAuth2RedirectHandler({ onLogin, setRole }) {
       return;
     }
 
-    console.log("OAuth2 토큰 받음:", token);
-
-    // 토큰 저장 및 헤더 설정
-    localStorage.setItem("token", token);
-    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-    // 사용자 정보 가져오기
-    const fetchUser = async () => {
+    const fetchUserInfo = async () => {
       try {
-        const response = await api.get("/api/auth/me");
-        console.log("OAuth2 사용자 정보:", response.data);
+        // 토큰을 localStorage에 저장
+        localStorage.setItem("token", token);
 
-        const { nickname, role } = response.data;
+        // axios 기본 헤더에 토큰 설정
+        api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-        // ✅ role 저장
+        // 사용자 정보 가져오기
+        const userResponse = await api.get("/api/auth/me");
+        const { nickname, username, role } = userResponse.data;
+
+        // role 저장
         if (role) {
           localStorage.setItem("role", role);
           setRole(role);
         }
 
-        onLogin(nickname || response.data.username);
+        // 로그인 처리
+        onLogin(nickname || username);
 
         alert("로그인 성공!");
         navigate("/", { replace: true });
       } catch (err) {
-        console.error("사용자 정보 가져오기 실패:", err);
-        console.error("에러 응답:", err.response?.data);
-
-        // 토큰이 유효하지 않은 경우
+        console.error("사용자 정보 조회 실패:", err);
         localStorage.removeItem("token");
-        delete api.defaults.headers.common["Authorization"];
-
+        localStorage.removeItem("role");
         alert("로그인 처리 중 오류가 발생했습니다.");
         navigate("/login");
       }
     };
 
-    fetchUser();
+    fetchUserInfo();
   }, [searchParams, navigate, onLogin, setRole]);
 
   return (
@@ -80,6 +76,14 @@ function OAuth2RedirectHandler({ onLogin, setRole }) {
         ></div>
         <h2>로그인 처리 중...</h2>
         <p>잠시만 기다려주세요.</p>
+        <style>
+          {`
+            @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+          `}
+        </style>
       </div>
     </div>
   );
