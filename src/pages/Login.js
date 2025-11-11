@@ -26,22 +26,30 @@ function Login({ onLogin, setRole }) {
 
       console.log("로그인 응답:", loginResponse.data);
 
-      // 토큰 저장, 유저 역할 저장
+      // 토큰과 역할 가져오기
       const token = loginResponse.data.token;
       const userRole = loginResponse.data.role;
 
+      console.log("받은 토큰:", token); // 🔍 디버깅용
+
+      // ✅ localStorage에 저장
       localStorage.setItem("token", token);
       localStorage.setItem("role", userRole);
 
-      // Authorization 헤더에 토큰 설정
-      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      // ✅ 중요: 저장된 값 확인
+      console.log("저장된 토큰:", localStorage.getItem("token"));
 
-      // 사용자 정보 가져오기
-      const userResponse = await api.get("/api/auth/me");
+      // ✅ 사용자 정보 가져오기 - 직접 헤더에 토큰 포함
+      const userResponse = await api.get("/api/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token}`, // localStorage가 아닌 변수 사용
+        },
+      });
+
       console.log("사용자 정보:", userResponse.data);
 
       onLogin(userResponse.data.nickname);
-      setRole(userRole); // 역할 설정
+      setRole(userRole);
 
       alert("로그인 성공!");
       navigate("/", { replace: true });
@@ -73,7 +81,6 @@ function Login({ onLogin, setRole }) {
 
   return (
     <div className="login-container">
-      {/* 일반 로그인 시작 */}
       <div className="login-box">
         <div className="login-logo">OPTICORE</div>
         <form onSubmit={handleLogin} className="login-form">
@@ -103,9 +110,7 @@ function Login({ onLogin, setRole }) {
             {isLoading ? "로그인 중..." : "로그인"}
           </button>
         </form>
-        {/* 일반 로그인 끝 */}
 
-        {/* 네이버 로그인 시작 */}
         <div className="divider">
           <span>또는</span>
         </div>
@@ -125,9 +130,7 @@ function Login({ onLogin, setRole }) {
           </svg>
           네이버 로그인
         </button>
-        {/* 네이버 로그인 끝 */}
 
-        {/* 구글 로그인 시작 */}
         <button
           className="google-login-btn"
           onClick={handleGoogleLogin}
@@ -153,14 +156,11 @@ function Login({ onLogin, setRole }) {
           />
           Google 로그인
         </button>
-        {/* 구글 로그인 끝 */}
 
-        {/* 회원 가입 시작 */}
         <div className="login-signup-link">
           <span>아직 계정이 없으신가요? </span>
           <Link to="/signup">회원가입</Link>
         </div>
-        {/* 회원 가입 끝 */}
       </div>
     </div>
   );

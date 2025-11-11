@@ -29,6 +29,7 @@ import Power from "./pages/Computer/Power";
 import PowerView from "./pages/Computer/ViewDetail/PowerView";
 import { CartProvider } from "./pages/Computer/context/CartContext";
 import CompatibilityResult from "./pages/Computer/cartcomponents/CompatibilityResult";
+import Edit from "./pages/Computer/Edit";
 
 function App() {
   const [user, setUser] = useState(null); // 현재 로그인한 유저의 이름
@@ -36,6 +37,19 @@ function App() {
 
   const navigate = useNavigate("");
   const location = useLocation();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const savedRole = localStorage.getItem("role");
+
+    if (token) {
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    }
+
+    if (savedRole) {
+      setRole(savedRole);
+    }
+  }, []);
 
   // 스크롤 복원 비활성화 (히스토리 관리 개선)
   useEffect(() => {
@@ -104,6 +118,7 @@ function App() {
           />
 
           <Route path="/input" element={<Input />}></Route>
+          <Route path="/edit/:id" element={<Edit />}></Route>
 
           <Route path="/cpu" element={<Cpu role={role} />}></Route>
           <Route path="/cpu/:id" element={<CpuView role={role} />}></Route>

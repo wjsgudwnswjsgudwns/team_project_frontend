@@ -1,15 +1,26 @@
+/* CpuView.css */
+
 /* ========================================
-   깔끔한 화이트 미니멀 스타일 - 상품 상세
+   기계적 산업 스타일 - 상품 상세 뷰
    ======================================== */
 
+/* === 페이지 컨테이너 === */
 .cpu-page-container {
   display: flex;
-  min-height: 100vh;
-  background: #fafafa;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: #1a1a1a;
+  min-height: 0vh;
+  /* 기존: padding: 20px 40px; */
+  /* 수정: ComputerSidebar가 왼쪽에 붙도록 왼쪽 패딩을 0으로 설정 */
+  padding: 20px 40px 20px 0;
+  gap: 25px;
 }
 
+/* 내용 영역 - 전체 페이지 컨테이너에서 패딩을 제거했으므로, 이 영역에 좌우 패딩을 다시 적용합니다. */
 .cpu-view-content {
   flex: 1;
+  /* 상단 패딩 유지, 좌우 패딩을 40px로 다시 적용 */
   padding: 80px 40px;
 }
 
@@ -20,59 +31,99 @@
   margin: 0 auto;
   text-align: center;
   padding: 80px 20px;
-  background: white;
-  border: 1px solid #e8e8e8;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  background: rgba(10, 10, 10, 0.95);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
+  font-family: "Courier New", monospace;
+  position: relative;
+}
+
+/* 코너 장식 */
+.loading-container::before,
+.error-container::before {
+  content: "SYSTEM LOG";
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: #ff3b30;
+  font-size: 10px;
+  letter-spacing: 2px;
 }
 
 .loading-spinner {
-  width: 40px;
-  height: 40px;
-  margin: 0 auto 20px;
-  border: 3px solid #f5f5f5;
-  border-top-color: #1a1a1a;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 30px;
+  border: 4px solid rgba(60, 60, 60, 0.3);
+  border-top-color: #ff3b30;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  box-shadow: 0 0 20px rgba(255, 59, 48, 0.4);
 }
 
 .error-message {
-  color: #999;
-  font-size: 15px;
-  margin-bottom: 24px;
+  color: #aaa;
+  font-size: 16px;
+  margin-bottom: 32px;
+  letter-spacing: 1px;
 }
 
 .back-btn {
-  padding: 12px 32px;
-  background: #1a1a1a;
-  color: white;
-  border: none;
-  font-size: 11px;
-  font-weight: 600;
+  padding: 14px 40px;
+  background: rgba(255, 59, 48, 0.1);
+  color: #ffffff;
+  border: 2px solid #ff3b30;
+  font-size: 12px;
+  font-weight: 900;
   cursor: pointer;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   text-transform: uppercase;
   transition: all 0.3s;
+  font-family: "Courier New", monospace;
+  position: relative;
+  overflow: hidden;
 }
 
 .back-btn:hover {
-  background: #000;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: #ff3b30;
+  transform: translateY(0);
+  box-shadow: 0 0 20px rgba(255, 59, 48, 0.5);
+  border-color: #ffffff;
 }
 
 /* === 상품 상세 컨테이너 === */
 .product-detail-container {
   max-width: 1200px;
   margin: 0 auto;
-  background: white;
-  border: 1px solid #e8e8e8;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  background: rgba(10, 10, 10, 0.95);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
+  font-family: "Courier New", monospace;
+  position: relative;
+}
+
+/* 코너 장식 (AI 컨설팅 폼 재활용) */
+.product-detail-container::before,
+.product-detail-container::after {
+  content: "";
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 3px solid #ff3b30;
+}
+
+.product-detail-container::before {
+  top: -2px;
+  left: -2px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.product-detail-container::after {
+  bottom: -2px;
+  right: -2px;
+  border-left: none;
+  border-top: none;
 }
 
 /* === 상품 개요 (이미지 + 기본정보) === */
@@ -81,7 +132,7 @@
   grid-template-columns: 400px 1fr;
   gap: 60px;
   padding: 60px;
-  border-bottom: 1px solid #e8e8e8;
+  border-bottom: 1px solid #333;
 }
 
 .product-image-section {
@@ -90,8 +141,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fafafa;
-  border: 1px solid #e8e8e8;
+  background: rgba(20, 20, 20, 0.8);
+  border: 2px solid #555;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  position: relative;
 }
 
 .product-image {
@@ -99,6 +153,7 @@
   height: 100%;
   object-fit: contain;
   padding: 40px;
+  filter: grayscale(0.5) contrast(1.1);
 }
 
 .product-image-placeholder {
@@ -107,11 +162,11 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-  color: #ccc;
+  color: #666;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
 }
 
 /* === 제품 정보 === */
@@ -122,27 +177,29 @@
 }
 
 .product-category {
-  font-size: 10px;
-  color: #999;
-  font-weight: 600;
+  font-size: 11px;
+  color: #ff3b30;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 16px;
+  letter-spacing: 3px;
+  margin-bottom: 24px;
+  text-shadow: 0 0 5px rgba(255, 59, 48, 0.5);
 }
 
 .product-name {
-  font-size: 32px;
-  font-weight: 300;
-  color: #1a1a1a;
+  font-size: 36px;
+  font-weight: 900;
+  color: #ffffff;
   margin-bottom: 40px;
   line-height: 1.3;
-  letter-spacing: -0.5px;
+  letter-spacing: 1px;
+  animation: neonPulse 3s infinite;
 }
 
 .product-basic-info {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 12px;
 }
 
 .info-row {
@@ -150,58 +207,76 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 0;
-  border-bottom: 1px solid #f5f5f5;
+  border-bottom: 1px dotted #444;
+  transition: background 0.3s;
+}
+
+.info-row:hover {
+  background: rgba(255, 255, 255, 0.03);
+  padding-left: 10px;
+  border-color: #777;
 }
 
 .info-label {
   font-size: 11px;
-  color: #999;
+  color: #888;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
 }
 
 .info-value {
   font-size: 16px;
-  color: #1a1a1a;
-  font-weight: 400;
+  color: #ccc;
+  font-weight: 600;
 }
 
 .info-value.price {
-  font-size: 24px;
-  font-weight: 300;
-  letter-spacing: -0.5px;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 /* === 상세 스펙 섹션 === */
 .product-specs-section {
   padding: 60px;
-  border-bottom: 1px solid #e8e8e8;
+  border-bottom: 1px solid #333;
 }
 
 .section-title {
   font-size: 11px;
-  color: #999;
-  font-weight: 600;
+  color: #ff3b30;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   margin-bottom: 32px;
+  text-shadow: 0 0 5px rgba(255, 59, 48, 0.5);
 }
 
 .specs-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
+  gap: 32px;
 }
 
 .spec-item {
-  padding: 20px 0;
-  border-bottom: 1px solid #f5f5f5;
+  padding: 16px 0;
+  border-left: 2px solid #555;
+  padding-left: 20px;
+  transition: all 0.3s;
+}
+
+.spec-item:hover {
+  border-left-color: #ffffff;
+  background: rgba(255, 255, 255, 0.02);
+  transform: translateX(5px);
 }
 
 .spec-label {
   font-size: 11px;
-  color: #999;
+  color: #888;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -210,15 +285,16 @@
 
 .spec-value {
   font-size: 15px;
-  color: #1a1a1a;
-  font-weight: 400;
+  color: #ccc;
+  font-weight: 600;
 }
 
 .no-specs {
-  color: #999;
+  color: #666;
   font-size: 14px;
   text-align: center;
   padding: 40px;
+  border: 1px dashed #444;
 }
 
 /* === 액션 버튼 === */
@@ -227,56 +303,72 @@
   display: flex;
   gap: 16px;
   justify-content: flex-end;
-  background: #fafafa;
+  background: rgba(20, 20, 20, 0.8);
+  border-top: 1px solid #333;
 }
 
 .action-btn {
-  padding: 14px 36px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 1px;
+  padding: 16px 36px;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  border: 1px solid #e0e0e0;
+  border: 2px solid #555;
   cursor: pointer;
   transition: all 0.3s;
   text-decoration: none;
   display: inline-block;
+  font-family: "Courier New", monospace;
+  position: relative;
+  overflow: hidden;
 }
 
-.btn-list {
-  background: white;
-  color: #1a1a1a;
+/* 버튼 기본 스타일 */
+.btn-list,
+.btn-edit,
+.btn-delete {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ccc;
+  border-color: #555;
 }
 
+/* 리스트 버튼 */
 .btn-list:hover {
-  background: #f5f5f5;
-  border-color: #ccc;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #ffffff;
+  color: #ffffff;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
 }
 
+/* 수정 버튼 */
 .btn-edit {
-  background: white;
-  color: #1a1a1a;
+  border-color: #ffffff;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .btn-edit:hover {
-  background: #1a1a1a;
-  color: white;
-  border-color: #1a1a1a;
+  background: #ffffff;
+  color: #1a1a1a;
+  border-color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
 }
 
+/* 삭제 버튼 (비비드 레드 강조) */
 .btn-delete {
-  background: white;
-  color: #d32f2f;
-  border-color: #d32f2f;
+  border-color: #ff3b30;
+  color: #ff3b30;
+  background: rgba(255, 59, 48, 0.05);
 }
 
 .btn-delete:hover {
-  background: #d32f2f;
-  color: white;
+  background: #ff3b30;
+  color: #ffffff;
+  border-color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(211, 47, 47, 0.2);
+  box-shadow: 0 0 25px rgba(255, 59, 48, 0.5);
 }
 
 /* === 반응형 === */
@@ -319,5 +411,12 @@
   .action-btn {
     flex: 1;
     min-width: 100px;
+    padding: 12px 20px;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+
+  .info-value.price {
+    font-size: 20px;
   }
 }

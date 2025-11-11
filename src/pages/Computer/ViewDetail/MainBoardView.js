@@ -155,7 +155,7 @@ function MainBoardView({ role }) {
             </button>
             {role === "ROLE_ADMIN" && (
               <>
-                <Link to={`/cpu/edit/${id}`} className="action-btn btn-edit">
+                <Link to={`/edit/${id}`} className="action-btn btn-edit">
                   수정
                 </Link>
                 <button

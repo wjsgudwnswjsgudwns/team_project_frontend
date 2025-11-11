@@ -20,7 +20,7 @@ function CpuView({ role }) {
     try {
       setLoading(true);
       const response = await api.get(`/api/products/${id}`);
-      console.log("API 응답:", response.data); // 디버깅용
+      console.log("API 응답:", response.data);
       setProduct(response.data);
       setError(null);
     } catch (err) {
@@ -99,7 +99,7 @@ function CpuView({ role }) {
                   className="product-image"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = "/placeholder-image.png"; // 대체 이미지
+                    e.target.src = "/placeholder-image.png";
                   }}
                 />
               ) : (
@@ -134,12 +134,12 @@ function CpuView({ role }) {
           {/* 상세 스펙 섹션 */}
           <div className="product-specs-section">
             <h2 className="section-title">상세 스펙</h2>
-            {product.specs && Object.keys(product.specs).length > 0 ? (
+            {product.specs && product.specs.length > 0 ? (
               <div className="specs-grid">
-                {Object.entries(product.specs).map(([key, value]) => (
-                  <div key={key} className="spec-item">
-                    <div className="spec-label">{key}</div>
-                    <div className="spec-value">{value}</div>
+                {product.specs.map((spec, index) => (
+                  <div key={index} className="spec-item">
+                    <div className="spec-label">{spec.key}</div>
+                    <div className="spec-value">{spec.value}</div>
                   </div>
                 ))}
               </div>
@@ -155,7 +155,7 @@ function CpuView({ role }) {
             </button>
             {role === "ROLE_ADMIN" && (
               <>
-                <Link to={`/cpu/edit/${id}`} className="action-btn btn-edit">
+                <Link to={`/edit/${id}`} className="action-btn btn-edit">
                   수정
                 </Link>
                 <button
