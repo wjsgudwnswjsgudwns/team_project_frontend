@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from "react";
+import api from "../../api/axiosConfig";
 
 export default function PostForm({
   formData,
@@ -27,32 +28,42 @@ export default function PostForm({
     }
   }, [formData.fContent, isEditing]);
 
-  const handleImageInsert = (e) => {
+  const handleImageInsert = async (e) => {
     const files = Array.from(e.target.files);
 
-    files.forEach((file) => {
+    for (const file of files) {
       if (file.size > 5 * 1024 * 1024) {
         alert(`${file.name}은(는) 5MB를 초과합니다.`);
-        return;
+        continue;
       }
 
-      const reader = new FileReader();
-      reader.onloadend = () => {
+      // S3에 업로드
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await api.post("/api/image/upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        const imageUrl = response.data.url;
+
+        // 에디터에 이미지 삽입
         const img = document.createElement("img");
-        img.src = reader.result;
+        img.src = imageUrl;
         img.style.maxWidth = "100%";
         img.style.height = "auto";
         img.style.margin = "10px 0";
 
         if (contentEditableRef.current) {
           contentEditableRef.current.focus();
-
           const selection = window.getSelection();
           if (selection.rangeCount > 0) {
             const range = selection.getRangeAt(0);
             range.deleteContents();
             range.insertNode(img);
-
             range.setStartAfter(img);
             range.setEndAfter(img);
             selection.removeAllRanges();
@@ -64,9 +75,10 @@ export default function PostForm({
             fContent: contentEditableRef.current.innerHTML,
           });
         }
-      };
-      reader.readAsDataURL(file);
-    });
+      } catch (error) {
+        alert("이미지 업로드 실패: " + error.message);
+      }
+    }
 
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
