@@ -49,7 +49,7 @@ function Navbar({ user, onLogout, role }) {
           <Link to="/ai" className="sub-menu-item">
             AI 컴퓨터 견적
           </Link>
-          <Link to="/counsel-board" className="sub-menu-item">
+          <Link to="/counselboard" className="sub-menu-item">
             PC 구매 상담
           </Link>
           <Link to="/freeboard" className="sub-menu-item">
