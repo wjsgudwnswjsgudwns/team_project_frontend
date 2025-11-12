@@ -1,3 +1,5 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css");
+
 /* ========================================
    기계적 산업 스타일 - AI 컨설팅 폼
    [모노크롬 & 비비드 레드 테마 적용]
@@ -154,7 +156,8 @@
   font-weight: 900;
   font-size: 24px;
   animation: blink 1.5s infinite;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .form-item:hover {
@@ -178,14 +181,16 @@
   margin-bottom: 12px;
   text-transform: uppercase;
   letter-spacing: 2px;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .selected-value {
   font-size: 16px;
   color: #aaaaaa;
   font-weight: 600;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 /* === 드롭다운 패널 === */
@@ -213,7 +218,8 @@
   align-items: center;
   justify-content: center;
   transition: all 0.3s;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 900;
 }
 
@@ -242,7 +248,8 @@
   font-weight: 600;
   font-size: 15px;
   margin-bottom: 8px;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   position: relative;
 }
 
@@ -298,7 +305,8 @@
   color: #ccc;
   outline: none;
   transition: all 0.3s;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 600;
 }
 
@@ -311,7 +319,8 @@
 
 .custom-usage-input input::placeholder {
   color: #555;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 /* === 예산 패널 === */
@@ -321,13 +330,14 @@
 
 .budget-range-display {
   text-align: center;
-  font-size: 36px;
-  font-weight: 900;
+  font-size: 20px;
+  font-weight: 500;
   color: #ffffff;
   margin-bottom: 32px;
   letter-spacing: 2px;
-  animation: neonPulse 3s infinite;
-  font-family: "Courier New", monospace;
+  /* animation: neonPulse 3s infinite; */
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .slider-controls {
@@ -342,7 +352,8 @@
   font-weight: 900;
   letter-spacing: 2px;
   text-transform: uppercase;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 /* === 슬라이더 + 입력 필드 === */
@@ -408,7 +419,8 @@
   outline: none;
   transition: all 0.3s;
   font-weight: 700;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .budget-number-input:focus {
@@ -428,15 +440,16 @@
   color: #ffffff;
   border: 3px solid #ffffff;
   font-size: 16px;
-  font-weight: 900;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.3s;
   letter-spacing: 4px;
   text-transform: uppercase;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   position: relative;
   overflow: hidden;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  /* text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); */
 }
 
 .search-button::before {
@@ -453,13 +466,13 @@
     transparent
   );
   transform: rotate(45deg);
-  animation: buttonShine 3s infinite;
+  /* animation: buttonShine 3s infinite; */
 }
 
 .search-button:hover {
   background: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 0 40px rgba(255, 255, 255, 0.6),
-    inset 0 0 40px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3),
+    inset 0 0 20px rgba(255, 255, 255, 0.1);
   transform: scale(1.02);
   letter-spacing: 6px;
 }
@@ -543,7 +556,8 @@
   margin-bottom: 16px;
   letter-spacing: 2px;
   text-transform: uppercase;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   animation: neonPulse 2s infinite;
 }
 
@@ -552,7 +566,8 @@
   color: #888;
   font-weight: 700;
   letter-spacing: 1px;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 /* === 견적 탭 버튼 === */
@@ -577,7 +592,8 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   text-transform: uppercase;
   letter-spacing: 2px;
   position: relative;
@@ -673,7 +689,8 @@
   text-transform: uppercase;
   letter-spacing: 2px;
   font-size: 11px;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .product-list-header .col-image {
@@ -763,7 +780,8 @@
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 2px;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .product-list-item .col-name {
@@ -772,7 +790,8 @@
   font-weight: 600;
   color: #ccc;
   line-height: 1.5;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .product-list-item .col-price {
@@ -782,7 +801,8 @@
   font-weight: 900;
   color: #ffffff;
   letter-spacing: 1px;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
@@ -803,7 +823,8 @@
   border: 2px solid #555;
   letter-spacing: 2px;
   text-transform: uppercase;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   position: relative;
   overflow: hidden;
 }

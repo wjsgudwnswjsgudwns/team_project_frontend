@@ -30,6 +30,7 @@ import PowerView from "./pages/Computer/ViewDetail/PowerView";
 import { CartProvider } from "./pages/Computer/context/CartContext";
 import CompatibilityResult from "./pages/Computer/cartcomponents/CompatibilityResult";
 import Edit from "./pages/Computer/Edit";
+import Chatbot from "./component/Chatbot";
 
 import CounselBoard from "./pages/CounselBoard";
 import InfoBoard from "./pages/InfoBoard";
@@ -123,7 +124,7 @@ function App() {
           <Route path="/input" element={<Input />}></Route>
           <Route path="/edit/:id" element={<Edit />}></Route>
 
-          <Route path="/cpu" element={<Cpu role={role} />}></Route>
+          <Route path="/cpu" element={<Cpu role={role} user={user} />}></Route>
           <Route path="/cpu/:id" element={<CpuView role={role} />}></Route>
 
           <Route path="/cooler" element={<Cooler role={role} />}></Route>
@@ -170,6 +171,7 @@ function App() {
             element={<CompatibilityResult />}
           ></Route>
         </Routes>
+        <Chatbot />
       </CartProvider>
     </div>
   );
