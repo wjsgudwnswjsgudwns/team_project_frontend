@@ -6,7 +6,7 @@ import ComputerSidebar from "./ComputerSidebar";
 import { Link, useNavigate } from "react-router-dom";
 import "./Cpu.css";
 
-function Cpu({ role }) {
+function Cpu({ role, user }) {
   const [products, setProducts] = useState([]);
   const [searchName, setSearchName] = useState(""); // 검색어
   const [currentPage, setCurrentPage] = useState(0); // 현재 페이지
@@ -164,7 +164,7 @@ function Cpu({ role }) {
           )}
         </div>
 
-        <CartPanel />
+        {user && <CartPanel />}
       </div>
     </div>
   );

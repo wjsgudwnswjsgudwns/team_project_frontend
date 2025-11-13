@@ -342,7 +342,10 @@ const AiConsult = () => {
             <p className="loading-text">
               AI가 최적의 견적을 생성하고 있습니다...
             </p>
-            <p className="loading-subtext">잠시만 기다려주세요</p>
+            <p className="loading-subtext">약 2분정도 시간이 소요됩니다. </p>
+            <p className="loading-subtext">
+              AI가 정보 제공 시 실수를 할 수 있으니 다시 한번 확인하세요.{" "}
+            </p>
           </div>
         </div>
       )}

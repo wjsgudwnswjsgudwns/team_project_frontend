@@ -111,7 +111,6 @@ function PowerView({ role }) {
 
             {/* 기본 정보 영역 */}
             <div className="product-info-section">
-              <div className="product-category">{product.category}</div>
               <h1 className="product-name">{product.name}</h1>
 
               <div className="product-basic-info">

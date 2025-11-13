@@ -25,7 +25,10 @@ function Input() {
   const [imagePreview, setImagePreview] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
 
+  const [fileInputKey, setFileInputKey] = useState(Date.now());
+
   const keyInputRef = useRef(null);
+  const keySubmitRef = useRef(null);
 
   // 기본 상품 정보 변경
   const handleProductChange = (e) => {
@@ -126,12 +129,13 @@ function Input() {
         name: "",
         manufacturer: "",
         price: "",
-        imageUrl: "",
         category: "CPU",
       });
       setSpecs([]);
       setImagePreview(null);
       setImageUrl("");
+      setFileInputKey(Date.now()); // 이미지 초기화
+      keySubmitRef.current?.focus();
     } catch (error) {
       console.error("등록 실패:", error);
       alert("상품 등록 중 오류가 발생했습니다.");
@@ -144,8 +148,6 @@ function Input() {
     <div className="cpu-page-container">
       <ComputerSidebar />
       <div className="input-cpu-content">
-        <h2>상품 등록 (관리자용)</h2>
-
         <form onSubmit={handleSubmit} className="cpu-spec-form">
           {/* 기본 상품 정보 */}
           <div className="spec-group">
@@ -153,9 +155,12 @@ function Input() {
             <table className="spec-table">
               <tbody>
                 <tr>
-                  <td className="label-cell">상품명 *</td>
+                  <td className="label-cell" ref={keySubmitRef}>
+                    상품명 *
+                  </td>
                   <td className="input-cell">
                     <input
+                      ref={keySubmitRef}
                       type="text"
                       name="name"
                       value={product.name}
