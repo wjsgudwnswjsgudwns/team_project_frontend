@@ -52,7 +52,7 @@ function Navbar({ user, onLogout, role }) {
           <Link to="/aichart" className="sub-menu-item">
             시세 차트
           </Link>
-          <Link to="/counsel-board" className="sub-menu-item">
+          <Link to="/counsel-board" className="sub-menu-item"></Link>
           <Link to="/counselboard" className="sub-menu-item">
             PC 구매 상담
           </Link>
