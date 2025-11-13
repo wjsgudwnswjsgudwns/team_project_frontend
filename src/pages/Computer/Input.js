@@ -12,13 +12,15 @@ function Input() {
     category: "CPU",
   });
 
-  // 동적 스펙 필드들 - 배열로 변경
+  // 동적 스펙 필드들 -> 백앤드에서 List형태니까 배열형태 []
   const [specs, setSpecs] = useState([]);
 
-  // 새 필드 추가용
+  // 새 필드 추가용 -> 상세 스펙 추가
   const [newFieldKey, setNewFieldKey] = useState("");
   const [newFieldValue, setNewFieldValue] = useState("");
 
+  // 중복 제출 방지
+  //사용자가 '상품 등록' 버튼을 누른 후, 서버에서 응답이 오기 전에 버튼을 여러 번 누르는 것을 막음
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 이미지 관련
@@ -30,20 +32,22 @@ function Input() {
   const keyInputRef = useRef(null);
   const keySubmitRef = useRef(null);
 
-  // 기본 상품 정보 변경
+  // 상품 기본 정보 변경
   const handleProductChange = (e) => {
     const { name, value } = e.target;
     setProduct((prev) => ({
+      // prev = 기본 상품 정보 = product = name, manufacturer, price, category
       ...prev,
-      [name]: value,
+      [name]: value, // input에서 name, value 매칭
     }));
   };
 
   // 스펙 필드 값 변경
   const handleSpecChange = (index, field, value) => {
     setSpecs((prev) => {
-      const newSpecs = [...prev];
-      newSpecs[index] = { ...newSpecs[index], [field]: value };
+      // specs를 prev라는 이름으로 풀어서 넘겨줌
+      const newSpecs = [...prev]; // prev를 복사하여 새로운 배열 newSpecs
+      newSpecs[index] = { ...newSpecs[index], [field]: value }; // 해당하는 index 번호를 찾아서 새로운 입력한 값 field로 value에 넣어서 다시 저장
       return newSpecs;
     });
   };
@@ -51,10 +55,11 @@ function Input() {
   // 새 스펙 필드 추가
   const addSpecField = () => {
     if (newFieldKey.trim() && newFieldValue.trim()) {
-      setSpecs((prev) => [...prev, { key: newFieldKey, value: newFieldValue }]);
-      setNewFieldKey("");
-      setNewFieldValue("");
-      keyInputRef.current?.focus();
+      // 모두 입력 했는지 유효성 검사
+      setSpecs((prev) => [...prev, { key: newFieldKey, value: newFieldValue }]); // 기존 배열에 새로운 정보를 뒤에 추가
+      setNewFieldKey(""); // key값 초기화
+      setNewFieldValue(""); // value 값 초기화
+      keyInputRef.current?.focus(); // key 값으로 포커스 이동
     } else {
       alert("필드명과 값을 모두 입력해주세요.");
     }
@@ -63,6 +68,8 @@ function Input() {
   // 스펙 필드 삭제
   const removeSpecField = (index) => {
     setSpecs((prev) => prev.filter((_, i) => i !== index));
+    // _ = 현재 배열 요소의 값 , i = 현재 배열의 인덱스
+    // 같으면 삭제 다르면, 통과
   };
 
   // 이미지 선택 시 미리보기 & 업로드
@@ -102,6 +109,7 @@ function Input() {
     e.preventDefault();
 
     if (!product.name || !product.price) {
+      // 이름과 가격은 필수 입력 사항
       alert("상품명과 가격은 필수입니다.");
       return;
     }
@@ -109,6 +117,7 @@ function Input() {
     setIsSubmitting(true);
 
     const productData = {
+      // 전송할 데이터
       name: product.name,
       manufacturer: product.manufacturer,
       price: parseInt(product.price),
