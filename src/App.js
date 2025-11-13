@@ -31,7 +31,6 @@ import { CartProvider } from "./pages/Computer/context/CartContext";
 import CompatibilityResult from "./pages/Computer/cartcomponents/CompatibilityResult";
 import Edit from "./pages/Computer/Edit";
 import Chatbot from "./component/Chatbot";
-import AiChart from "./pages/AiChart";
 
 import CounselBoard from "./pages/CounselBoard";
 import InfoBoard from "./pages/InfoBoard";
@@ -132,8 +131,6 @@ function App() {
               <OAuth2RedirectHandler onLogin={setUser} setRole={setRole} />
             }
           />
-
-          <Route path="/aichart" element={<AiChart />}></Route>
 
           <Route path="/input" element={<Input />}></Route>
           <Route path="/edit/:id" element={<Edit />}></Route>

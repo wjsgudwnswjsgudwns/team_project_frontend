@@ -49,9 +49,6 @@ function Navbar({ user, onLogout, role }) {
           <Link to="/ai" className="sub-menu-item">
             AI 컴퓨터 견적
           </Link>
-          <Link to="/aichart" className="sub-menu-item">
-            시세 차트
-          </Link>
           <Link to="/counselboard" className="sub-menu-item">
             PC 구매 상담
           </Link>
