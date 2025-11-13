@@ -1,0 +1,430 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css");
+
+/* ========================================
+   AI 차트 스타일 - 기계적 산업 테마
+   [모노크롬 & 비비드 레드 테마 적용]
+   ======================================== */
+
+/* === 차트 컨테이너 === */
+.ai-chart-container {
+  min-height: 100vh;
+  background: #000000;
+  background-image: repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.02) 0px,
+      transparent 1px,
+      transparent 2px,
+      rgba(255, 255, 255, 0.02) 3px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(100, 100, 100, 0.02) 0px,
+      transparent 1px,
+      transparent 2px,
+      rgba(100, 100, 100, 0.02) 3px
+    );
+  padding: 80px 20px;
+  position: relative;
+}
+
+.ai-chart-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 400px;
+  background: radial-gradient(
+    ellipse at top,
+    rgba(255, 255, 255, 0.08),
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.ai-chart-container h1 {
+  text-align: center;
+  font-size: 42px;
+  font-weight: 900;
+  color: #ffffff;
+  margin-bottom: 60px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+/* === 입력 섹션 === */
+.input-section {
+  max-width: 800px;
+  margin: 0 auto 40px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.product-input {
+  flex: 1;
+  min-width: 300px;
+  padding: 18px 24px;
+  background: rgba(20, 20, 20, 0.8);
+  border: 2px solid #555;
+  font-size: 16px;
+  color: #ccc;
+  outline: none;
+  transition: all 0.3s;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.product-input:focus {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: #ffffff;
+  color: #fff;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+}
+
+.product-input::placeholder {
+  color: #555;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.search-button {
+  padding: 18px 40px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 3px solid #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.search-button::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transform: rotate(45deg);
+  transition: all 0.5s;
+}
+
+.search-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3),
+    inset 0 0 20px rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+  letter-spacing: 4px;
+}
+
+.search-button:disabled,
+.search-button.loading {
+  background: rgba(60, 60, 60, 0.2);
+  color: #555;
+  border-color: #444;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.search-button:disabled::before,
+.search-button.loading::before {
+  display: none;
+}
+
+/* === 에러 메시지 === */
+.error-message {
+  max-width: 800px;
+  margin: 0 auto 30px;
+  padding: 20px 28px;
+  background: rgba(255, 59, 48, 0.1);
+  border: 2px solid #ff3b30;
+  color: #ff6b6b;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  box-shadow: 0 0 25px rgba(255, 59, 48, 0.3);
+  position: relative;
+}
+
+.error-message::before {
+  content: "!";
+  position: absolute;
+  left: -15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  background: #ff3b30;
+  color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 18px;
+  box-shadow: 0 0 20px rgba(255, 59, 48, 0.5);
+}
+
+/* === 로딩 컨테이너 === */
+.loading-container {
+  max-width: 800px;
+  margin: 60px auto;
+  padding: 80px 40px;
+  background: rgba(15, 15, 15, 0.95);
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 50px rgba(255, 255, 255, 0.5);
+  text-align: center;
+  position: relative;
+}
+
+.loading-container::before,
+.loading-container::after {
+  content: "";
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 3px solid #ff3b30;
+}
+
+.loading-container::before {
+  top: -3px;
+  left: -3px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.loading-container::after {
+  bottom: -3px;
+  right: -3px;
+  border-left: none;
+  border-top: none;
+}
+
+.loading-container p {
+  font-size: 20px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  animation: neonPulse 2s infinite;
+  margin-bottom: 24px;
+}
+
+@keyframes neonPulse {
+  0%,
+  100% {
+    text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 30px #ffffff;
+  }
+  50% {
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 15px #ffffff;
+  }
+}
+
+.loading-spinner {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+  border: 5px solid rgba(60, 60, 60, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* === 차트 컨테이너 === */
+.chart-container {
+  max-width: 1200px;
+  margin: 60px auto 0;
+  background: rgba(10, 10, 10, 0.95);
+  border: 2px solid #ffffff;
+  padding: 48px;
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
+  position: relative;
+}
+
+.chart-container::before,
+.chart-container::after {
+  content: "";
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 3px solid #ff3b30;
+}
+
+.chart-container::before {
+  top: -2px;
+  left: -2px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.chart-container::after {
+  bottom: -2px;
+  right: -2px;
+  border-left: none;
+  border-top: none;
+}
+
+.chart-container h2 {
+  font-size: 28px;
+  font-weight: 900;
+  color: #ffffff;
+  margin-bottom: 40px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  text-align: center;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #555;
+}
+
+/* === Recharts 커스텀 스타일 === */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: rgba(100, 100, 100, 0.3);
+}
+
+.recharts-text {
+  fill: #aaaaaa;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.recharts-legend-wrapper {
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 700;
+}
+
+.recharts-tooltip-wrapper {
+  outline: none;
+}
+
+.recharts-default-tooltip {
+  background: rgba(15, 15, 15, 0.98) !important;
+  border: 2px solid #ffffff !important;
+  padding: 16px !important;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.5) !important;
+}
+
+.recharts-tooltip-label {
+  color: #ffffff !important;
+  font-weight: 900 !important;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  margin-bottom: 8px !important;
+  font-size: 14px !important;
+  letter-spacing: 1px !important;
+}
+
+.recharts-tooltip-item {
+  color: #ff3b30 !important;
+  font-weight: 700 !important;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  font-size: 13px !important;
+}
+
+/* === 반응형 === */
+@media (max-width: 768px) {
+  .ai-chart-container {
+    padding: 40px 16px;
+  }
+
+  .ai-chart-container h1 {
+    font-size: 28px;
+    margin-bottom: 40px;
+    letter-spacing: 2px;
+  }
+
+  .input-section {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .product-input {
+    min-width: 100%;
+  }
+
+  .search-button {
+    width: 100%;
+    padding: 16px 32px;
+    font-size: 14px;
+    letter-spacing: 2px;
+  }
+
+  .chart-container {
+    padding: 32px 24px;
+  }
+
+  .chart-container h2 {
+    font-size: 20px;
+    margin-bottom: 30px;
+  }
+
+  .loading-container {
+    padding: 60px 30px;
+  }
+
+  .loading-container p {
+    font-size: 16px;
+  }
+
+  .recharts-text {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ai-chart-container h1 {
+    font-size: 22px;
+  }
+
+  .product-input {
+    font-size: 14px;
+    padding: 14px 20px;
+  }
+
+  .search-button {
+    font-size: 12px;
+    padding: 14px 28px;
+  }
+
+  .chart-container h2 {
+    font-size: 18px;
+  }
+}
