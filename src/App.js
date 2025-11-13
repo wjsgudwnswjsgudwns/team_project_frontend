@@ -31,6 +31,7 @@ import { CartProvider } from "./pages/Computer/context/CartContext";
 import CompatibilityResult from "./pages/Computer/cartcomponents/CompatibilityResult";
 import Edit from "./pages/Computer/Edit";
 import Chatbot from "./component/Chatbot";
+import AiChart from "./pages/AiChart";
 
 function App() {
   const [user, setUser] = useState(null); // 현재 로그인한 유저의 이름
@@ -74,6 +75,14 @@ function App() {
 
   // 사용자 확인
   const checkUser = async () => {
+    // ⭐ 토큰이 없으면 바로 리턴
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setUser(null);
+      setRole(null);
+      return;
+    }
+
     try {
       const res = await api.get("/api/auth/me");
       console.log("/api/auth/me 응답:", res.data);
@@ -81,8 +90,11 @@ function App() {
 
       const savedRole = localStorage.getItem("role"); // 역할 가져오기
       setRole(savedRole); // 역할 저장
-    } catch {
+    } catch (error) {
+      console.error("사용자 정보 확인 실패:", error);
+      // ⭐ /api/auth/me 실패 시에도 토큰은 유지 (axios 인터셉터에서 처리)
       setUser(null);
+      setRole(null);
     }
   };
 
@@ -117,6 +129,8 @@ function App() {
               <OAuth2RedirectHandler onLogin={setUser} setRole={setRole} />
             }
           />
+
+          <Route path="/aichart" element={<AiChart />}></Route>
 
           <Route path="/input" element={<Input />}></Route>
           <Route path="/edit/:id" element={<Edit />}></Route>
