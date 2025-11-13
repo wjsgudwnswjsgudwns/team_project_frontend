@@ -49,11 +49,11 @@ export default function PostDetail({
         {isAuthor && (
           <div className="meta-actions">
             <button onClick={onEdit} className="text-action-btn">
-              ✏️ 수정
+              수정
             </button>
             <span className="action-divider">|</span>
             <button onClick={onDelete} className="text-action-btn delete">
-              🗑️ 삭제
+              삭제
             </button>
           </div>
         )}

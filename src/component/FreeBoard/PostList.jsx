@@ -4,7 +4,6 @@ export default function PostList({
   isSearching,
   currentPage,
 }) {
-  // posts가 undefined이거나 배열이 아닐 경우 처리
   if (!posts || !Array.isArray(posts) || posts.length === 0) {
     return (
       <div className="empty-message">
@@ -19,7 +18,6 @@ export default function PostList({
         <div
           key={post.id}
           className="post-item"
-          // onClick={() => onPostClick(post.id, currentPage)}
           onClick={() => {
             console.log("🟡 PostList 클릭:", { postId: post.id, currentPage });
             onPostClick(post.id, currentPage);
@@ -27,10 +25,16 @@ export default function PostList({
         >
           <div className="post-header">
             <h3 className="post-title">{post.ftitle}</h3>
-            {post.ffile && post.ffile !== "[]" && (
-              <span className="image-badge">📷</span>
+
+            {/* ✅ 이미지 있으면 단순 아이콘 표시 */}
+            {post.imageCount > 0 && (
+              <div className="image-icon">
+                <div className="image-icon-box"></div>
+                <div className="image-icon-box"></div>
+              </div>
             )}
           </div>
+
           <div className="post-meta">
             <span>작성자: {post.username || "Unknown"}</span>
             <span>조회수: {post.fview}</span>
@@ -42,6 +46,22 @@ export default function PostList({
                 : "-"}
             </span>
           </div>
+
+          {/* ✅ 호버 시 미리보기 팝업 */}
+          {post.firstImageUrl && (
+            <div className="image-preview-popup">
+              <img
+                src={post.firstImageUrl}
+                alt="미리보기"
+                className="preview-popup-image"
+              />
+              {post.imageCount > 1 && (
+                <div className="preview-popup-count">
+                  +{post.imageCount - 1} more
+                </div>
+              )}
+            </div>
+          )}
         </div>
       ))}
     </div>

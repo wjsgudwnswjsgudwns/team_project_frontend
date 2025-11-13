@@ -1,3 +1,5 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css");
+
 /* ========================================
    기계적 산업 스타일 - 자유게시판
    [모노크롬 & 비비드 레드 테마 적용]
@@ -6,10 +8,10 @@
 @keyframes borderGlow {
   0%,
   100% {
-    box-shadow: 0 0 5px #ff3b30, 0 0 10px #ff3b30;
+    box-shadow: 0 0 5px #ff3b30, 0 0 10px #ff3b30, inset 0 0 5px #ff3b30;
   }
   50% {
-    box-shadow: 0 0 10px #ff3b30, 0 0 20px #ff3b30;
+    box-shadow: 0 0 10px #ff3b30, 0 0 20px #ff3b30, inset 0 0 10px #ff3b30;
   }
 }
 
@@ -65,7 +67,8 @@
   font-size: 14px;
   font-weight: 900;
   transition: all 0.3s;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   text-transform: uppercase;
   letter-spacing: 2px;
   position: relative;
@@ -99,7 +102,6 @@
   border-color: #ffffff;
   color: #ffffff;
   box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .tab-btn.active::before {
@@ -155,7 +157,8 @@
   cursor: pointer;
   outline: none;
   transition: all 0.3s;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 600;
 }
 
@@ -175,7 +178,8 @@
   transition: all 0.3s;
   background: rgba(20, 20, 20, 0.8);
   color: #ccc;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 600;
 }
 
@@ -188,7 +192,8 @@
 
 .search-input::placeholder {
   color: #555;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .search-btn {
@@ -202,7 +207,8 @@
   transition: all 0.3s;
   letter-spacing: 2px;
   text-transform: uppercase;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .search-btn:hover {
@@ -222,7 +228,8 @@
   transition: all 0.3s;
   letter-spacing: 2px;
   text-transform: uppercase;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .reset-btn:hover {
@@ -234,10 +241,11 @@
 
 .search-result-text {
   margin-bottom: 24px;
-  font-size: 12px;
+  font-size: 13px;
   color: #888;
-  font-family: "Courier New", monospace;
-  font-weight: 700;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
   letter-spacing: 1px;
 }
 
@@ -254,7 +262,8 @@
   padding: 80px 20px;
   color: #666;
   font-size: 14px;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -304,7 +313,8 @@
   font-weight: 700;
   color: #e0e0e0;
   margin: 0;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   letter-spacing: 0.5px;
 }
 
@@ -314,7 +324,8 @@
   color: #ff3b30;
   padding: 4px 10px;
   border: 1px solid #ff3b30;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 900;
   letter-spacing: 1px;
 }
@@ -322,11 +333,12 @@
 .post-meta {
   display: flex;
   gap: 20px;
-  font-size: 11px;
+  font-size: 13px;
   color: #888;
-  font-family: "Courier New", monospace;
-  font-weight: 700;
-  letter-spacing: 1px;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
 /* ========== 페이지네이션 ========== */
@@ -347,7 +359,8 @@
   cursor: pointer;
   font-size: 13px;
   transition: all 0.3s;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 900;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -370,7 +383,8 @@
   font-size: 13px;
   color: #888;
   font-weight: 900;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   letter-spacing: 1px;
 }
 
@@ -381,7 +395,8 @@
   color: #ffffff !important;
   margin-bottom: 40px;
   margin-top: 0;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   letter-spacing: 1px;
   text-transform: uppercase;
 }
@@ -409,7 +424,8 @@
   text-align: left;
   color: #ccc;
   background: rgba(20, 20, 20, 0.8);
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 600;
 }
 
@@ -435,7 +451,8 @@
   font-size: 13px;
   font-weight: 900;
   transition: all 0.3s;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   letter-spacing: 2px;
   text-transform: uppercase;
 }
@@ -449,8 +466,9 @@
 .image-insert-note {
   font-size: 11px;
   color: #666;
-  font-family: "Courier New", monospace;
-  font-weight: 700;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
   letter-spacing: 1px;
 }
 
@@ -471,7 +489,8 @@
   text-align: left;
   color: #ccc !important;
   background: rgba(20, 20, 20, 0.8) !important;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 600;
 }
 
@@ -506,7 +525,8 @@
   transition: all 0.3s;
   letter-spacing: 2px;
   text-transform: uppercase;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .form-submit-btn:hover {
@@ -526,7 +546,8 @@
   transition: all 0.3s;
   letter-spacing: 2px;
   text-transform: uppercase;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .form-cancel-btn:hover {
@@ -544,7 +565,8 @@
   margin-bottom: 24px;
   margin-top: 0;
   text-align: left;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   letter-spacing: 1px;
 }
 
@@ -555,11 +577,12 @@
   padding: 16px 0;
   border-bottom: 2px solid #555;
   margin-bottom: 40px;
-  font-size: 11px;
+  font-size: 13px;
   color: #999 !important;
-  font-family: "Courier New", monospace;
-  font-weight: 700;
-  letter-spacing: 1px;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
 .meta-left {
@@ -578,14 +601,15 @@
   background: none;
   border: none;
   padding: 0;
-  font-size: 11px;
+  font-size: 13px;
   color: #999 !important;
   cursor: pointer;
   transition: color 0.3s;
   white-space: nowrap;
-  font-family: "Courier New", monospace;
-  font-weight: 900;
-  letter-spacing: 1px;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
 }
 
@@ -603,7 +627,7 @@
 
 .action-divider {
   color: #444;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .detail-content {
@@ -616,7 +640,8 @@
   font-size: 15px;
   color: #e0e0e0;
   text-align: left;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 600;
 }
 
@@ -645,7 +670,8 @@
   font-size: 14px;
   font-weight: 900;
   transition: all 0.3s;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   letter-spacing: 2px;
   text-transform: uppercase;
 }
@@ -673,7 +699,8 @@
   transition: all 0.3s;
   letter-spacing: 2px;
   text-transform: uppercase;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .back-btn:hover {
@@ -693,7 +720,8 @@
   font-size: 13px;
   font-weight: 900;
   transition: all 0.3s;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   letter-spacing: 2px;
   text-transform: uppercase;
 }
@@ -755,19 +783,20 @@
   margin: 0 0 12px 0;
   font-size: 20px;
   color: #ffffff;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 900;
   letter-spacing: 2px;
   text-transform: uppercase;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .video-modal p {
   margin: 0 0 24px 0;
   font-size: 12px;
   color: #888;
-  font-family: "Courier New", monospace;
-  font-weight: 700;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
   letter-spacing: 1px;
 }
 
@@ -781,7 +810,8 @@
   box-sizing: border-box;
   color: #ccc;
   background: rgba(20, 20, 20, 0.8);
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 600;
 }
 
@@ -807,7 +837,8 @@
   font-size: 13px;
   font-weight: 900;
   transition: all 0.3s;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   letter-spacing: 2px;
   text-transform: uppercase;
 }
@@ -829,7 +860,8 @@
   transition: all 0.3s;
   letter-spacing: 2px;
   text-transform: uppercase;
-  font-family: "Courier New", monospace;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .video-modal-cancel-btn:hover {
@@ -913,4 +945,337 @@
     padding: 12px 20px;
     font-size: 12px;
   }
+}
+
+/* ========================================
+   이미지 미리보기 스타일
+   ======================================== */
+
+/* === 1. 자유게시판/구매상담 - 호버 미리보기 === */
+
+.post-item {
+  position: relative;
+}
+
+.image-icon {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.image-icon-box {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid #10b981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.image-icon-box:nth-child(1) {
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+.image-icon-box:nth-child(2) {
+  top: 3px;
+  left: 3px;
+  z-index: 1;
+  opacity: 0.7;
+}
+
+.post-item:hover .image-icon-box {
+  border-color: #ffffff;
+  background: rgba(16, 185, 129, 0.3);
+}
+
+.image-preview-popup {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background: rgba(10, 10, 10, 0.98);
+  border: 2px solid #10b981;
+  box-shadow: 0 0 40px rgba(16, 185, 129, 0.6);
+  padding: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  max-width: 320px;
+  width: max-content;
+  overflow: hidden;
+}
+
+.post-item:hover .image-preview-popup {
+  opacity: 1;
+  visibility: visible;
+}
+
+.image-preview-popup::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 20px;
+  height: 20px;
+  border-top: 2px solid #10b981;
+  border-left: 2px solid #10b981;
+  z-index: 1;
+}
+
+.image-preview-popup::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 20px;
+  height: 20px;
+  border-bottom: 2px solid #10b981;
+  border-right: 2px solid #10b981;
+  z-index: 1;
+}
+
+.preview-popup-image {
+  max-width: 320px;
+  max-height: 220px;
+  width: 100%;
+  height: auto;
+  display: block;
+  border: none;
+  box-shadow: none;
+  object-fit: cover;
+}
+
+.preview-popup-count {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  background: rgba(10, 10, 10, 0.85);
+  border: 1px solid #10b981;
+  font-size: 9px;
+  color: #10b981;
+  text-align: center;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+  z-index: 2;
+}
+
+/* === 2. 정보게시판 - 썸네일 직접 표시 === */
+
+.info-post-item {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid rgba(100, 100, 100, 0.3);
+  cursor: pointer;
+  transition: all 0.3s;
+  background: transparent;
+  position: relative;
+}
+
+.info-post-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #ffffff, #666);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.info-post-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: #888;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+  transform: translateX(6px);
+}
+
+.info-post-item:hover::before {
+  opacity: 1;
+}
+
+.info-post-thumbnail {
+  flex-shrink: 0;
+  width: 120px;
+  height: 90px;
+  border: 2px solid #555;
+  overflow: hidden;
+  position: relative;
+  background: rgba(20, 20, 20, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info-post-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.info-post-default-logo {
+  width: 80% !important;
+  height: 80% !important;
+  object-fit: contain !important;
+  opacity: 0.6;
+  filter: grayscale(20%);
+}
+
+.info-post-item:hover .info-post-thumbnail img {
+  transform: scale(1.1);
+}
+
+.info-post-item:hover .info-post-default-logo {
+  transform: scale(1.05) !important;
+  opacity: 0.8;
+}
+
+.info-post-no-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #555;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.info-post-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.info-post-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.info-post-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #e0e0e0;
+  margin: 0;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: 0.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.info-post-meta {
+  display: flex;
+  gap: 20px;
+  font-size: 13px;
+  color: #888;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+  .image-preview-popup {
+    max-width: 280px;
+  }
+
+  .preview-popup-image {
+    max-width: 280px;
+    max-height: 200px;
+  }
+}
+
+/* 호버 시 미리보기 팝업 */
+.image-preview-popup {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+
+  background: rgba(10, 10, 10, 0.98);
+  border: 2px solid #10b981;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+  padding: 0; /* ✅ 패딩 제거 */
+
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  pointer-events: none;
+
+  max-width: 320px; /* ✅ 크기 축소 */
+  width: max-content;
+  overflow: hidden;
+}
+
+.post-item:hover .image-preview-popup {
+  opacity: 1;
+  visibility: visible;
+}
+
+.image-preview-popup::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 20px;
+  height: 20px;
+  border-top: 2px solid #10b981;
+  border-left: 2px solid #10b981;
+  z-index: 1;
+}
+
+.image-preview-popup::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 20px;
+  height: 20px;
+  border-bottom: 2px solid #10b981;
+  border-right: 2px solid #10b981;
+  z-index: 1;
+}
+
+.preview-popup-image {
+  max-width: 320px; /* ✅ 크기 축소 */
+  max-height: 220px;
+  width: 100%;
+  height: auto;
+  display: block;
+  border: none; /* ✅ 내부 border 제거 */
+  box-shadow: none; /* ✅ 내부 shadow 제거 */
+}
+
+.preview-popup-count {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  background: rgba(10, 10, 10, 0.85);
+  border: 1px solid #10b981;
+  font-size: 9px;
+  color: #10b981;
+  text-align: center;
+  font-family: "Courier New", monospace;
+  font-weight: 700;
+  letter-spacing: 1px;
+  z-index: 2;
 }
