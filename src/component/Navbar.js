@@ -53,6 +53,7 @@ function Navbar({ user, onLogout, role }) {
             시세 차트
           </Link>
           <Link to="/counsel-board" className="sub-menu-item">
+          <Link to="/counselboard" className="sub-menu-item">
             PC 구매 상담
           </Link>
           <Link to="/freeboard" className="sub-menu-item">

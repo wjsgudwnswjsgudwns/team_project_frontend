@@ -33,6 +33,9 @@ import Edit from "./pages/Computer/Edit";
 import Chatbot from "./component/Chatbot";
 import AiChart from "./pages/AiChart";
 
+import CounselBoard from "./pages/CounselBoard";
+import InfoBoard from "./pages/InfoBoard";
+
 function App() {
   const [user, setUser] = useState(null); // 현재 로그인한 유저의 이름
   const [role, setRole] = useState(null); // 사용자 역할
@@ -172,6 +175,9 @@ function App() {
           <Route path="/power/:id" element={<PowerView role={role} />}></Route>
 
           <Route path="/freeboard" element={<FreeBoard />}></Route>
+
+          <Route path="/counselboard" element={<CounselBoard />}></Route>
+          <Route path="/infoboard" element={<InfoBoard />}></Route>
 
           <Route path="/ai" element={<AiConsult />}></Route>
           <Route

@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import api from "../api/axiosConfig";
 
-export const useCounselBoard = () => {
+export const useInfoBoard = () => {
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
   const [page, setPage] = useState(0);
@@ -13,13 +13,13 @@ export const useCounselBoard = () => {
       try {
         let url;
         if (searchParams && searchParams.keyword) {
-          url = `/api/counselboard/search?searchType=${
+          url = `/api/infoboard/search?searchType=${
             searchParams.searchType
           }&keyword=${encodeURIComponent(
             searchParams.keyword
           )}&page=${page}&size=10`;
         } else {
-          url = `/api/counselboard?page=${page}&size=10`;
+          url = `/api/infoboard?page=${page}&size=10`;
         }
 
         const res = await api.get(url);
@@ -39,10 +39,10 @@ export const useCounselBoard = () => {
 
   const fetchPostDetail = useCallback(async (id) => {
     try {
-      const res = await api.get(`/api/counselboard/${id}`);
+      const res = await api.get(`/api/infoboard/${id}`);
       setSelectedPost(res.data);
 
-      const likeRes = await api.get(`/api/counselboard/${id}/like/status`);
+      const likeRes = await api.get(`/api/infoboard/${id}/like/status`);
       setIsLiked(likeRes.data.isLiked);
 
       return res.data;
@@ -55,12 +55,12 @@ export const useCounselBoard = () => {
   const createPost = useCallback(async (formData) => {
     try {
       const submitData = {
-        cTitle: formData.cTitle,
-        cContent: formData.cContent,
-        cFile: "",
+        iTitle: formData.iTitle,
+        iContent: formData.iContent,
+        iFile: "",
       };
 
-      await api.post("/api/counselboard", submitData);
+      await api.post("/api/infoboard", submitData);
       alert("작성 완료!");
       return true;
     } catch (err) {
@@ -72,12 +72,12 @@ export const useCounselBoard = () => {
   const updatePost = useCallback(async (id, formData) => {
     try {
       const submitData = {
-        cTitle: formData.cTitle,
-        cContent: formData.cContent,
-        cFile: "",
+        iTitle: formData.iTitle,
+        iContent: formData.iContent,
+        iFile: "",
       };
 
-      await api.put(`/api/counselboard/${id}`, submitData);
+      await api.put(`/api/infoboard/${id}`, submitData);
       alert("수정 완료!");
       return true;
     } catch (err) {
@@ -90,7 +90,7 @@ export const useCounselBoard = () => {
     if (!window.confirm("정말 삭제하시겠습니까?")) return false;
 
     try {
-      await api.delete(`/api/counselboard/${id}`);
+      await api.delete(`/api/infoboard/${id}`);
       alert("삭제 완료!");
       return true;
     } catch (err) {
@@ -102,7 +102,7 @@ export const useCounselBoard = () => {
   const toggleLike = useCallback(
     async (postId) => {
       try {
-        const res = await api.post(`/api/counselboard/${postId}/like`);
+        const res = await api.post(`/api/infoboard/${postId}/like`);
         setIsLiked(res.data.isLiked);
         await fetchPostDetail(postId);
         alert(res.data.message);
