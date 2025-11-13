@@ -7,6 +7,7 @@ import InfoPostList from "../component/InfoBoard/InfoPostList";
 import InfoPostDetail from "../component/InfoBoard/InfoPostDetail";
 import InfoPostForm from "../component/InfoBoard/InfoPostForm";
 import SearchBar from "../component/FreeBoard/SearchBar";
+import api from "../api/axiosConfig";
 import "./FreeBoard.css";
 
 export default function InfoBoard() {
@@ -17,10 +18,15 @@ export default function InfoBoard() {
   const [formData, setFormData] = useState({ iTitle: "", iContent: "" });
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [isCollecting, setIsCollecting] = useState(false); // ✅ 추가
 
   const isNavigatingRef = useRef(false);
 
   const { currentUsername } = useAuth();
+
+  // role 가져오기 (App.js에서 전달받거나 localStorage에서)
+  const role = localStorage.getItem("role");
+
   const {
     posts,
     selectedPost,
@@ -46,6 +52,35 @@ export default function InfoBoard() {
     handleSearch,
     resetSearch,
   } = useSearch();
+
+  // ✅ 뉴스 수집 함수
+  const handleCollectNews = async () => {
+    if (
+      !window.confirm(
+        "지금 즉시 최신 뉴스를 수집하시겠습니까?\n(약 1-2분 소요)"
+      )
+    ) {
+      return;
+    }
+
+    setIsCollecting(true);
+    try {
+      const res = await api.get("/api/admin/news/collect-now");
+      alert(
+        res.data.message +
+          "\n\n잠시 후 새로고침하면 새 게시글을 확인할 수 있습니다."
+      );
+
+      // 30초 후 자동 새로고침
+      setTimeout(() => {
+        fetchPosts();
+        setIsCollecting(false);
+      }, 30000);
+    } catch (err) {
+      alert("뉴스 수집 실패: " + err.message);
+      setIsCollecting(false);
+    }
+  };
 
   useEffect(() => {
     if (isNavigatingRef.current) {
@@ -191,6 +226,25 @@ export default function InfoBoard() {
           >
             글쓰기
           </button>
+
+          {/* ✅ 관리자 전용 뉴스 수집 버튼 */}
+          {role === "ROLE_ADMIN" && (
+            <button
+              onClick={handleCollectNews}
+              disabled={isCollecting}
+              className="tab-btn"
+              style={{
+                backgroundColor: isCollecting
+                  ? "#666"
+                  : "rgba(16, 185, 129, 0.2)",
+                borderColor: isCollecting ? "#666" : "#10b981",
+                color: isCollecting ? "#999" : "#10b981",
+                cursor: isCollecting ? "not-allowed" : "pointer",
+              }}
+            >
+              {isCollecting ? "⏳ 수집 중..." : "🤖 뉴스 자동 수집"}
+            </button>
+          )}
         </div>
 
         {activeTab === "posts" && (
