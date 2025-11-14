@@ -18,6 +18,7 @@ api.interceptors.request.use(
       console.log("🔑 요청 토큰:", token.substring(0, 20) + "...");
     } else {
       console.log("🔑 토큰 없음");
+      delete config.headers.Authorization;
     }
 
     console.log("📤 요청:", config.method.toUpperCase(), config.url);
@@ -37,24 +38,31 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log("❌ 응답 실패:", error.config?.url, error.response?.status);
+    console.log("응답 실패:", error.config?.url, error.response?.status);
 
     if (error.response?.status === 401) {
-      console.warn("🚫 401 에러 - 인증 실패");
+      console.warn("401 에러 - 인증 실패");
 
-      // ⭐ GET 요청의 초기 체크용 API만 토큰 삭제하지 않음
+      // GET 요청의 초기 체크용 API만 토큰 삭제하지 않음
       const isGetRequest = error.config?.method?.toUpperCase() === "GET";
       const isInitialCheckUrl =
         error.config?.url?.includes("/api/auth/me") ||
         error.config?.url?.includes("/api/cart");
 
-      if (isGetRequest && isInitialCheckUrl) {
-        console.log("📌 초기 체크 GET 요청 실패 - 토큰 유지");
+      // 게시판 GET 요청도 예외 처리
+      const isBoardRequest =
+        error.config?.url?.includes("/api/freeboard") ||
+        error.config?.url?.includes("/api/counselboard") ||
+        error.config?.url?.includes("/api/infoboard");
+
+      // 게시판 또는 초기 체크 요청이면 리다이렉트 하지 않음
+      if ((isGetRequest && isBoardRequest) || isInitialCheckUrl) {
+        console.log("게시판 조회 또는 초기 체크 - 401 무시");
         return Promise.reject(error);
       }
 
       // 다른 401 에러는 토큰 삭제
-      console.log("🗑️ 토큰 삭제 및 로그인 페이지로 이동");
+      console.log("토큰 삭제 및 로그인 페이지로 이동");
       localStorage.removeItem("token");
       localStorage.removeItem("role");
 

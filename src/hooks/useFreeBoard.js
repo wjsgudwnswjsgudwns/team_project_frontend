@@ -40,21 +40,30 @@ export const useFreeBoard = () => {
   }, []);
 
   // 게시글 상세 조회
-  const fetchPostDetail = useCallback(async (id) => {
+  const fetchPostDetail = async (id) => {
     try {
       const res = await api.get(`/api/freeboard/${id}`);
       setSelectedPost(res.data);
 
-      // 좋아요 상태 확인
-      const likeRes = await api.get(`/api/freeboard/${id}/like/status`);
-      setIsLiked(likeRes.data.isLiked);
-
-      return res.data;
-    } catch (err) {
-      alert("게시글 상세 조회 실패: " + err.message);
-      throw err;
+      // ⭐ 로그인 상태일 때만 좋아요 여부 확인
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const likeRes = await api.get(`/api/freeboard/${id}/like/status`);
+          setIsLiked(likeRes.data.isLiked);
+        } catch (likeError) {
+          console.log("좋아요 상태 확인 실패 (비로그인 상태)");
+          setIsLiked(false);
+        }
+      } else {
+        // 비로그인 상태
+        setIsLiked(false);
+      }
+    } catch (error) {
+      console.error("게시글 상세 조회 실패:", error);
+      alert("게시글을 불러올 수 없습니다.");
     }
-  }, []);
+  };
 
   // 게시글 작성
   const createPost = useCallback(async (formData) => {
@@ -109,13 +118,24 @@ export const useFreeBoard = () => {
   // 좋아요 토글
   const toggleLike = useCallback(
     async (postId) => {
+      // 로그인 체크
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("로그인이 필요합니다.");
+        return;
+      }
+
       try {
         const res = await api.post(`/api/freeboard/${postId}/like`);
         setIsLiked(res.data.isLiked);
         await fetchPostDetail(postId);
         alert(res.data.message);
       } catch (err) {
-        alert("좋아요 처리 실패: " + err.message);
+        if (err.response?.status === 401) {
+          alert("로그인이 필요합니다.");
+        } else {
+          alert("좋아요 처리 실패: " + err.message);
+        }
       }
     },
     [fetchPostDetail]

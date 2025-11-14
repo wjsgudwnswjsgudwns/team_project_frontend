@@ -101,13 +101,24 @@ export const useInfoBoard = () => {
 
   const toggleLike = useCallback(
     async (postId) => {
+      // ⭐ 로그인 체크
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("로그인 후 이용 가능합니다.");
+        return;
+      }
+
       try {
         const res = await api.post(`/api/infoboard/${postId}/like`);
         setIsLiked(res.data.isLiked);
         await fetchPostDetail(postId);
         alert(res.data.message);
       } catch (err) {
-        alert("좋아요 처리 실패: " + err.message);
+        if (err.response?.status === 401) {
+          alert("로그인이 필요합니다.");
+        } else {
+          alert("좋아요 처리 실패: " + err.message);
+        }
       }
     },
     [fetchPostDetail]

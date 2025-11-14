@@ -99,6 +99,12 @@ export default function InfoBoard() {
       }
       setActiveTab("detail");
     } else if (tab === "write") {
+      // 로그인 체크
+      if (!currentUsername) {
+        alert("로그인이 필요한 서비스입니다.");
+        navigate("/login");
+        return;
+      }
       setActiveTab("write");
     } else {
       setActiveTab("posts");
@@ -216,6 +222,12 @@ export default function InfoBoard() {
           </button>
           <button
             onClick={() => {
+              // 로그인 한 사람만 글쓰기 가능
+              if (!currentUsername) {
+                alert("로그인 후 작성 가능합니다.");
+                navigate("/login");
+                return;
+              }
               isNavigatingRef.current = true;
               setActiveTab("write");
               navigate("/infoboard?tab=write", { replace: false });
