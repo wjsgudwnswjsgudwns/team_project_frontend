@@ -2,6 +2,16 @@
    App.css - 전역 스타일 (Razer/다크 테마)
    ======================================== */
 
+html,
+body,
+#root,
+.App,
+.home-container {
+  transform: none !important;
+  will-change: auto !important;
+  perspective: none !important;
+  filter: none !important;
+}
 :root {
   /* AiConsult.css에서 사용된 비비드 레드 */
   --color-primary: #ff3b30;
@@ -37,6 +47,11 @@ body {
 .App {
   background-color: var(--color-bg-dark);
   min-height: 100vh;
+  /* position: relative;  <-- 제거 또는 주석 처리 */
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
 }
 
 /* 링크 스타일 */
