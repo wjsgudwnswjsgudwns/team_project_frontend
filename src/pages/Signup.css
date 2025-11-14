@@ -191,3 +191,21 @@
     font-size: 12px;
   }
 }
+
+.password-rules {
+  display: flex;
+  margin-top: 8px;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.password-rules .valid {
+  color: #2ecc71; /* 초록색 */
+  transition: 0.2s;
+}
+
+.password-rules .invalid {
+  color: #e74c3c; /* 빨간색 */
+  transition: 0.2s;
+}

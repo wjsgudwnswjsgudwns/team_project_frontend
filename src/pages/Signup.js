@@ -11,11 +11,34 @@ function Signup() {
   const [nickname, setNickname] = useState("");
   const [errors, setErrors] = useState({});
 
+  const [passwordValid, setPasswordValid] = useState({
+    hasLetter: false,
+    hasDigit: false,
+    hasSpecial: false,
+    minLength: false,
+  });
+
   const navigate = useNavigate();
 
+  // 회원 가입
   const handleSignup = async (e) => {
     e.preventDefault();
     setErrors({});
+
+    // ✅ 비밀번호 정규식 (영문 + 숫자 + 특수문자 + 8자 이상)
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+
+    if (!passwordRegex.test(password)) {
+      alert(
+        "비밀번호는 영문, 숫자, 특수문자를 포함하여 8자 이상이어야 합니다."
+      );
+      return;
+    }
+
+    if (password !== passwordCheck) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
 
     // 전송할 데이터 확인
     const signupData = {
@@ -51,6 +74,18 @@ function Signup() {
         alert("회원 가입 실패: " + err.message);
       }
     }
+  };
+
+  // 실시간 비밀번호 유효성 검사
+  const handlePasswordChange = (value) => {
+    setPassword(value);
+
+    setPasswordValid({
+      hasLetter: /[A-Za-z]/.test(value),
+      hasDigit: /\d/.test(value),
+      hasSpecial: /[^A-Za-z0-9]/.test(value),
+      minLength: value.length >= 8,
+    });
   };
 
   return (
@@ -89,13 +124,32 @@ function Signup() {
             className="signup-input"
             placeholder="비밀번호"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => handlePasswordChange(e.target.value)}
             required
           />
           {errors.password && <p className="signup-error">{errors.password}</p>}
+          {errors.passwordComplexity && (
+            <p className="signup-error">{errors.passwordComplexity}</p>
+          )}
           {errors.passwordLengthError && (
             <p className="signup-error">{errors.passwordLengthError}</p>
           )}
+
+          {/* ✅ 비밀번호 규칙 안내 UI */}
+          <div className="password-rules">
+            <p className={passwordValid.hasLetter ? "valid" : "invalid"}>
+              {passwordValid.hasLetter ? "✅" : "❌"} 영문 포함
+            </p>
+            <p className={passwordValid.hasDigit ? "valid" : "invalid"}>
+              {passwordValid.hasDigit ? "✅" : "❌"} 숫자 포함
+            </p>
+            <p className={passwordValid.hasSpecial ? "valid" : "invalid"}>
+              {passwordValid.hasSpecial ? "✅" : "❌"} 특수문자 포함
+            </p>
+            <p className={passwordValid.minLength ? "valid" : "invalid"}>
+              {passwordValid.minLength ? "✅" : "❌"} 최소 8자 이상
+            </p>
+          </div>
 
           <input
             type="password"
@@ -105,9 +159,6 @@ function Signup() {
             onChange={(e) => setPasswordCheck(e.target.value)}
             required
           />
-          {errors.passwordCheck && (
-            <p className="signup-error">{errors.passwordCheck}</p>
-          )}
           {errors.passwordNotSame && (
             <p className="signup-error">{errors.passwordNotSame}</p>
           )}
