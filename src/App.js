@@ -32,6 +32,7 @@ import CompatibilityResult from "./pages/Computer/cartcomponents/CompatibilityRe
 import Edit from "./pages/Computer/Edit";
 import Chatbot from "./component/Chatbot";
 import MyPage from "./pages/MyPage";
+import UserProfile from "./pages/UserProfile";
 
 import CounselBoard from "./pages/CounselBoard";
 import InfoBoard from "./pages/InfoBoard";
@@ -177,6 +178,7 @@ function App() {
           <Route path="/counselboard" element={<CounselBoard />}></Route>
           <Route path="/infoboard" element={<InfoBoard />}></Route>
           <Route path="/mypage" element={<MyPage />}></Route>
+          <Route path="/user/:username" element={<UserProfile />}></Route>
 
           <Route path="/ai" element={<AiConsult />}></Route>
           <Route

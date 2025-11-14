@@ -36,7 +36,13 @@ export default function PostDetail({
 
       <div className="detail-meta">
         <div className="meta-left">
-          <span>작성자: {post.username}</span>
+          <span
+            style={{ cursor: "pointer", textDecoration: "none" }}
+            onClick={() => navigate(`/user/${post.username}`)}
+            title="프로필 보기"
+          >
+            작성자: {post.username}
+          </span>
           <span>조회수: {post.fview}</span>
           <span>좋아요: {post.flike}</span>
           <span>

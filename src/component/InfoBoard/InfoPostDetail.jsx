@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import InfoCommentSection from "./InfoCommentSection";
 import InfoBottomPostList from "./InfoBottomPostList";
 
@@ -12,6 +12,7 @@ export default function InfoPostDetail({
   onBack,
   onPostClick,
 }) {
+  const navigate = useNavigate();
   const location = useLocation();
   const isAuthor = currentUsername && post.username === currentUsername;
 
@@ -32,7 +33,13 @@ export default function InfoPostDetail({
 
       <div className="detail-meta">
         <div className="meta-left">
-          <span>작성자: {post.username}</span>
+          <span
+            style={{ cursor: "pointer", textDecoration: "none" }}
+            onClick={() => navigate(`/user/${post.username}`)}
+            title="프로필 보기"
+          >
+            작성자: {post.username}
+          </span>
           <span>조회수: {post.iview}</span>
           <span>좋아요: {post.ilike}</span>
           <span>

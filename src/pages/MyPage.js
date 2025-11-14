@@ -236,12 +236,10 @@ export default function MyPage() {
             회원정보
           </button>
           <button
-            onClick={() => setActiveTab("activity")}
-            className={`mypage-tab-btn ${
-              activeTab === "activity" ? "active" : ""
-            }`}
+            onClick={() => navigate(`/user/${myPageData.username}`)}
+            className="mypage-tab-btn"
           >
-            활동내역
+            활동내역 보기
           </button>
           <button
             onClick={() => setActiveTab("delete")}
@@ -414,7 +412,7 @@ export default function MyPage() {
           </div>
         )}
 
-        {/* 활동내역 탭 */}
+        {/* 활동내역 탭
         {activeTab === "activity" && (
           <div className="mypage-content-box">
             <h3 className="section-title">최근 작성 글</h3>
@@ -488,7 +486,7 @@ export default function MyPage() {
               </div>
             )}
           </div>
-        )}
+        )} */}
 
         {/* 회원탈퇴 탭 */}
         {activeTab === "delete" && (
