@@ -36,6 +36,7 @@ import UserProfile from "./pages/UserProfile";
 
 import CounselBoard from "./pages/CounselBoard";
 import InfoBoard from "./pages/InfoBoard";
+import Home2 from "./pages/Home2";
 
 function App() {
   const [user, setUser] = useState(null); // 현재 로그인한 유저의 이름
@@ -122,6 +123,10 @@ function App() {
       <CartProvider>
         <Routes>
           <Route path="/" element={<Home user={user} role={role} />}></Route>
+          <Route
+            path="/home2"
+            element={<Home2 user={user} role={role} />}
+          ></Route>
           <Route path="/signup" element={<Signup />}></Route>
           <Route
             path="/login"
