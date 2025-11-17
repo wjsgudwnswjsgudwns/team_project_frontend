@@ -16,11 +16,22 @@ function Home2() {
     counselBoardPosts: [],
   });
   const [loading, setLoading] = useState(true);
+  const [currentBanner, setCurrentBanner] = useState(0);
   const navigate = useNavigate();
+
+  const banners = [home1, home2, home3, home4];
 
   useEffect(() => {
     fetchRecentPosts();
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentBanner((prev) => (prev + 1) % banners.length);
+    }, 3000); // 3초마다 자동 전환
+
+    return () => clearInterval(interval);
+  }, [banners.length]);
 
   const fetchRecentPosts = async () => {
     try {
@@ -46,6 +57,18 @@ function Home2() {
       return title.substring(0, maxLength) + "...";
     }
     return title;
+  };
+
+  const nextBanner = () => {
+    setCurrentBanner((prev) => (prev + 1) % banners.length);
+  };
+
+  const prevBanner = () => {
+    setCurrentBanner((prev) => (prev - 1 + banners.length) % banners.length);
+  };
+
+  const goToBanner = (index) => {
+    setCurrentBanner(index);
   };
 
   const renderBoardSection = (title, posts, boardType) => (
@@ -91,10 +114,42 @@ function Home2() {
 
   return (
     <div className="home2-container">
-      <img src={home1} alt="배너 1"></img>
-      <img src={home2} alt="배너 2"></img>
-      <img src={home3} alt="배너 3"></img>
-      <img src={home4} alt="배너 4"></img>
+      <div className="banner-carousel">
+        <button className="carousel-btn prev-btn" onClick={prevBanner}>
+          ‹
+        </button>
+
+        <div className="banner-wrapper">
+          <div
+            className="banner-track"
+            style={{ transform: `translateX(-${currentBanner * 100}%)` }}
+          >
+            {banners.map((banner, index) => (
+              <img
+                key={index}
+                src={banner}
+                alt={`배너 ${index + 1}`}
+                className="banner-image"
+              />
+            ))}
+          </div>
+        </div>
+
+        <button className="carousel-btn next-btn" onClick={nextBanner}>
+          ›
+        </button>
+
+        <div className="carousel-indicators">
+          {banners.map((_, index) => (
+            <button
+              key={index}
+              className={`indicator ${index === currentBanner ? "active" : ""}`}
+              onClick={() => goToBanner(index)}
+            />
+          ))}
+        </div>
+      </div>
+
       <div className="boards-grid">
         {renderBoardSection(
           "상담 게시판",

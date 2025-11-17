@@ -318,62 +318,65 @@ export default function MyPage() {
 
             <h3 className="section-title">정보 수정</h3>
             <form onSubmit={handleUpdateInfo}>
-              {!myPageData.provider && (
-                <>
-                  <div className="form-group">
-                    <label className="form-label">현재 비밀번호 *</label>
-                    <input
-                      type="password"
-                      className="form-input"
-                      placeholder="현재 비밀번호"
-                      value={updateForm.currentPassword}
-                      onChange={(e) =>
-                        setUpdateForm({
-                          ...updateForm,
-                          currentPassword: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
+              <div className="form-group">
+                <label className="form-label">현재 비밀번호 *</label>
+                <input
+                  type="password"
+                  className="form-input"
+                  placeholder="현재 비밀번호"
+                  value={updateForm.currentPassword}
+                  onChange={(e) =>
+                    setUpdateForm({
+                      ...updateForm,
+                      currentPassword: e.target.value,
+                    })
+                  }
+                />
+              </div>
 
-                  <div className="form-group">
-                    <label className="form-label">
-                      새 비밀번호 (변경 시에만 입력)
-                    </label>
-                    <input
-                      type="password"
-                      className="form-input"
-                      placeholder="새 비밀번호"
-                      value={updateForm.newPassword}
-                      onChange={(e) =>
-                        setUpdateForm({
-                          ...updateForm,
-                          newPassword: e.target.value,
-                        })
-                      }
-                    />
-                    <p className="form-note">
-                      영문, 숫자, 특수문자 포함 8자 이상
-                    </p>
-                  </div>
+              {/* ✅ 모든 사용자에게 비밀번호 설정/변경 가능 */}
+              <div className="form-group">
+                <label className="form-label">
+                  {myPageData.provider
+                    ? "비밀번호 설정"
+                    : "새 비밀번호 (변경 시에만 입력)"}
+                </label>
+                <input
+                  type="password"
+                  className="form-input"
+                  placeholder={
+                    myPageData.provider ? "비밀번호 설정" : "새 비밀번호"
+                  }
+                  value={updateForm.newPassword}
+                  onChange={(e) =>
+                    setUpdateForm({
+                      ...updateForm,
+                      newPassword: e.target.value,
+                    })
+                  }
+                />
+                <p className="form-note">영문, 숫자, 특수문자 포함 8자 이상</p>
+              </div>
 
-                  <div className="form-group">
-                    <label className="form-label">새 비밀번호 확인</label>
-                    <input
-                      type="password"
-                      className="form-input"
-                      placeholder="새 비밀번호 확인"
-                      value={updateForm.newPasswordCheck}
-                      onChange={(e) =>
-                        setUpdateForm({
-                          ...updateForm,
-                          newPasswordCheck: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </>
-              )}
+              <div className="form-group">
+                <label className="form-label">
+                  {myPageData.provider ? "비밀번호 확인" : "새 비밀번호 확인"}
+                </label>
+                <input
+                  type="password"
+                  className="form-input"
+                  placeholder={
+                    myPageData.provider ? "비밀번호 확인" : "새 비밀번호 확인"
+                  }
+                  value={updateForm.newPasswordCheck}
+                  onChange={(e) =>
+                    setUpdateForm({
+                      ...updateForm,
+                      newPasswordCheck: e.target.value,
+                    })
+                  }
+                />
+              </div>
 
               <div className="form-group">
                 <label className="form-label">닉네임 *</label>

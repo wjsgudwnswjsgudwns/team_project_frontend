@@ -27,7 +27,7 @@ function OAuth2RedirectHandler({ onLogin, setRole }) {
 
         // 사용자 정보 가져오기
         const userResponse = await api.get("/api/auth/me");
-        const { nickname, username, role } = userResponse.data;
+        const { nickname, username, role, hasPassword } = userResponse.data;
 
         // role 저장
         if (role) {
@@ -38,8 +38,13 @@ function OAuth2RedirectHandler({ onLogin, setRole }) {
         // 로그인 처리
         onLogin(nickname || username);
 
-        alert("로그인 성공!");
-        navigate("/", { replace: true });
+        if (hasPassword === "false" || hasPassword === false) {
+          alert("추가 정보 입력이 필요합니다.");
+          navigate("/set-password", { replace: true });
+        } else {
+          alert("로그인 성공!");
+          navigate("/", { replace: true });
+        }
       } catch (err) {
         console.error("사용자 정보 조회 실패:", err);
         localStorage.removeItem("token");

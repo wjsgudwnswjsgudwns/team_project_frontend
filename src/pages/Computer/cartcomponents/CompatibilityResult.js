@@ -1,11 +1,11 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import "./CompatibilityResult.css";
 import cpuImage from "../../../images/cpu.png";
-import gpuImage from "../../../images/GPU.png";
+import gpuImage from "../../../images/gpu.png";
 import caseImage from "../../../images/case.png";
 import mainboardImage from "../../../images/mainboard.png";
 import powerImage from "../../../images/power.png";
-import ramImage from "../../../images/ram-Photoroom.png";
+import ramImage from "../../../images/ram.png";
 
 function CompatibilityResult() {
   const location = useLocation();
@@ -13,6 +13,25 @@ function CompatibilityResult() {
 
   const raw = location.state?.results;
   let results = Array.isArray(raw) ? raw : [];
+
+  // ✅ 에러 처리 강화
+  if (results.length === 0) {
+    return (
+      <div className="compatibility-result">
+        <h2 className="compatibility-title">호환성 검사 결과</h2>
+        <div className="back-button-container">
+          <button onClick={() => navigate(-1)} className="back-button">
+            ← 돌아가기
+          </button>
+        </div>
+        <div className="detail-section">
+          <p style={{ textAlign: "center", color: "#666", padding: "40px" }}>
+            호환성 검사 결과가 없습니다.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const getStatus = (answer) => {
     if (!answer) return "unknown";
@@ -23,13 +42,21 @@ function CompatibilityResult() {
     return "unknown";
   };
 
+  // ✅ 안전한 호환성 맵 생성
   const compatMap = results.reduce((acc, r) => {
-    acc[r.question] = {
-      status: getStatus(r.answer),
-      answer: r.answer || r.error,
-    };
+    if (r && r.question) {
+      acc[r.question] = {
+        status: getStatus(r.answer),
+        answer: r.answer || r.error || "응답 없음",
+      };
+    }
     return acc;
   }, {});
+
+  // ✅ 안전한 호환성 체크 헬퍼
+  const getCompatInfo = (questionKey) => {
+    return compatMap[questionKey] || { status: "unknown", answer: "정보 없음" };
+  };
 
   const getStatusIcon = (status) => {
     if (status === "success") return "✓";
@@ -59,7 +86,7 @@ function CompatibilityResult() {
           <div className="top-row">
             <div className="component-box">
               <span className="component-icon">
-                <img src={cpuImage}></img>
+                <img src={cpuImage} alt="CPU"></img>
               </span>
               <div className="component-label">CPU</div>
             </div>
@@ -67,20 +94,18 @@ function CompatibilityResult() {
             <div className="horizontal-link">
               <span className="arrow-icon">↔</span>
               <div
-                className={`status-badge status-${getStatus(
-                  compatMap["CPU와 메모리 호환성"]?.answer
-                )}`}
+                className={`status-badge status-${
+                  getCompatInfo("CPU와 메모리 호환성").status
+                }`}
               >
-                {getStatusText(
-                  getStatus(compatMap["CPU와 메모리 호환성"]?.answer)
-                )}
+                {getStatusText(getCompatInfo("CPU와 메모리 호환성").status)}
               </div>
               <span className="arrow-icon">↔</span>
             </div>
 
             <div className="component-box">
               <span className="component-icon">
-                <img src={ramImage}></img>
+                <img src={ramImage} alt="메모리"></img>
               </span>
               <div className="component-label">메모리</div>
             </div>
@@ -91,13 +116,11 @@ function CompatibilityResult() {
             <div className="left-vertical">
               <span className="arrow-icon">↕</span>
               <div
-                className={`status-badge status-${getStatus(
-                  compatMap["CPU와 메인보드 호환성"]?.answer
-                )}`}
+                className={`status-badge status-${
+                  getCompatInfo("CPU와 메인보드 호환성").status
+                }`}
               >
-                {getStatusText(
-                  getStatus(compatMap["CPU와 메인보드 호환성"]?.answer)
-                )}
+                {getStatusText(getCompatInfo("CPU와 메인보드 호환성").status)}
               </div>
               <span className="arrow-icon">↕</span>
             </div>
@@ -113,7 +136,7 @@ function CompatibilityResult() {
           <div className="mainboard-row">
             <div className="component-box">
               <span className="component-icon">
-                <img src={mainboardImage}></img>
+                <img src={mainboardImage} alt="메인보드"></img>
               </span>
               <div className="component-label">메인보드</div>
             </div>
@@ -121,12 +144,12 @@ function CompatibilityResult() {
             <div className="horizontal-link-reverse">
               <span className="arrow-icon">↔</span>
               <div
-                className={`status-badge status-${getStatus(
-                  compatMap["메모리와 메인보드 호환성"]?.answer
-                )}`}
+                className={`status-badge status-${
+                  getCompatInfo("메모리와 메인보드 호환성").status
+                }`}
               >
                 {getStatusText(
-                  getStatus(compatMap["메모리와 메인보드 호환성"]?.answer)
+                  getCompatInfo("메모리와 메인보드 호환성").status
                 )}
               </div>
             </div>
@@ -139,13 +162,11 @@ function CompatibilityResult() {
             <div className="left-vertical">
               <span className="arrow-icon">↕</span>
               <div
-                className={`status-badge status-${getStatus(
-                  compatMap["케이스와 메인보드 장착"]?.answer
-                )}`}
+                className={`status-badge status-${
+                  getCompatInfo("케이스와 메인보드 장착").status
+                }`}
               >
-                {getStatusText(
-                  getStatus(compatMap["케이스와 메인보드 장착"]?.answer)
-                )}
+                {getStatusText(getCompatInfo("케이스와 메인보드 장착").status)}
               </div>
               <span className="arrow-icon">↕</span>
             </div>
@@ -158,7 +179,7 @@ function CompatibilityResult() {
           <div className="top-row">
             <div className="component-box">
               <span className="component-icon">
-                <img src={caseImage}></img>
+                <img src={caseImage} alt="케이스"></img>
               </span>
               <div className="component-label">케이스</div>
             </div>
@@ -166,20 +187,18 @@ function CompatibilityResult() {
             <div className="horizontal-link">
               <span className="arrow-icon">↔</span>
               <div
-                className={`status-badge status-${getStatus(
-                  compatMap["케이스와 파워 호환성"]?.answer
-                )}`}
+                className={`status-badge status-${
+                  getCompatInfo("케이스와 파워 호환성").status
+                }`}
               >
-                {getStatusText(
-                  getStatus(compatMap["케이스와 파워 호환성"]?.answer)
-                )}
+                {getStatusText(getCompatInfo("케이스와 파워 호환성").status)}
               </div>
               <span className="arrow-icon">↔</span>
             </div>
 
             <div className="component-box">
               <span className="component-icon">
-                <img src={powerImage}></img>
+                <img src={powerImage} alt="파워"></img>
               </span>
               <div className="component-label">파워</div>
             </div>
@@ -190,13 +209,11 @@ function CompatibilityResult() {
             <div className="left-vertical">
               <span className="arrow-icon">↕</span>
               <div
-                className={`status-badge status-${getStatus(
-                  compatMap["케이스와 GPU 장착"]?.answer
-                )}`}
+                className={`status-badge status-${
+                  getCompatInfo("케이스와 GPU 장착").status
+                }`}
               >
-                {getStatusText(
-                  getStatus(compatMap["케이스와 GPU 장착"]?.answer)
-                )}
+                {getStatusText(getCompatInfo("케이스와 GPU 장착").status)}
               </div>
               <span className="arrow-icon">↕</span>
             </div>
@@ -209,25 +226,28 @@ function CompatibilityResult() {
           <div className="bottom-row">
             <div className="component-box">
               <span className="component-icon">
-                <img src={gpuImage}></img>
+                <img src={gpuImage} alt="그래픽카드"></img>
               </span>
               <div className="component-label">그래픽카드</div>
             </div>
           </div>
         </div>
       </div>
-
       <div className="detail-section">
-        <h3 className="detail-title">상세 호환성 정보</h3>
+                <h3 className="detail-title">상세 호환성 정보</h3>
+                <hr className="result-divider" />     
         <div className="detail-list">
           {results.map((r, i) => {
+            if (!r || !r.question) return null;
             const status = getStatus(r.answer);
             return (
               <div key={i} className={`detail-item status-${status}`}>
-                <div className="status-icon">{getStatusIcon(status)}</div>
-                <div className="detail-content">
-                  <div className="detail-question">{r.question}</div>
-                  <div className="detail-answer">{r.answer || r.error}</div>
+                <div className="status-icon">{getStatusIcon(status)}</div>     
+                <div className="compatibility-content-box">
+                  <div className="compatibility-question">{r.question}</div>   
+                  <div className="compatibility-answer">
+                    {r.answer || r.error || "응답 없음"}   
+                  </div>
                 </div>
               </div>
             );

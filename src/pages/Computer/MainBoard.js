@@ -27,24 +27,15 @@ function MainBoard({ role }) {
     try {
       setLoading(true);
 
-      // 검색어가 있으면 검색 API, 없으면 전체 조회 API
+      // 카테고리별 API 호출로 변경
       const url = searchName.trim()
-        ? `/api/products/search?name=${searchName}&page=${currentPage}&size=${pageSize}&sortBy=id`
-        : `/api/products/paging?page=${currentPage}&size=${pageSize}&sortBy=id`;
+        ? `/api/products/category/MAINBOARD/search?name=${searchName}&page=${currentPage}&size=${pageSize}&sortBy=id`
+        : `/api/products/category/MAINBOARD?page=${currentPage}&size=${pageSize}&sortBy=id`;
 
       const response = await api.get(url);
 
-      console.log("API 응답:", response.data); // 디버깅용
-
-      // 안전하게 데이터 접근
-      const content = response.data?.content || [];
-
-      // 카테고리 필터링
-      const mainboardProducts = content.filter(
-        (p) => p.category === "MAINBOARD"
-      );
-
-      setProducts(mainboardProducts);
+      // 필터링 불필요 - 이미 백엔드에서 CPU만 반환함
+      setProducts(response.data?.content || []);
       setTotalPages(response.data?.totalPages || 0);
       setTotalElements(response.data?.totalElements || 0);
     } catch (error) {

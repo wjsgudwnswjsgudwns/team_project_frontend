@@ -2,8 +2,9 @@
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-  background-color: #f8fafc;
+  background-color: #0d1117;
   min-height: 100vh;
+  color: #f0f6fc;
 }
 
 .compatibility-title {
@@ -11,15 +12,19 @@
   font-weight: bold;
   margin-bottom: 3rem;
   text-align: center;
-  color: #1e293b;
+  color: #ffffff;
+  text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+  letter-spacing: 2px;
+  font-family: "Courier New", monospace;
 }
 
 .diagram-container {
-  background: white;
+  background: linear-gradient(145deg, #161b22, #0d1117);
   border-radius: 1.5rem;
   padding: 3rem;
   margin-bottom: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 30px rgba(255, 0, 0, 0.1);
+  border: 1px solid #30363d;
 }
 
 .diagram-layout {
@@ -29,25 +34,28 @@
 
 /* 부품 박스 */
 .component-box {
-  background: #e8edf5;
+  background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
   border-radius: 1rem;
-  /* padding: 2.5rem 2rem; */
   padding: 1rem;
   text-align: center;
-  border: 1px solid #d1dae6;
-  /* width: 200px; */
+  border: 2px solid #30363d;
   width: 120px;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.component-box:hover {
+  border-color: #ff0000;
+  box-shadow: 0 0 25px rgba(255, 0, 0, 0.4);
+  transform: translateY(-3px);
 }
 
 .component-icon {
-  /* font-size: 3.5rem; */
-  margin-bottom: 0.75rem;
-  display: block;
-
   width: 50px;
   height: 50px;
   margin: 0 auto;
   margin-bottom: 0.75rem;
+  filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.3));
 }
 
 .component-icon img {
@@ -59,9 +67,12 @@
 }
 
 .component-label {
-  font-weight: 600;
-  color: #1e293b;
-  font-size: 1rem;
+  font-weight: 200;
+  color: #f0f6fc;
+  font-size: 0.8rem;
+  font-family: "Courier New", monospace;
+  margin-top: 10px;
+  letter-spacing: 1px;
 }
 
 /* 상단 행 (CPU-메모리, 케이스-파워) */
@@ -69,7 +80,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* gap: 2rem; */
   gap: 1rem;
   margin-bottom: 1rem;
 }
@@ -79,7 +89,6 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 1rem;
-  /* padding: 0 50px; */
   padding: 0 10px;
 }
 
@@ -112,7 +121,6 @@
   align-items: center;
   gap: 1rem;
   position: absolute;
-  /* right: 50px; */
   right: 22px;
 }
 
@@ -124,10 +132,8 @@
 .left-vertical {
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
   align-items: flex-start;
   gap: 0.75rem;
-  /* width: 200px; */
   width: 130px;
   margin-left: 15px;
 }
@@ -141,7 +147,6 @@
   flex-direction: column;
   align-items: center;
   gap: 0.75rem;
-  /* width: 200px; */
   width: 130px;
 }
 
@@ -152,7 +157,19 @@
 
 .arrow-icon {
   font-size: 2rem;
-  color: #3b82f6;
+  color: #ff0000;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+  animation: pulse-icon 2s infinite;
+}
+
+@keyframes pulse-icon {
+  0%,
+  100% {
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+  }
 }
 
 /* 상태 뱃지 */
@@ -162,23 +179,38 @@
   font-size: 0.9rem;
   font-weight: 600;
   white-space: nowrap;
-  color: white;
+  color: #0d1117;
+  font-family: "Courier New", monospace;
+  letter-spacing: 1px;
+  border: 2px solid;
+  box-shadow: 0 0 15px;
+  transition: all 0.3s ease;
 }
 
 .status-success {
-  background: #3b82f6;
+  background: #00ff00;
+  border-color: #00ff00;
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
 }
 
 .status-error {
-  background: #ef4444;
+  background: #ff0000;
+  border-color: #ff0000;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+  color: #fff;
 }
 
 .status-warning {
-  background: #f59e0b;
+  background: #ffaa00;
+  border-color: #ffaa00;
+  box-shadow: 0 0 15px rgba(255, 170, 0, 0.5);
 }
 
 .status-unknown {
-  background: #94a3b8;
+  background: #666;
+  border-color: #666;
+  box-shadow: 0 0 15px rgba(102, 102, 102, 0.5);
+  color: #fff;
 }
 
 /* 빈 공간 */
@@ -192,17 +224,32 @@
 
 /* 상세 정보 섹션 */
 .detail-section {
-  background: white;
+  background: linear-gradient(145deg, #161b22, #0d1117);
   border-radius: 1rem;
   padding: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 30px rgba(255, 0, 0, 0.1);
+  border: 1px solid #30363d;
+}
+
+.result-divider {
+  border: 0;
+  height: 1px;
+  background: #ddd;
+  margin: 16px 0;
+}
+
+.detail-section hr {
+  display: none !important;
 }
 
 .detail-title {
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 1.5rem;
-  color: #1e293b;
+  color: #ff0000;
+  font-family: "Courier New", monospace;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
 }
 
 .detail-list {
@@ -212,32 +259,49 @@
 
 .detail-item {
   display: flex;
-  align-items: start;
-  gap: 1rem;
-  padding: 1rem;
-  background: #f8fafc;
-  border-radius: 0.75rem;
-  border-left: 4px solid #e2e8f0;
-  transition: all 0.2s;
-  height: 100px;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #1a1a1a;
+  border-radius: 0.5rem;
+  border-left: 3px solid #30363d;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  min-height: 50px;
 }
 
 .detail-item:hover {
-  background: #f1f5f9;
-  border-left-color: #3b82f6;
-  transform: translateX(4px);
+  background: #222;
+  border-left-color: #ff0000;
+  transform: translateX(8px);
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
 }
 
 .detail-item.status-success {
-  border-left-color: #10b981;
+  border-left-color: #00ff00;
+}
+
+.detail-item.status-success:hover {
+  border-left-color: #00ff00;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
 }
 
 .detail-item.status-error {
-  border-left-color: #ef4444;
+  border-left-color: #ff0000;
+}
+
+.detail-item.status-error:hover {
+  border-left-color: #ff0000;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
 }
 
 .detail-item.status-warning {
-  border-left-color: #f59e0b;
+  border-left-color: #ffaa00;
+}
+
+.detail-item.status-warning:hover {
+  border-left-color: #ffaa00;
+  box-shadow: 0 0 20px rgba(255, 170, 0, 0.2);
 }
 
 .status-icon {
@@ -245,45 +309,80 @@
   flex-shrink: 0;
 }
 
-.detail-content {
+.detail-item.status-success .status-icon {
+  color: #00ff00;
+  text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.detail-item.status-error .status-icon {
+  color: #ff0000;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+}
+
+.detail-item.status-warning .status-icon {
+  color: #ffaa00;
+  text-shadow: 0 0 10px rgba(255, 170, 0, 0.5);
+}
+
+.detail-item.status-unknown .status-icon {
+  color: #666;
+}
+
+.compatibility-content-box {
   flex: 1;
+  height: auto !important;
+  border-bottom: none;
+  text-align: left;
 }
 
-.detail-question {
+.compatibility-question {
   font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 0.25rem;
+  color: #f0f6fc;
+  margin-bottom: 0.5rem;
+  font-family: "Courier New", monospace;
+  letter-spacing: 1px;
+  width: 100%;
 }
 
-.detail-answer {
-  color: #64748b;
+.compatibility-answer {
+  color: #8b949e;
   font-size: 0.95rem;
-  line-height: 1.5;
+  line-height: 1.6;
+  font-family: "Courier New", monospace;
+  overflow: visible;
+  width: 100%;
 }
 
 /* 버튼 */
 .back-button-container {
   text-align: center;
-  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .back-button {
-  background: #3b82f6;
-  color: white;
+  background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+  color: #ffffff;
   padding: 0.875rem 2rem;
   border-radius: 0.75rem;
-  border: none;
+  border: 2px solid #ffffff;
   cursor: pointer;
   font-weight: 600;
   font-size: 1rem;
-  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
-  transition: all 0.2s;
+  font-family: "Courier New", monospace;
+  letter-spacing: 2px;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+  transition: all 0.3s ease;
 }
 
 .back-button:hover {
-  background: #2563eb;
+  background: #222222;
+  color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
+}
+
+.back-button:active {
+  transform: translateY(0);
 }
 
 /* 반응형 */
@@ -297,28 +396,42 @@
   }
 
   .component-box {
-    width: 140px;
-    padding: 1.5rem 1rem;
+    width: 100px;
+    padding: 0.75rem;
   }
 
   .component-icon {
-    font-size: 2.5rem;
+    width: 40px;
+    height: 40px;
+  }
+
+  .component-label {
+    font-size: 0.85rem;
   }
 
   .top-row {
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
   .middle-row {
-    padding: 0 30px;
+    padding: 0 10px;
   }
 
   .bottom-row {
-    padding-left: 30px;
+    padding-left: 10px;
   }
 
   .left-vertical,
   .right-vertical {
-    width: 140px;
+    width: 100px;
+  }
+
+  .status-badge {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .arrow-icon {
+    font-size: 1.5rem;
   }
 }
