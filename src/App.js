@@ -37,6 +37,8 @@ import UserProfile from "./pages/UserProfile";
 import CounselBoard from "./pages/CounselBoard";
 import InfoBoard from "./pages/InfoBoard";
 import Home2 from "./pages/Home2";
+import SetPassword from "./pages/SetPassword";
+import Footer from "./component/Footer";
 
 function App() {
   const [user, setUser] = useState(null); // 현재 로그인한 유저의 이름
@@ -138,6 +140,7 @@ function App() {
               <OAuth2RedirectHandler onLogin={setUser} setRole={setRole} />
             }
           />
+          <Route path="/set-password" element={<SetPassword />}></Route>
 
           <Route path="/input" element={<Input />}></Route>
           <Route path="/edit/:id" element={<Edit />}></Route>
@@ -193,6 +196,7 @@ function App() {
         </Routes>
         <Chatbot />
       </CartProvider>
+      <Footer />
     </div>
   );
 }

@@ -69,6 +69,25 @@ nav > div > a:hover {
   position: relative;
   display: flex;
   align-items: center;
+  margin-right: 30px;
+}
+
+.user-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-right: 30px;
+  font-size: 14px;
+  font-weight: 800;
+  color: #ffffff;
+  padding: 10px 15px;
+  display: block;
+  cursor: default;
+  letter-spacing: 1px;
+  border: 2px solid #ffffff;
+  background: #1a1a1a;
+  text-transform: uppercase;
+  transition: all 0.2s;
 }
 
 .user-nickname {

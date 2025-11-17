@@ -27,22 +27,15 @@ function Cpu({ role, user }) {
     try {
       setLoading(true);
 
-      // 검색어가 있으면 검색 API, 없으면 전체 조회 API
+      // 카테고리별 API 호출로 변경
       const url = searchName.trim()
-        ? `/api/products/search?name=${searchName}&page=${currentPage}&size=${pageSize}&sortBy=id`
-        : `/api/products/paging?page=${currentPage}&size=${pageSize}&sortBy=id`;
+        ? `/api/products/category/CPU/search?name=${searchName}&page=${currentPage}&size=${pageSize}&sortBy=id`
+        : `/api/products/category/CPU?page=${currentPage}&size=${pageSize}&sortBy=id`;
 
       const response = await api.get(url);
 
-      console.log("API 응답:", response.data); // 디버깅용
-
-      // 안전하게 데이터 접근
-      const content = response.data?.content || [];
-
-      // CPU 카테고리만 필터링
-      const cpuProducts = content.filter((p) => p.category === "CPU");
-
-      setProducts(cpuProducts);
+      // 필터링 불필요 - 이미 백엔드에서 CPU만 반환함
+      setProducts(response.data?.content || []);
       setTotalPages(response.data?.totalPages || 0);
       setTotalElements(response.data?.totalElements || 0);
     } catch (error) {

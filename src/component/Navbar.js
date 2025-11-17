@@ -17,7 +17,11 @@ function Navbar({ user, onLogout, role }) {
           <img src={logo} alt="로고" className="navbar-logo"></img>
         </Link>
         <div>
-          {!user && <Link to="/login">로그인</Link>}
+          {!user && (
+            <div className="user-container">
+              {!user && <Link to="/login">로그인</Link>}
+            </div>
+          )}
 
           {user && (
             <div className="user-menu-container">
