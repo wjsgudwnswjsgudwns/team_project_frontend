@@ -39,6 +39,11 @@ import InfoBoard from "./pages/InfoBoard";
 import Home2 from "./pages/Home2";
 import SetPassword from "./pages/SetPassword";
 import Footer from "./component/Footer";
+import Help from "./help/Help";
+import MyHelp from "./help/MyHelp";
+import HelpDetail from "./help/HelpDetail";
+import GuestInquiry from "./help/GuestInquiry";
+import HelpList from "./help/HelpList";
 
 function App() {
   const [user, setUser] = useState(null); // 현재 로그인한 유저의 이름
@@ -140,6 +145,12 @@ function App() {
               <OAuth2RedirectHandler onLogin={setUser} setRole={setRole} />
             }
           />
+          <Route path="/help" element={<Help />}></Route>
+          <Route path="/myhelp" element={<MyHelp />}></Route>
+          <Route path="/help/:id" element={<HelpDetail />}></Route>
+          <Route path="/guest-inquiry" element={<GuestInquiry />}></Route>
+          <Route path="/helplist" element={<HelpList />}></Route>
+
           <Route path="/set-password" element={<SetPassword />}></Route>
 
           <Route path="/input" element={<Input />}></Route>
