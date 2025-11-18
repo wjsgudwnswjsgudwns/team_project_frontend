@@ -31,6 +31,16 @@ function Navbar({ user, onLogout, role }) {
                 <Link to="/mypage" className="menu-item">
                   마이페이지
                 </Link>
+                {role === "ROLE_USER" && (
+                  <Link to="/myhelp" className="menu-item">
+                    내 문의
+                  </Link>
+                )}
+                {role === "ROLE_ADMIN" && (
+                  <Link to="/helplist" className="menu-item">
+                    문의 내역
+                  </Link>
+                )}
                 <button
                   className="menu-item logout-btn-dropdown"
                   onClick={onLogout}
@@ -65,6 +75,14 @@ function Navbar({ user, onLogout, role }) {
           <Link to="/cpu" className="sub-menu-item">
             PC 주요 구성
           </Link>
+          <div className="help-menu-container">
+            <div className="help-menu-item">고객센터</div>
+            <div className="help-dropdown-menu">
+              <Link to="/help" className="help-menu-item">
+                1 대 1 문의
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
 

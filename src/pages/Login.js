@@ -30,16 +30,11 @@ function Login({ onLogin, setRole }) {
       const token = loginResponse.data.token;
       const userRole = loginResponse.data.role;
 
-      console.log("받은 토큰:", token); // 🔍 디버깅용
-
-      // ✅ localStorage에 저장
+      // localStorage에 저장
       localStorage.setItem("token", token);
       localStorage.setItem("role", userRole);
 
-      // ✅ 중요: 저장된 값 확인
-      console.log("저장된 토큰:", localStorage.getItem("token"));
-
-      // ✅ 사용자 정보 가져오기 - 직접 헤더에 토큰 포함
+      // 사용자 정보 가져오기 - 직접 헤더에 토큰 포함
       const userResponse = await api.get("/api/auth/me", {
         headers: {
           Authorization: `Bearer ${token}`, // localStorage가 아닌 변수 사용
@@ -75,6 +70,7 @@ function Login({ onLogin, setRole }) {
     window.location.href = "http://localhost:8880/oauth2/authorization/naver";
   };
 
+  // 구글 로그인
   const handleGoogleLogin = () => {
     window.location.href = "http://localhost:8880/oauth2/authorization/google";
   };

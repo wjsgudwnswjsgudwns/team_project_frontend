@@ -1,7 +1,7 @@
 .footer {
   display: flex;
   justify-content: space-between;
-  border-top: 3px solid #ff3b30;
+  border-top: 2px solid #ff3b30;
 }
 
 .footer-container {

@@ -72,6 +72,13 @@ nav > div > a:hover {
   margin-right: 30px;
 }
 
+.help-menu-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-right: 30px;
+}
+
 .user-container {
   position: relative;
   display: flex;
@@ -126,8 +133,23 @@ nav > div > a:hover {
   border-radius: 0;
 }
 
+.help-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  /* left: 0; */
+  min-width: 140px;
+  background: #0a0a0a;
+  border: 2px solid #ffffff;
+  display: none;
+  align-items: center;
+}
+
 /* 호버 시 드롭다운 표시 */
 .user-menu-container:hover .dropdown-menu {
+  display: flex;
+}
+
+.help-menu-container:hover .help-dropdown-menu {
   display: flex;
 }
 
@@ -206,6 +228,27 @@ nav > div > a:hover {
 }
 
 .sub-menu-item:hover {
+  color: #ff3b30;
+  border-bottom-color: #ff3b30;
+  /* text-shadow 제거 */
+}
+
+.help-menu-item {
+  min-height: 50px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 25px;
+  font-size: 13px;
+  font-weight: 900;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+}
+
+.help-menu-item:hover {
   color: #ff3b30;
   border-bottom-color: #ff3b30;
   /* text-shadow 제거 */
