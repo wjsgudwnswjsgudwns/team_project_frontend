@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/axiosConfig";
+import HelpAnswer from "./HelpAnswer";
 import "../help/Help.css";
 
 function HelpDetail() {
@@ -19,6 +20,10 @@ function HelpDetail() {
       const response = await api.get(`/api/help/${id}`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
+
+      console.log("Help 데이터:", response.data);
+      console.log("isAnswered:", response.data.isAnswered);
+      console.log("helpAnswer 객체:", response.data.helpAnswer);
 
       setHelp(response.data);
     } catch (error) {
@@ -47,6 +52,10 @@ function HelpDetail() {
       console.error("삭제 실패:", error);
       alert(error.response?.data || "삭제 중 오류가 발생했습니다.");
     }
+  };
+
+  const handleAnswerUpdate = () => {
+    fetchHelpDetail();
   };
 
   const formatDate = (dateString) => {
@@ -134,6 +143,38 @@ function HelpDetail() {
               </div>
             </div>
           </>
+        )}
+
+        {/* 답변 섹션 추가 */}
+        {help.isAnswered && help.answer && (
+          <>
+            <div className="help-detail-divider"></div>
+            <div className="answer-display-readonly">
+              <div className="answer-header">
+                <h3>관리자 답변</h3>
+                <div className="answer-meta">
+                  <span className="answer-author">
+                    {help.answer.admin?.nickname || "관리자"}
+                  </span>
+                  {help.answer.answeredDate && (
+                    <span className="answer-date">
+                      {formatDate(help.answer.answeredDate)}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="answer-content">
+                <p>{help.answer.answer}</p>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* 디버깅용 - 나중에 제거 */}
+        {help.isAnswered && !help.answer && (
+          <div style={{ color: "yellow", padding: "20px" }}>
+            ⚠️ isAnswered는 true인데 answer 객체가 없습니다.
+          </div>
         )}
 
         <div className="help-detail-actions">
