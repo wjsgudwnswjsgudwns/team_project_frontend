@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axiosConfig";
+import HelpAnswer from "./HelpAnswer";
 import "../help/Help.css";
 
 function HelpList() {
@@ -23,16 +24,34 @@ function HelpList() {
         return;
       }
 
+      console.log("문의 목록 요청 시작...");
       const response = await api.get("/api/help/admin/list", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setHelps(response.data);
+      console.log("응답 전체:", response);
+      console.log("응답 데이터:", response.data);
+      console.log("데이터 타입:", typeof response.data);
+      console.log("배열 여부:", Array.isArray(response.data));
+
+      // 응답 데이터가 배열인지 확인
+      if (Array.isArray(response.data)) {
+        console.log("데이터 개수:", response.data.length);
+        setHelps(response.data);
+      } else {
+        console.error("예상치 못한 응답 형식:", response.data);
+        setHelps([]);
+      }
     } catch (error) {
       console.error("문의 목록 조회 실패:", error);
+      console.error("에러 응답:", error.response);
+      setHelps([]); // 에러 시 빈 배열로 설정
       if (error.response?.status === 403) {
         alert("관리자 권한이 필요합니다.");
         navigate("/");
+      } else if (error.response?.status === 401) {
+        alert("로그인이 필요합니다.");
+        navigate("/login");
       }
     } finally {
       setLoading(false);
@@ -99,6 +118,27 @@ function HelpList() {
     return true;
   });
 
+  // 답변 업데이트 후 목록 새로고침
+  const handleAnswerUpdate = () => {
+    fetchAllHelps();
+    // 현재 선택된 문의 정보도 업데이트
+    if (selectedHelp) {
+      fetchHelpDetail(selectedHelp.id);
+    }
+  };
+
+  const fetchHelpDetail = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await api.get(`/api/help/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setSelectedHelp(response.data);
+    } catch (error) {
+      console.error("문의 상세 조회 실패:", error);
+    }
+  };
+
   if (loading) {
     return <div className="loading">로딩 중...</div>;
   }
@@ -123,10 +163,10 @@ function HelpList() {
             </div>
             <span
               className={`status-badge ${
-                selectedHelp.answered ? "answered" : "pending"
+                selectedHelp.isAnswered ? "answered" : "pending"
               }`}
             >
-              {selectedHelp.answered ? "답변 완료" : "답변 대기"}
+              {selectedHelp.isAnswered ? "답변 완료" : "답변 대기"}
             </span>
           </div>
 
@@ -159,22 +199,21 @@ function HelpList() {
             )}
           </div>
 
+          <div className="help-detail-divider"></div>
+
+          {/* 답변 컴포넌트 추가 */}
+          <HelpAnswer
+            helpId={selectedHelp.id}
+            existingAnswer={selectedHelp.helpAnswer}
+            onAnswerUpdate={handleAnswerUpdate}
+          />
+
           <div className="help-detail-actions">
-            <button
-              className={`answer-btn ${
-                selectedHelp.answered ? "answered" : ""
-              }`}
-              onClick={() =>
-                handleAnswerToggle(selectedHelp.id, selectedHelp.answered)
-              }
-            >
-              {selectedHelp.answered ? "답변 취소" : "답변 완료"}
-            </button>
             <button
               className="delete-btn"
               onClick={() => handleDelete(selectedHelp.id)}
             >
-              삭제
+              문의 삭제
             </button>
           </div>
         </div>
@@ -186,7 +225,7 @@ function HelpList() {
   return (
     <div className="help-list-container admin">
       <div className="help-list-header">
-        <h2>전체 문의 관리 ({helps.length}건)</h2>
+        <h2>전체 문의 관리 ({Array.isArray(helps) ? helps.length : 0}건)</h2>
         <div className="filter-buttons">
           <button
             className={filter === "all" ? "active" : ""}
@@ -209,7 +248,7 @@ function HelpList() {
         </div>
       </div>
 
-      {filteredHelps.length === 0 ? (
+      {!Array.isArray(helps) || filteredHelps.length === 0 ? (
         <div className="empty-list">
           <p>문의가 없습니다.</p>
         </div>
@@ -233,7 +272,7 @@ function HelpList() {
                 </div>
                 <span
                   className={`status-badge ${
-                    help.idAnswered ? "answered" : "pending"
+                    help.isAnswered ? "answered" : "pending"
                   }`}
                 >
                   {help.isAnswered ? "답변 완료" : "답변 대기"}
