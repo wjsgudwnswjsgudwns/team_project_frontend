@@ -154,8 +154,11 @@ function Login({ onLogin, setRole }) {
         </button>
 
         <div className="login-signup-link">
-          <span>아직 계정이 없으신가요? </span>
           <Link to="/signup">회원가입</Link>
+          <span> / </span>
+          <Link to="/find-username">아이디 찾기</Link>
+          <span> / </span>
+          <Link to="/find-password">비밀번호 찾기</Link>
         </div>
       </div>
     </div>

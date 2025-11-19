@@ -44,6 +44,8 @@ import MyHelp from "./help/MyHelp";
 import HelpDetail from "./help/HelpDetail";
 import GuestInquiry from "./help/GuestInquiry";
 import HelpList from "./help/HelpList";
+import FindUsername from "./FindAccount/FindUsername";
+import FindPassword from "./FindAccount/FindPassword";
 
 function App() {
   const [user, setUser] = useState(null); // 현재 로그인한 유저의 이름
@@ -150,6 +152,9 @@ function App() {
           <Route path="/help/:id" element={<HelpDetail />}></Route>
           <Route path="/guest-inquiry" element={<GuestInquiry />}></Route>
           <Route path="/helplist" element={<HelpList />}></Route>
+
+          <Route path="/find-username" element={<FindUsername />} />
+          <Route path="/find-password" element={<FindPassword />} />
 
           <Route path="/set-password" element={<SetPassword />}></Route>
 
