@@ -1,4 +1,4 @@
-import logoImage from "../../images/logo-white-Photoroom.png";
+// import logoImage from "../../images/logo-white-Photoroom.png";
 
 export default function InfoPostList({
   posts,
@@ -14,6 +14,7 @@ export default function InfoPostList({
     );
   }
 
+  const logoImage = process.env.REACT_APP_LOGO_URL;
   return (
     <div className="posts-list">
       {posts.map((post) => (

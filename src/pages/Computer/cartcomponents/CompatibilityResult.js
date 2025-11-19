@@ -1,13 +1,14 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import "./CompatibilityResult.css";
-import cpuImage from "../../../images/cpu.png";
-import gpuImage from "../../../images/gpu.png";
-import caseImage from "../../../images/case.png";
-import mainboardImage from "../../../images/mainboard.png";
-import powerImage from "../../../images/power.png";
-import ramImage from "../../../images/ram.png";
 
 function CompatibilityResult() {
+  const cpuImage = process.env.REACT_APP_CPU_IMAGES_URL;
+  const gpuImage = process.env.REACT_APP_GPU_IMAGES_URL;
+  const caseImage = process.env.REACT_APP_CASE_IMAGES_URL;
+  const mainboardImage = process.env.REACT_APP_MAINBOARD_IMAGES_URL;
+  const powerImage = process.env.REACT_APP_POWER_IMAGES_URL;
+  const ramImage = process.env.REACT_APP_RAM_IMAGES_URL;
+
   const location = useLocation();
   const navigate = useNavigate();
 

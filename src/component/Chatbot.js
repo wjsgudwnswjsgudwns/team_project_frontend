@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Chatbot.css";
 import api from "../api/axiosConfig";
-import chatbot from "../images/chatbot.png";
+
 import {
   initialResponses,
   initialMessage,
@@ -9,6 +9,8 @@ import {
 } from "./chatbotResponses";
 
 const Chatbot = () => {
+  const chatbot = process.env.REACT_APP_CHATBOT_URL;
+
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([initialMessage]);
   const [inputMessage, setInputMessage] = useState("");
