@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Home.css";
-import home from "../videos/Untitled.mp4";
 
 function Home() {
+  const videoUrl = process.env.REACT_APP_HOME_VIDEO_URL;
+
   const [isBooting, setIsBooting] = useState(false);
   const [bootProgress, setBootProgress] = useState(0);
   const [bootText, setBootText] = useState("");
@@ -49,7 +50,7 @@ function Home() {
         id="video-background"
         className="video-background"
       >
-        <source src={home} type="video/mp4" />
+        <source src={videoUrl || ""} type="video/mp4" />
         당신의 브라우저는 비디오 태그를 지원하지 않습니다.
       </video>
 

@@ -3,13 +3,14 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Home2.css";
 import api from "../api/axiosConfig";
-import comm from "../images/comm.png";
-import home1 from "../images/home1.png";
-import home2 from "../images/home2.png";
-import home3 from "../images/home3.png";
-import home4 from "../images/home4.png";
 
 function Home2() {
+  const comm = process.env.REACT_APP_COMM_URL;
+  const home1 = process.env.REACT_APP_HOME1_URL;
+  const home2 = process.env.REACT_APP_HOME2_URL;
+  const home3 = process.env.REACT_APP_HOME3_URL;
+  const home4 = process.env.REACT_APP_HOME4_URL;
+
   const [recentPosts, setRecentPosts] = useState({
     infoBoardPosts: [],
     freeBoardPosts: [],

@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
-import logo from "../images/logo-white-Photoroom.png";
 import "./Navbar.css";
 import { useState } from "react";
 
 function Navbar({ user, onLogout, role }) {
+  const logo = process.env.REACT_APP_LOGO_URL;
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
