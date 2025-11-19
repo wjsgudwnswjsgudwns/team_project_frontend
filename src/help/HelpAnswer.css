@@ -94,10 +94,11 @@
   gap: 10px;
   margin-top: 20px;
   justify-content: flex-end;
+  align-items: stretch;
 }
 
-.answer-form-actions button {
-  padding: 12px 30px;
+.answer-form-actions .answer-submit-btn,
+.answer-form-actions .answer-cancel-btn {
   font-size: 14px;
   font-weight: 900;
   letter-spacing: 1px;
@@ -107,20 +108,26 @@
   border-radius: 0;
   font-family: "Pretendard", sans-serif;
   border: 2px solid;
+  box-sizing: border-box;
+  padding: 14px 32px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.answer-form-actions .submit-btn {
+.answer-form-actions .answer-submit-btn {
   background: transparent;
   border-color: #ff3b30;
   color: #ff3b30;
 }
 
-.answer-form-actions .submit-btn:hover:not(:disabled) {
+.answer-form-actions .answer-submit-btn:hover:not(:disabled) {
   background: #ff3b30;
   color: #000000;
 }
 
-.answer-form-actions .submit-btn:disabled {
+.answer-form-actions .answer-submit-btn:disabled {
   background: transparent;
   border-color: #666;
   color: #666;
@@ -128,18 +135,19 @@
   transform: none;
 }
 
-.answer-form-actions .cancel-btn {
+.answer-form-actions .answer-cancel-btn {
   background: transparent;
   border-color: #666;
   color: #666;
+  white-space: nowrap;
 }
 
-.answer-form-actions .cancel-btn:hover:not(:disabled) {
+.answer-form-actions .answer-cancel-btn:hover:not(:disabled) {
   background: #666;
   color: #ffffff;
 }
 
-.answer-form-actions .cancel-btn:disabled {
+.answer-form-actions .answer-cancel-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }

@@ -21,9 +21,9 @@ function HelpDetail() {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
 
-      console.log("Help 데이터:", response.data);
-      console.log("isAnswered:", response.data.isAnswered);
-      console.log("helpAnswer 객체:", response.data.helpAnswer);
+      console.log("📌 Help 전체 데이터:", response.data);
+      console.log("📌 answered 값:", response.data.answered);
+      console.log("📌 helpAnswer 존재:", response.data.helpAnswer);
 
       setHelp(response.data);
     } catch (error) {
@@ -94,11 +94,9 @@ function HelpDetail() {
             </span>
           </div>
           <span
-            className={`status-badge ${
-              help.isAnswered ? "answered" : "pending"
-            }`}
+            className={`status-badge ${help.answered ? "answered" : "pending"}`}
           >
-            {help.isAnswered ? "답변 완료" : "답변 대기"}
+            {help.answered ? "답변 완료" : "답변 대기"}
           </span>
         </div>
 
@@ -145,8 +143,8 @@ function HelpDetail() {
           </>
         )}
 
-        {/* 답변 섹션 추가 */}
-        {help.isAnswered && help.answer && (
+        {/* 답변 섹션 */}
+        {help.answered && help.helpAnswer && (
           <>
             <div className="help-detail-divider"></div>
             <div className="answer-display-readonly">
@@ -154,27 +152,20 @@ function HelpDetail() {
                 <h3>관리자 답변</h3>
                 <div className="answer-meta">
                   <span className="answer-author">
-                    {help.answer.admin?.nickname || "관리자"}
+                    {help.helpAnswer.admin?.nickname || "관리자"}
                   </span>
-                  {help.answer.answeredDate && (
+                  {help.helpAnswer.answeredDate && (
                     <span className="answer-date">
-                      {formatDate(help.answer.answeredDate)}
+                      {formatDate(help.helpAnswer.answeredDate)}
                     </span>
                   )}
                 </div>
               </div>
               <div className="answer-content">
-                <p>{help.answer.answer}</p>
+                <p>{help.helpAnswer.answer}</p>
               </div>
             </div>
           </>
-        )}
-
-        {/* 디버깅용 - 나중에 제거 */}
-        {help.isAnswered && !help.answer && (
-          <div style={{ color: "yellow", padding: "20px" }}>
-            ⚠️ isAnswered는 true인데 answer 객체가 없습니다.
-          </div>
         )}
 
         <div className="help-detail-actions">
