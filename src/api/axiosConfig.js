@@ -55,8 +55,17 @@ api.interceptors.response.use(
         error.config?.url?.includes("/api/counselboard") ||
         error.config?.url?.includes("/api/infoboard");
 
+      // ✅ 마이페이지 비밀번호 인증 요청도 예외 처리
+      const isPasswordVerify = error.config?.url?.includes(
+        "/api/mypage/verify-password"
+      );
+
       // 게시판 또는 초기 체크 요청이면 리다이렉트 하지 않음
-      if ((isGetRequest && isBoardRequest) || isInitialCheckUrl) {
+      if (
+        (isGetRequest && isBoardRequest) ||
+        isInitialCheckUrl ||
+        isPasswordVerify
+      ) {
         console.log("게시판 조회 또는 초기 체크 - 401 무시");
         return Promise.reject(error);
       }
