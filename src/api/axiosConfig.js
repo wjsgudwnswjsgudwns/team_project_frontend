@@ -55,7 +55,7 @@ api.interceptors.response.use(
         error.config?.url?.includes("/api/counselboard") ||
         error.config?.url?.includes("/api/infoboard");
 
-      // ✅ 마이페이지 비밀번호 인증 요청도 예외 처리
+      // 마이페이지 비밀번호 인증 요청도 예외 처리
       const isPasswordVerify = error.config?.url?.includes(
         "/api/mypage/verify-password"
       );
