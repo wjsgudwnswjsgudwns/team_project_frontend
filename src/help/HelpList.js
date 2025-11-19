@@ -11,9 +11,13 @@ function HelpList() {
   const [filter, setFilter] = useState("all");
   const [selectedHelp, setSelectedHelp] = useState(null);
 
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const size = 10;
+
   useEffect(() => {
     fetchAllHelps();
-  }, []);
+  }, [page]);
 
   const fetchAllHelps = async () => {
     try {
@@ -24,28 +28,18 @@ function HelpList() {
         return;
       }
 
-      console.log("문의 목록 요청 시작...");
       const response = await api.get("/api/help/admin/list", {
         headers: { Authorization: `Bearer ${token}` },
+        params: { page, size },
       });
 
-      console.log("응답 전체:", response);
-      console.log("응답 데이터:", response.data);
-      console.log("데이터 타입:", typeof response.data);
-      console.log("배열 여부:", Array.isArray(response.data));
-
-      // 응답 데이터가 배열인지 확인
-      if (Array.isArray(response.data)) {
-        console.log("데이터 개수:", response.data.length);
-        setHelps(response.data);
-      } else {
-        console.error("예상치 못한 응답 형식:", response.data);
-        setHelps([]);
+      if (response.data.content && Array.isArray(response.data.content)) {
+        setHelps(response.data.content);
+        setTotalPages(response.data.totalPages);
       }
     } catch (error) {
       console.error("문의 목록 조회 실패:", error);
-      console.error("에러 응답:", error.response);
-      setHelps([]); // 에러 시 빈 배열로 설정
+      setHelps([]);
       if (error.response?.status === 403) {
         alert("관리자 권한이 필요합니다.");
         navigate("/");
@@ -58,11 +52,18 @@ function HelpList() {
     }
   };
 
+  const handlePageChange = (newPage) => {
+    if (newPage >= 0 && newPage < totalPages) {
+      setPage(newPage);
+      window.scrollTo(0, 0);
+    }
+  };
+
   const handleAnswerToggle = async (id, currentStatus) => {
     try {
       const token = localStorage.getItem("token");
       await api.put(
-        `/api/help/admin/${id}/answer?isAnswered=${!currentStatus}`,
+        `/api/help/admin/${id}/answer?answered=${!currentStatus}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -113,8 +114,8 @@ function HelpList() {
   };
 
   const filteredHelps = helps.filter((help) => {
-    if (filter === "answered") return help.isAnswered;
-    if (filter === "pending") return !help.isAnswered;
+    if (filter === "answered") return help.answered;
+    if (filter === "pending") return !help.answered;
     return true;
   });
 
@@ -163,10 +164,10 @@ function HelpList() {
             </div>
             <span
               className={`status-badge ${
-                selectedHelp.isAnswered ? "answered" : "pending"
+                selectedHelp.answered ? "answered" : "pending"
               }`}
             >
-              {selectedHelp.isAnswered ? "답변 완료" : "답변 대기"}
+              {selectedHelp.answered ? "답변 완료" : "답변 대기"}
             </span>
           </div>
 
@@ -255,15 +256,14 @@ function HelpList() {
       ) : (
         <div className="help-list">
           {filteredHelps.map((help) => (
-            <div key={help.id} className="help-item admin">
+            <div
+              key={help.id}
+              className="help-item admin"
+              onClick={() => setSelectedHelp(help)}
+            >
               <div className="help-item-header">
                 <div>
-                  <h3
-                    className="help-title-clickable"
-                    onClick={() => setSelectedHelp(help)}
-                  >
-                    {help.title}
-                  </h3>
+                  <h3 className="help-title-clickable">{help.title}</h3>
                   <span className="author-info">
                     {help.user
                       ? `회원: ${help.user.nickname}`
@@ -272,10 +272,10 @@ function HelpList() {
                 </div>
                 <span
                   className={`status-badge ${
-                    help.isAnswered ? "answered" : "pending"
+                    help.answered ? "answered" : "pending"
                   }`}
                 >
-                  {help.isAnswered ? "답변 완료" : "답변 대기"}
+                  {help.answered ? "답변 완료" : "답변 대기"}
                 </span>
               </div>
               <div className="help-item-preview">
@@ -291,6 +291,39 @@ function HelpList() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* 페이징 - 목록 마지막에 추가 */}
+      {totalPages > 1 && (
+        <div className="pagination">
+          <button
+            className="page-btn"
+            onClick={() => handlePageChange(page - 1)}
+            disabled={page === 0}
+          >
+            이전
+          </button>
+
+          <div className="page-numbers">
+            {[...Array(totalPages)].map((_, index) => (
+              <button
+                key={index}
+                className={`page-number ${page === index ? "active" : ""}`}
+                onClick={() => handlePageChange(index)}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
+
+          <button
+            className="page-btn"
+            onClick={() => handlePageChange(page + 1)}
+            disabled={page === totalPages - 1}
+          >
+            다음
+          </button>
         </div>
       )}
     </div>

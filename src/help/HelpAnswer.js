@@ -102,12 +102,16 @@ function HelpAnswer({ helpId, existingAnswer, onAnswerUpdate }) {
               disabled={loading}
             />
             <div className="answer-form-actions">
-              <button type="submit" className="submit-btn" disabled={loading}>
+              <button
+                type="submit"
+                className="answer-submit-btn"
+                disabled={loading}
+              >
                 {loading ? "등록 중..." : "답변 등록"}
               </button>
               <button
                 type="button"
-                className="cancel-btn"
+                className="answer-cancel-btn"
                 onClick={() => {
                   setIsEditing(false);
                   setAnswerContent(existingAnswer?.answer || "");

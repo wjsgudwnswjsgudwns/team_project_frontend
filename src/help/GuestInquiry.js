@@ -6,17 +6,17 @@ import "../help/Help.css";
 function GuestInquiry() {
   const navigate = useNavigate();
 
-  // 이름 핸드폰 번호 입력 초기값 searchData -> GuestHelpDto
   const [searchData, setSearchData] = useState({
     name: "",
     phone: "",
   });
 
-  const [helps, setHelps] = useState([]); // 문의
-  const [searched, setSearched] = useState(false); // 검색 결과 영역을 화면 true -> 비회원 문의 내역 리스트
-  const [selectedHelp, setSelectedHelp] = useState(null); // 사용자가 선택한 특정 문의 항목
+  const [helps, setHelps] = useState([]);
+  const [searched, setSearched] = useState(false);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const size = 10;
 
-  // 값 입력
   const handleChange = (e) => {
     const { name, value } = e.target;
     setSearchData((prev) => ({
@@ -25,9 +25,10 @@ function GuestInquiry() {
     }));
   };
 
-  // 비회원 문의 조회
-  const handleSearch = async (e) => {
-    e.preventDefault();
+  const handleSearch = async (e, pageNum = 0) => {
+    if (e && e.preventDefault) {
+      e.preventDefault();
+    }
 
     if (!searchData.name.trim() || !searchData.phone.trim()) {
       alert("이름과 휴대폰 번호를 모두 입력해주세요.");
@@ -35,15 +36,19 @@ function GuestInquiry() {
     }
 
     try {
-      const response = await api.post("/api/help/guest/inquiry", searchData);
-      setHelps(response.data);
+      const response = await api.post("/api/help/guest/inquiry", searchData, {
+        params: { page: pageNum, size },
+      });
+      setHelps(response.data.content);
+      setTotalPages(response.data.totalPages);
+      setPage(pageNum);
       setSearched(true);
-      setSelectedHelp(null);
     } catch (error) {
       console.error("조회 실패:", error);
       if (error.response?.status === 404) {
         alert("해당 정보로 등록된 문의가 없습니다.");
         setHelps([]);
+        setTotalPages(0);
       } else {
         alert(error.response?.data || "조회 중 오류가 발생했습니다.");
       }
@@ -51,27 +56,13 @@ function GuestInquiry() {
     }
   };
 
-  // 문의 삭제
-  const handleDelete = async (id) => {
-    if (!window.confirm("정말 삭제하시겠습니까?")) {
-      return;
-    }
-
-    try {
-      await api.delete(`/api/help/guest/${id}`, {
-        data: searchData,
-      });
-
-      alert("삭제되었습니다.");
-      setSelectedHelp(null);
-      handleSearch(new Event("submit")); // 삭제 로직 후 목록 재호출
-    } catch (error) {
-      console.error("삭제 실패:", error);
-      alert(error.response?.data || "삭제 중 오류가 발생했습니다.");
+  const handlePageChange = (newPage) => {
+    if (newPage >= 0 && newPage < totalPages) {
+      handleSearch(null, newPage);
+      window.scrollTo(0, 0);
     }
   };
 
-  // 날짜
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("ko-KR", {
@@ -88,7 +79,6 @@ function GuestInquiry() {
       <div className="guest-inquiry-form-section">
         <div className="help-form-title">비회원 문의 조회</div>
 
-        {/* 조회 입력창 */}
         <form className="help-form" onSubmit={handleSearch}>
           <div className="form-group">
             <label className="form-label">이름</label>
@@ -127,39 +117,76 @@ function GuestInquiry() {
               <p>등록된 문의가 없습니다.</p>
             </div>
           ) : (
-            <div className="help-list">
-              <h3>문의 내역 ({helps.length}건)</h3>
-              {helps.map((help) => (
-                <div key={help.id} className="help-item">
-                  <div className="help-item-header">
-                    <h3
-                      className="help-title-clickable"
-                      onClick={() => navigate(`/help/${help.id}`)}
-                    >
-                      {help.title}
-                    </h3>
-                    <span
-                      className={`status-badge ${
-                        help.isAnswered ? "answered" : "pending"
-                      }`}
-                    >
-                      {help.isAnswered ? "답변 완료" : "답변 대기"}
-                    </span>
+            <>
+              <div className="help-list">
+                <h3>문의 내역 ({helps.length}건)</h3>
+                {helps.map((help) => (
+                  <div key={help.id} className="help-item">
+                    <div className="help-item-header">
+                      <h3
+                        className="help-title-clickable"
+                        onClick={() => navigate(`/help/${help.id}`)}
+                      >
+                        {help.title}
+                      </h3>
+                      <span
+                        className={`status-badge ${
+                          help.answered ? "answered" : "pending"
+                        }`}
+                      >
+                        {help.answered ? "답변 완료" : "답변 대기"}
+                      </span>
+                    </div>
+                    <div className="help-item-preview">
+                      <p>
+                        {help.content.substring(0, 100)}
+                        {help.content.length > 100 ? "..." : ""}
+                      </p>
+                    </div>
+                    <div className="help-item-footer">
+                      <span className="help-date">
+                        {formatDate(help.inquiryDate)}
+                      </span>
+                    </div>
                   </div>
-                  <div className="help-item-preview">
-                    <p>
-                      {help.content.substring(0, 100)}
-                      {help.content.length > 100 ? "..." : ""}
-                    </p>
+                ))}
+              </div>
+
+              {/* 페이징 */}
+              {totalPages > 1 && (
+                <div className="pagination">
+                  <button
+                    className="page-btn"
+                    onClick={() => handlePageChange(page - 1)}
+                    disabled={page === 0}
+                  >
+                    이전
+                  </button>
+
+                  <div className="page-numbers">
+                    {[...Array(totalPages)].map((_, index) => (
+                      <button
+                        key={index}
+                        className={`page-number ${
+                          page === index ? "active" : ""
+                        }`}
+                        onClick={() => handlePageChange(index)}
+                      >
+                        {index + 1}
+                      </button>
+                    ))}
                   </div>
-                  <div className="help-item-footer">
-                    <span className="help-date">
-                      {formatDate(help.inquiryDate)}
-                    </span>
-                  </div>
+
+                  <button
+                    className="page-btn"
+                    onClick={() => handlePageChange(page + 1)}
+                    disabled={page === totalPages - 1}
+                  >
+                    다음
+                  </button>
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           )}
         </div>
       )}

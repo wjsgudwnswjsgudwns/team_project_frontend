@@ -841,3 +841,78 @@
     min-width: auto;
   }
 }
+
+/* 페이징 스타일 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 40px;
+  padding: 20px 0;
+}
+
+.page-btn {
+  padding: 10px 20px;
+  background: transparent;
+  border: 2px solid #666;
+  color: #666;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: "Pretendard", sans-serif;
+}
+
+.page-btn:hover:not(:disabled) {
+  background: #666;
+  color: #ffffff;
+}
+
+.page-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.page-numbers {
+  display: flex;
+  gap: 5px;
+}
+
+.page-number {
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 2px solid #333;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: "Pretendard", sans-serif;
+}
+
+.page-number:hover {
+  background: #333;
+  border-color: #ff3b30;
+}
+
+.page-number.active {
+  background: #ff3b30;
+  border-color: #ff3b30;
+  color: #000000;
+}
+
+@media (max-width: 768px) {
+  .pagination {
+    flex-wrap: wrap;
+  }
+
+  .page-numbers {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    margin-top: 10px;
+  }
+}
