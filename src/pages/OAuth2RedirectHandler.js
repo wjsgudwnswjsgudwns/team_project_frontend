@@ -7,8 +7,11 @@ function OAuth2RedirectHandler({ onLogin, setRole }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // SecurityConfig에서 리다이렉트할 때 token을 쿼리 파라미터로 전달
+    console.log("=== OAuth2RedirectHandler 실행 ===");
+    console.log("전체 URL:", window.location.href);
+
     const token = searchParams.get("token");
+    console.log("토큰:", token);
 
     if (!token) {
       console.error("토큰이 없습니다.");
@@ -19,15 +22,18 @@ function OAuth2RedirectHandler({ onLogin, setRole }) {
 
     const fetchUserInfo = async () => {
       try {
+        console.log("토큰 저장 시작");
         // 토큰을 localStorage에 저장
         localStorage.setItem("token", token);
 
+        console.log("사용자 정보 요청");
         // axios 기본 헤더에 토큰 설정
         api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
         // 사용자 정보 가져오기
         const userResponse = await api.get("/api/auth/me");
         const { nickname, username, role, hasPassword } = userResponse.data;
+        console.log("사용자 정보:", userResponse.data);
 
         // role 저장
         if (role) {
@@ -51,6 +57,8 @@ function OAuth2RedirectHandler({ onLogin, setRole }) {
         localStorage.removeItem("role");
         alert("로그인 처리 중 오류가 발생했습니다.");
         navigate("/login");
+        console.error("에러 발생:", err);
+        console.error("에러 응답:", err.response);
       }
     };
 
