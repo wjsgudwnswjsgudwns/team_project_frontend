@@ -15,7 +15,7 @@ function Login({ onLogin, setRole }) {
     e.preventDefault();
     setIsLoading(true);
 
-    console.log("로그인 시도:", { username, password });
+    console.log("로그인 시도 : ", { username, password });
 
     try {
       // JSON 형식으로 전송
