@@ -10,14 +10,14 @@ const api = axios.create({
 // 요청 인터셉터
 api.interceptors.request.use(
   (config) => {
-    // ⭐ 항상 최신 토큰 가져오기
+    // 항상 최신 토큰 가져오기
     const token = localStorage.getItem("token");
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
-      console.log("🔑 요청 토큰:", token.substring(0, 20) + "...");
+      console.log("요청 토큰:", token.substring(0, 20) + "...");
     } else {
-      console.log("🔑 토큰 없음");
+      console.log("토큰 없음");
       delete config.headers.Authorization;
     }
 
