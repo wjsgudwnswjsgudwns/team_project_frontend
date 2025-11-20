@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import api from "../../../api/axiosConfig";
 
 export default function ProductList({ category, onAddToCart }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8080/api/products")
+    api
+      .get("api/products")
       .then((res) => {
         const filtered = res.data.filter((p) => p.category === category);
         setProducts(filtered);
@@ -16,7 +17,7 @@ export default function ProductList({ category, onAddToCart }) {
 
   const handleAdd = async (productId) => {
     try {
-      const res = await axios.post("http://localhost:8080/api/cart", {
+      const res = await api.post("/api/cart", {
         productId,
         quantity: 1,
       });

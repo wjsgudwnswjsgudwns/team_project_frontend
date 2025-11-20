@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import "./AiConsult.css";
+import api from "../api/axiosConfig";
 
 const AiConsult = () => {
   const [aiResult, setAiResult] = useState([]);
@@ -87,11 +88,7 @@ const AiConsult = () => {
     setSelectedEstimate(0);
 
     try {
-      const response = await fetch("http://localhost:8880/api/ai/consult", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ formData }),
-      });
+      const response = await api.post("/api/ai/consult", { formData });
 
       const data = await response.json();
       console.log("AI 응답:", data.result);
@@ -115,15 +112,15 @@ const AiConsult = () => {
             const enrichedParts = await Promise.all(
               estimate.부품목록.map(async (item) => {
                 try {
-                  const priceResponse = await fetch(
-                    `http://localhost:8880/api/price/product-info?productName=${encodeURIComponent(
+                  const priceResponse = await api.get(
+                    `/api/price/product-info?productName=${encodeURIComponent(
                       item["제품명"]
                     )}`
                   );
                   const priceData = await priceResponse.json();
 
-                  const imageResponse = await fetch(
-                    `http://localhost:8880/api/image/search?productName=${encodeURIComponent(
+                  const imageResponse = await api.get(
+                    `/api/image/search?productName=${encodeURIComponent(
                       item["제품명"]
                     )}`
                   );
