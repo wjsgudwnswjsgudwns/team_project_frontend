@@ -67,12 +67,14 @@ function Login({ onLogin, setRole }) {
 
   // 네이버 로그인
   const handleNaverLogin = () => {
-    window.location.href = "http://localhost:8880/oauth2/authorization/naver";
+    window.location.href =
+      "http://ec2-15-165-127-242.ap-northeast-2.compute.amazonaws.com:8880/oauth2/authorization/naver";
   };
 
   // 구글 로그인
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:8880/oauth2/authorization/google";
+    window.location.href =
+      "http://ec2-15-165-127-242.ap-northeast-2.compute.amazonaws.com:8880/oauth2/authorization/google";
   };
 
   return (
