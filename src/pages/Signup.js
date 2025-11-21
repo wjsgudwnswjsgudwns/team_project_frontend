@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react"; // ✅ useEffect import 확인
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api/axiosConfig";
 import "./Signup.css";
@@ -11,6 +11,14 @@ function Signup() {
   const [nickname, setNickname] = useState("");
   const [errors, setErrors] = useState({});
 
+  // ✅ 이메일 인증 상태
+  const [verificationCode, setVerificationCode] = useState("");
+  const [isCodeSent, setIsCodeSent] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [isSendingCode, setIsSendingCode] = useState(false);
+  const [isVerifyingCode, setIsVerifyingCode] = useState(false);
+  const [timer, setTimer] = useState(0);
+
   const [passwordValid, setPasswordValid] = useState({
     hasLetter: false,
     hasDigit: false,
@@ -20,10 +28,91 @@ function Signup() {
 
   const navigate = useNavigate();
 
+  // ✅ 타이머 카운트다운 (useState → useEffect로 수정)
+  useEffect(() => {
+    if (timer > 0) {
+      const interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [timer]);
+
+  // ✅ 이메일 인증 코드 발송
+  const handleSendVerificationCode = async () => {
+    if (!email) {
+      alert("이메일을 입력해주세요.");
+      return;
+    }
+
+    // 이메일 형식 검증
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert("올바른 이메일 형식이 아닙니다.");
+      return;
+    }
+
+    setIsSendingCode(true);
+
+    try {
+      const res = await api.post("/api/email/send-code", {
+        email,
+        purpose: "SIGNUP",
+      });
+
+      if (res.data.success) {
+        alert("인증 코드가 발송되었습니다. 이메일을 확인해주세요.");
+        setIsCodeSent(true);
+        setTimer(300); // 5분 타이머
+        setVerificationCode(""); // 인증 코드 입력란 초기화
+      }
+    } catch (err) {
+      alert(
+        "인증 코드 발송 실패: " + (err.response?.data?.message || err.message)
+      );
+    } finally {
+      setIsSendingCode(false);
+    }
+  };
+
+  // ✅ 인증 코드 확인
+  const handleVerifyCode = async () => {
+    if (!verificationCode) {
+      alert("인증 코드를 입력해주세요.");
+      return;
+    }
+
+    setIsVerifyingCode(true);
+
+    try {
+      const res = await api.post("/api/email/verify-code", {
+        email,
+        code: verificationCode,
+        purpose: "SIGNUP",
+      });
+
+      if (res.data.success) {
+        alert("이메일 인증이 완료되었습니다.");
+        setIsEmailVerified(true);
+        setTimer(0);
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || "인증 코드가 올바르지 않습니다.");
+    } finally {
+      setIsVerifyingCode(false);
+    }
+  };
+
   // 회원 가입
   const handleSignup = async (e) => {
     e.preventDefault();
     setErrors({});
+
+    // ✅ 이메일 인증 확인
+    if (!isEmailVerified) {
+      alert("이메일 인증을 완료해주세요.");
+      return;
+    }
 
     // ✅ 비밀번호 정규식 (영문 + 숫자 + 특수문자 + 8자 이상)
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
@@ -48,29 +137,16 @@ function Signup() {
       email,
       nickname,
     };
-    console.log("전송 데이터:", signupData);
 
     try {
       const response = await api.post("/api/auth/signup", signupData);
-      console.log("성공 응답:", response.data);
       alert("회원 가입 성공");
       navigate("/login");
     } catch (err) {
-      console.error("에러 전체:", err);
-      console.error("에러 응답:", err.response);
-      console.error("에러 데이터:", err.response?.data);
-
       if (err.response && err.response.status === 400) {
         const errorData = err.response.data;
-        console.log("400 에러 상세:", errorData);
         setErrors(errorData);
-
-        // 에러 메시지 콘솔 출력
-        Object.keys(errorData).forEach((key) => {
-          console.log(`${key}: ${errorData[key]}`);
-        });
       } else {
-        console.error("회원가입 실패:", err.message);
         alert("회원 가입 실패: " + err.message);
       }
     }
@@ -86,6 +162,13 @@ function Signup() {
       hasSpecial: /[^A-Za-z0-9]/.test(value),
       minLength: value.length >= 8,
     });
+  };
+
+  // ✅ 타이머 포맷 (MM:SS)
+  const formatTimer = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   return (
@@ -163,15 +246,117 @@ function Signup() {
             <p className="signup-error">{errors.passwordNotSame}</p>
           )}
 
-          <input
-            type="email"
-            className="signup-input"
-            placeholder="이메일"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+          {/* ✅ 이메일 입력 및 인증 */}
+          <div style={{ position: "relative" }}>
+            <input
+              type="email"
+              className="signup-input"
+              placeholder="이메일"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={isEmailVerified}
+              required
+              style={{
+                paddingRight: "120px",
+                background: isEmailVerified ? "#1a3a1a" : "",
+                borderColor: isEmailVerified ? "#10b981" : "",
+              }}
+            />
+            {!isEmailVerified && (
+              <button
+                type="button"
+                onClick={handleSendVerificationCode}
+                disabled={isSendingCode || (isCodeSent && timer > 0)}
+                style={{
+                  position: "absolute",
+                  right: "8px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  padding: "8px 16px",
+                  background: isCodeSent && timer > 0 ? "#555" : "#ffffff",
+                  color: isCodeSent && timer > 0 ? "#aaa" : "#000",
+                  border: "1px solid #555",
+                  cursor: isCodeSent && timer > 0 ? "not-allowed" : "pointer",
+                  fontSize: "12px",
+                  fontWeight: "700",
+                }}
+              >
+                {isSendingCode
+                  ? "발송중..."
+                  : isCodeSent && timer > 0
+                  ? "발송완료"
+                  : "인증코드 발송"}
+              </button>
+            )}
+            {isEmailVerified && (
+              <span
+                style={{
+                  position: "absolute",
+                  right: "16px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  color: "#10b981",
+                  fontSize: "12px",
+                  fontWeight: "700",
+                }}
+              >
+                ✅ 인증완료
+              </span>
+            )}
+          </div>
           {errors.email && <p className="signup-error">{errors.email}</p>}
+          {errors.emailNotVerified && (
+            <p className="signup-error">{errors.emailNotVerified}</p>
+          )}
+
+          {/* ✅ 인증 코드 입력 */}
+          {isCodeSent && !isEmailVerified && (
+            <div style={{ position: "relative", marginBottom: "30px" }}>
+              <input
+                type="text"
+                className="signup-input"
+                placeholder="인증 코드 6자리"
+                value={verificationCode}
+                onChange={(e) => setVerificationCode(e.target.value)}
+                maxLength={6}
+                style={{ paddingRight: "120px" }}
+              />
+              <button
+                type="button"
+                onClick={handleVerifyCode}
+                disabled={isVerifyingCode}
+                style={{
+                  position: "absolute",
+                  right: "8px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  padding: "8px 16px",
+                  background: "#ffffff",
+                  color: "#000",
+                  border: "1px solid #555",
+                  cursor: "pointer",
+                  fontSize: "12px",
+                  fontWeight: "700",
+                }}
+              >
+                {isVerifyingCode ? "확인중..." : "인증하기"}
+              </button>
+              {timer > 0 && (
+                <span
+                  style={{
+                    position: "absolute",
+                    left: "16px",
+                    bottom: "-24px",
+                    color: "#ff3b30",
+                    fontSize: "11px",
+                    fontWeight: "700",
+                  }}
+                >
+                  ⏱ {formatTimer(timer)}
+                </span>
+              )}
+            </div>
+          )}
 
           <button type="submit" className="signup-submit-btn">
             회원가입
