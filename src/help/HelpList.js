@@ -29,7 +29,6 @@ function HelpList() {
       }
 
       const response = await api.get("/api/help/admin/list", {
-        headers: { Authorization: `Bearer ${token}` },
         params: { page, size },
       });
 
@@ -40,11 +39,15 @@ function HelpList() {
     } catch (error) {
       console.error("문의 목록 조회 실패:", error);
       setHelps([]);
+
       if (error.response?.status === 403) {
         alert("관리자 권한이 필요합니다.");
         navigate("/");
       } else if (error.response?.status === 401) {
-        alert("로그인이 필요합니다.");
+        // ✅ 토큰이 만료되었을 가능성이 높음
+        alert("로그인이 만료되었습니다. 다시 로그인해주세요.");
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
         navigate("/login");
       }
     } finally {
@@ -64,13 +67,11 @@ function HelpList() {
       const token = localStorage.getItem("token");
       await api.put(
         `/api/help/admin/${id}/answer?answered=${!currentStatus}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
+        {}
       );
 
       alert("답변 상태가 변경되었습니다.");
 
-      // 선택된 항목 업데이트
       if (selectedHelp && selectedHelp.id === id) {
         setSelectedHelp({ ...selectedHelp, answered: !currentStatus });
       }
@@ -78,7 +79,16 @@ function HelpList() {
       fetchAllHelps();
     } catch (error) {
       console.error("상태 변경 실패:", error);
-      alert(error.response?.data || "상태 변경 중 오류가 발생했습니다.");
+
+      // ✅ 401 에러 처리 추가
+      if (error.response?.status === 401) {
+        alert("로그인이 만료되었습니다. 다시 로그인해주세요.");
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
+        navigate("/login");
+      } else {
+        alert(error.response?.data || "상태 변경 중 오류가 발생했습니다.");
+      }
     }
   };
 
@@ -89,16 +99,23 @@ function HelpList() {
 
     try {
       const token = localStorage.getItem("token");
-      await api.delete(`/api/help/admin/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await api.delete(`/api/help/admin/${id}`);
 
       alert("삭제되었습니다.");
       setSelectedHelp(null);
       fetchAllHelps();
     } catch (error) {
       console.error("삭제 실패:", error);
-      alert(error.response?.data || "삭제 중 오류가 발생했습니다.");
+
+      // ✅ 401 에러 처리 추가
+      if (error.response?.status === 401) {
+        alert("로그인이 만료되었습니다. 다시 로그인해주세요.");
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
+        navigate("/login");
+      } else {
+        alert(error.response?.data || "삭제 중 오류가 발생했습니다.");
+      }
     }
   };
 
@@ -131,12 +148,18 @@ function HelpList() {
   const fetchHelpDetail = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await api.get(`/api/help/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await api.get(`/api/help/${id}`);
       setSelectedHelp(response.data);
     } catch (error) {
       console.error("문의 상세 조회 실패:", error);
+
+      // ✅ 401 에러 처리 추가
+      if (error.response?.status === 401) {
+        alert("로그인이 만료되었습니다. 다시 로그인해주세요.");
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
+        navigate("/login");
+      }
     }
   };
 

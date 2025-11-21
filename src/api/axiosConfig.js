@@ -17,6 +17,15 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
       console.log("요청 토큰:", token.substring(0, 20) + "...");
+
+      // ✅ 토큰이 있을 때만 디코딩
+      try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        console.log("만료 시간:", new Date(payload.exp * 1000));
+        console.log("현재 시간:", new Date());
+      } catch (e) {
+        console.error("토큰 디코딩 실패:", e);
+      }
     } else {
       console.log("토큰 없음");
       delete config.headers.Authorization;
@@ -56,18 +65,14 @@ api.interceptors.response.use(
         error.config?.url?.includes("/api/counselboard") ||
         error.config?.url?.includes("/api/infoboard");
 
-      // 마이페이지 비밀번호 인증 요청도 예외 처리
-      const isPasswordVerify = error.config?.url?.includes(
-        "/api/mypage/verify-password"
-      );
+      const isHelpRequest = error.config?.url?.includes("/api/help");
 
       // 게시판 또는 초기 체크 요청이면 리다이렉트 하지 않음
       if (
-        (isGetRequest && isBoardRequest) ||
-        isInitialCheckUrl ||
-        isPasswordVerify
+        (isGetRequest && (isBoardRequest || isHelpRequest)) ||
+        isInitialCheckUrl
       ) {
-        console.log("게시판 조회 또는 초기 체크 - 401 무시");
+        console.log("게시판/Help 조회 또는 초기 체크 - 401 무시");
         return Promise.reject(error);
       }
 

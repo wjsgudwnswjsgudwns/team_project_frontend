@@ -90,7 +90,8 @@ const AiConsult = () => {
     try {
       const response = await api.post("/api/ai/consult", { formData });
 
-      const data = await response.json();
+      // ✅ 수정: response.json() → response.data
+      const data = response.data;
       console.log("AI 응답:", data.result);
 
       let jsonText = data.result || "";
@@ -117,14 +118,16 @@ const AiConsult = () => {
                       item["제품명"]
                     )}`
                   );
-                  const priceData = await priceResponse.json();
+                  // ✅ 수정: priceResponse.json() → priceResponse.data
+                  const priceData = priceResponse.data;
 
                   const imageResponse = await api.get(
                     `/api/image/search?productName=${encodeURIComponent(
                       item["제품명"]
                     )}`
                   );
-                  const imageData = await imageResponse.json();
+                  // ✅ 수정: imageResponse.json() → imageResponse.data
+                  const imageData = imageResponse.data;
 
                   return {
                     ...item,
