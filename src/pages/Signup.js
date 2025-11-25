@@ -67,9 +67,14 @@ function Signup() {
         setVerificationCode(""); // 인증 코드 입력란 초기화
       }
     } catch (err) {
-      alert(
-        "인증 코드 발송 실패: " + (err.response?.data?.message || err.message)
-      );
+      // ✅ 이메일 중복 에러 처리 추가
+      if (err.response?.data?.error?.includes("이미 가입된 이메일")) {
+        alert("이미 가입된 이메일입니다.");
+      } else {
+        alert(
+          "인증 코드 발송 실패: " + (err.response?.data?.message || err.message)
+        );
+      }
     } finally {
       setIsSendingCode(false);
     }
@@ -146,6 +151,9 @@ function Signup() {
       if (err.response && err.response.status === 400) {
         const errorData = err.response.data;
         setErrors(errorData);
+        if (errorData.emailDuplicated) {
+          alert(errorData.emailDuplicated);
+        }
       } else {
         alert("회원 가입 실패: " + err.message);
       }
@@ -305,6 +313,9 @@ function Signup() {
             )}
           </div>
           {errors.email && <p className="signup-error">{errors.email}</p>}
+          {errors.emailDuplicated && (
+            <p className="signup-error">{errors.emailDuplicated}</p>
+          )}
           {errors.emailNotVerified && (
             <p className="signup-error">{errors.emailNotVerified}</p>
           )}
