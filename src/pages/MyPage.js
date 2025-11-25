@@ -27,6 +27,19 @@ export default function MyPage() {
     email: "",
   });
 
+  // ✅ 이메일 인증 관련 상태 추가
+  const [emailVerification, setEmailVerification] = useState({
+    isChanging: false, // 이메일 변경 중인지
+    newEmail: "", // 새로운 이메일
+    verificationCode: "", // 인증 코드
+    isCodeSent: false, // 인증 코드 발송 여부
+    isSending: false, // 발송 중
+    isVerifying: false, // 인증 중
+    isVerified: false, // 인증 완료 여부
+    timer: 300, // 5분 타이머
+    timerInterval: null, // 타이머 인터벌
+  });
+
   // 회원탈퇴
   const [deletePassword, setDeletePassword] = useState("");
 
@@ -38,6 +51,27 @@ export default function MyPage() {
       navigate("/login");
     }
   }, [navigate]);
+
+  // ✅ 이메일 인증 타이머
+  useEffect(() => {
+    if (emailVerification.isCodeSent && emailVerification.timer > 0) {
+      const interval = setInterval(() => {
+        setEmailVerification((prev) => ({
+          ...prev,
+          timer: prev.timer - 1,
+        }));
+      }, 1000);
+
+      return () => clearInterval(interval);
+    } else if (emailVerification.timer === 0 && emailVerification.isCodeSent) {
+      setEmailVerification((prev) => ({
+        ...prev,
+        isCodeSent: false,
+        verificationCode: "",
+      }));
+      alert("인증 시간이 만료되었습니다. 다시 시도해주세요.");
+    }
+  }, [emailVerification.isCodeSent, emailVerification.timer]);
 
   // 비밀번호 인증
   const handleVerifyPassword = async (e) => {
@@ -88,6 +122,114 @@ export default function MyPage() {
     }
   };
 
+  // ✅ 이메일 변경 시작
+  const handleStartEmailChange = () => {
+    setEmailVerification({
+      ...emailVerification,
+      isChanging: true,
+      newEmail: updateForm.email,
+      verificationCode: "",
+      isCodeSent: false,
+      isVerified: false,
+      timer: 300,
+    });
+  };
+
+  // ✅ 이메일 변경 취소
+  const handleCancelEmailChange = () => {
+    setEmailVerification({
+      isChanging: false,
+      newEmail: "",
+      verificationCode: "",
+      isCodeSent: false,
+      isSending: false,
+      isVerifying: false,
+      isVerified: false,
+      timer: 300,
+      timerInterval: null,
+    });
+    setUpdateForm((prev) => ({ ...prev, email: myPageData.email }));
+  };
+
+  // ✅ 인증 코드 발송
+  const handleSendVerificationCode = async () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailVerification.newEmail)) {
+      alert("올바른 이메일 형식이 아닙니다.");
+      return;
+    }
+
+    if (emailVerification.newEmail === myPageData.email) {
+      alert("현재 이메일과 동일합니다.");
+      return;
+    }
+
+    setEmailVerification((prev) => ({ ...prev, isSending: true }));
+
+    try {
+      const res = await api.post("/api/email/send-code", {
+        email: emailVerification.newEmail,
+        purpose: "CHANGE_EMAIL",
+      });
+
+      if (res.data.success) {
+        alert("인증 코드가 발송되었습니다. 이메일을 확인해주세요.");
+        setEmailVerification((prev) => ({
+          ...prev,
+          isCodeSent: true,
+          timer: 300, // 5분 리셋
+        }));
+      }
+    } catch (err) {
+      alert(
+        "인증 코드 발송 실패: " + (err.response?.data?.message || err.message)
+      );
+    } finally {
+      setEmailVerification((prev) => ({ ...prev, isSending: false }));
+    }
+  };
+
+  // ✅ 인증 코드 확인
+  const handleVerifyCode = async () => {
+    if (!emailVerification.verificationCode) {
+      alert("인증 코드를 입력해주세요.");
+      return;
+    }
+
+    setEmailVerification((prev) => ({ ...prev, isVerifying: true }));
+
+    try {
+      const res = await api.post("/api/email/verify-code", {
+        email: emailVerification.newEmail,
+        code: emailVerification.verificationCode,
+        purpose: "CHANGE_EMAIL",
+      });
+
+      if (res.data.success) {
+        alert("이메일 인증이 완료되었습니다.");
+        setEmailVerification((prev) => ({
+          ...prev,
+          isVerified: true,
+          isCodeSent: false,
+        }));
+      }
+    } catch (err) {
+      alert(
+        "인증 실패: " +
+          (err.response?.data?.message || "인증 코드가 올바르지 않습니다.")
+      );
+    } finally {
+      setEmailVerification((prev) => ({ ...prev, isVerifying: false }));
+    }
+  };
+
+  // ✅ 타이머 포맷팅 (분:초)
+  const formatTimer = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
   // 회원정보 수정
   const handleUpdateInfo = async (e) => {
     e.preventDefault();
@@ -95,6 +237,15 @@ export default function MyPage() {
     // OAuth 사용자가 아닌 경우 비밀번호 필수
     if (!myPageData.provider && !updateForm.currentPassword) {
       alert("현재 비밀번호를 입력해주세요.");
+      return;
+    }
+
+    // ✅ 이메일이 변경되었는데 인증이 완료되지 않은 경우
+    if (
+      updateForm.email !== myPageData.email &&
+      !emailVerification.isVerified
+    ) {
+      alert("새 이메일 인증을 완료해주세요.");
       return;
     }
 
@@ -120,6 +271,20 @@ export default function MyPage() {
 
       if (res.data.success) {
         alert(res.data.message);
+
+        // ✅ 이메일 인증 상태 초기화
+        setEmailVerification({
+          isChanging: false,
+          newEmail: "",
+          verificationCode: "",
+          isCodeSent: false,
+          isSending: false,
+          isVerifying: false,
+          isVerified: false,
+          timer: 300,
+          timerInterval: null,
+        });
+
         fetchMyPageData(); // 데이터 갱신
         // 비밀번호 필드 초기화
         setUpdateForm({
@@ -392,18 +557,215 @@ export default function MyPage() {
                 />
               </div>
 
+              {/* ✅ 이메일 입력 및 인증 */}
               <div className="form-group">
                 <label className="form-label">이메일 *</label>
-                <input
-                  type="email"
-                  className="form-input"
-                  placeholder="이메일"
-                  value={updateForm.email}
-                  onChange={(e) =>
-                    setUpdateForm({ ...updateForm, email: e.target.value })
-                  }
-                  required
-                />
+
+                {!emailVerification.isChanging ? (
+                  // 이메일 변경 전 - 현재 이메일 표시
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "12px",
+                      alignItems: "center",
+                    }}
+                  >
+                    <input
+                      type="email"
+                      className="form-input"
+                      value={updateForm.email}
+                      onChange={(e) =>
+                        setUpdateForm({ ...updateForm, email: e.target.value })
+                      }
+                      required
+                    />
+                    {updateForm.email !== myPageData.email && (
+                      <button
+                        type="button"
+                        className="primary-btn"
+                        style={{ whiteSpace: "nowrap", padding: "16px 24px" }}
+                        onClick={handleStartEmailChange}
+                      >
+                        인증하기
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  // 이메일 변경 중 - 인증 프로세스
+                  <div
+                    style={{
+                      padding: "20px",
+                      background: "rgba(30, 30, 30, 0.5)",
+                      border: "1px solid #444",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "12px",
+                        alignItems: "center",
+                        marginBottom: "16px",
+                      }}
+                    >
+                      <input
+                        type="email"
+                        className="form-input"
+                        placeholder="새 이메일 입력"
+                        value={emailVerification.newEmail}
+                        onChange={(e) => {
+                          setEmailVerification({
+                            ...emailVerification,
+                            newEmail: e.target.value,
+                          });
+                          setUpdateForm({
+                            ...updateForm,
+                            email: e.target.value,
+                          });
+                        }}
+                        disabled={
+                          emailVerification.isCodeSent ||
+                          emailVerification.isVerified
+                        }
+                        style={{ margin: 0 }}
+                      />
+
+                      {!emailVerification.isVerified && (
+                        <>
+                          {!emailVerification.isCodeSent ? (
+                            <button
+                              type="button"
+                              className="primary-btn"
+                              style={{
+                                whiteSpace: "nowrap",
+                                padding: "16px 24px",
+                                background: "rgba(16, 185, 129, 0.2)",
+                                color: "#10b981",
+                                borderColor: "#10b981",
+                              }}
+                              onClick={handleSendVerificationCode}
+                              disabled={emailVerification.isSending}
+                            >
+                              {emailVerification.isSending
+                                ? "발송 중..."
+                                : "인증코드 발송"}
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              className="primary-btn"
+                              style={{
+                                whiteSpace: "nowrap",
+                                padding: "16px 24px",
+                                background: "rgba(100, 100, 100, 0.2)",
+                                color: "#888",
+                                borderColor: "#666",
+                              }}
+                              onClick={handleSendVerificationCode}
+                              disabled={emailVerification.isSending}
+                            >
+                              재발송
+                            </button>
+                          )}
+                        </>
+                      )}
+                    </div>
+
+                    {emailVerification.isCodeSent &&
+                      !emailVerification.isVerified && (
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "12px",
+                            alignItems: "center",
+                            marginBottom: "16px",
+                          }}
+                        >
+                          <input
+                            type="text"
+                            className="form-input"
+                            placeholder="인증코드 6자리"
+                            value={emailVerification.verificationCode}
+                            onChange={(e) =>
+                              setEmailVerification({
+                                ...emailVerification,
+                                verificationCode: e.target.value,
+                              })
+                            }
+                            maxLength={6}
+                            style={{
+                              margin: 0,
+                              textAlign: "center",
+                              letterSpacing: "4px",
+                            }}
+                          />
+                          <button
+                            type="button"
+                            className="primary-btn"
+                            style={{
+                              whiteSpace: "nowrap",
+                              padding: "16px 24px",
+                              background: "rgba(16, 185, 129, 0.2)",
+                              color: "#10b981",
+                              borderColor: "#10b981",
+                            }}
+                            onClick={handleVerifyCode}
+                            disabled={emailVerification.isVerifying}
+                          >
+                            {emailVerification.isVerifying
+                              ? "확인 중..."
+                              : "인증하기"}
+                          </button>
+                          <span
+                            style={{
+                              color: "#ff3b30",
+                              fontSize: "14px",
+                              fontWeight: 900,
+                              minWidth: "50px",
+                              textAlign: "center",
+                            }}
+                          >
+                            {formatTimer(emailVerification.timer)}
+                          </span>
+                        </div>
+                      )}
+
+                    {emailVerification.isVerified && (
+                      <div
+                        style={{
+                          padding: "12px",
+                          background: "rgba(16, 185, 129, 0.2)",
+                          color: "#10b981",
+                          border: "1px solid #10b981",
+                          textAlign: "center",
+                          fontSize: "13px",
+                          fontWeight: 900,
+                          letterSpacing: "1px",
+                          marginBottom: "16px",
+                        }}
+                      >
+                        ✓ 이메일 인증 완료
+                      </div>
+                    )}
+
+                    <button
+                      type="button"
+                      style={{
+                        padding: "12px 20px",
+                        background: "transparent",
+                        color: "#888",
+                        border: "1px solid #666",
+                        cursor: "pointer",
+                        fontSize: "12px",
+                        fontWeight: 700,
+                        width: "100%",
+                        transition: "all 0.3s",
+                      }}
+                      onClick={handleCancelEmailChange}
+                    >
+                      변경 취소
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className="button-group">
@@ -414,82 +776,6 @@ export default function MyPage() {
             </form>
           </div>
         )}
-
-        {/* 활동내역 탭
-        {activeTab === "activity" && (
-          <div className="mypage-content-box">
-            <h3 className="section-title">최근 작성 글</h3>
-            {myPageData.recentPosts.length === 0 ? (
-              <div className="empty-message">작성한 게시글이 없습니다.</div>
-            ) : (
-              <div className="post-list">
-                {myPageData.recentPosts.map((post) => (
-                  <div
-                    key={`${post.boardType}-${post.id}`}
-                    className="post-item"
-                    onClick={() => handlePostClick(post)}
-                  >
-                    <div className="post-title">
-                      <span className="board-type-badge">
-                        {post.boardType === "free"
-                          ? "자유"
-                          : post.boardType === "counsel"
-                          ? "상담"
-                          : "정보"}
-                      </span>
-                      {post.title}
-                    </div>
-                    <div className="post-meta">
-                      <span>
-                        {new Date(post.writeTime).toLocaleDateString("ko-KR")}
-                      </span>
-                      <span>·</span>
-                      <span>조회 {post.views}</span>
-                      <span>·</span>
-                      <span>좋아요 {post.likes}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <h3 className="section-title" style={{ marginTop: "48px" }}>
-              최근 작성 댓글
-            </h3>
-            {myPageData.recentComments.length === 0 ? (
-              <div className="empty-message">작성한 댓글이 없습니다.</div>
-            ) : (
-              <div className="comment-list">
-                {myPageData.recentComments.map((comment) => (
-                  <div
-                    key={`${comment.boardType}-${comment.id}`}
-                    className="comment-item"
-                    onClick={() => handleCommentClick(comment)}
-                  >
-                    <div className="comment-board-title">
-                      <span className="board-type-badge">
-                        {comment.boardType === "free"
-                          ? "자유"
-                          : comment.boardType === "counsel"
-                          ? "상담"
-                          : "정보"}
-                      </span>
-                      {comment.boardTitle}
-                    </div>
-                    <div className="comment-content">{comment.content}</div>
-                    <div className="comment-meta">
-                      <span>
-                        {new Date(comment.writeTime).toLocaleDateString(
-                          "ko-KR"
-                        )}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )} */}
 
         {/* 회원탈퇴 탭 */}
         {activeTab === "delete" && (
