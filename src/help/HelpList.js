@@ -99,7 +99,7 @@ function HelpList() {
 
     try {
       const token = localStorage.getItem("token");
-      await api.delete(`/api/help/admin/${id}`);
+      await api.delete(`/api/help/${id}`);
 
       alert("삭제되었습니다.");
       setSelectedHelp(null);

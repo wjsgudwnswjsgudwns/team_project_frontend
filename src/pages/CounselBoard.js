@@ -20,6 +20,10 @@ export default function CounselBoard() {
 
   const isNavigatingRef = useRef(false);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const { currentUsername } = useAuth();
   const {
     posts,

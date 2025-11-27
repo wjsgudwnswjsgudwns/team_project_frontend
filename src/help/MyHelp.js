@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import api from "../api/axiosConfig";
 import "../help/Help.css";
 
@@ -11,9 +11,11 @@ function MyHelp() {
   const [totalPages, setTotalPages] = useState(0);
   const size = 10;
 
+  const location = useLocation();
+
   useEffect(() => {
     fetchMyHelps();
-  }, [page]);
+  }, [page, location.state?.refresh]);
 
   const fetchMyHelps = async () => {
     try {
@@ -29,8 +31,8 @@ function MyHelp() {
         params: { page, size },
       });
 
-      setHelps(response.data.content);
-      setTotalPages(response.data.totalPages);
+      setHelps(response.data?.content || []);
+      setTotalPages(response.data?.totalPages || 0);
     } catch (error) {
       console.error("문의 목록 조회 실패:", error);
       if (error.response?.status === 401) {
@@ -100,8 +102,8 @@ function MyHelp() {
                 </div>
                 <div className="help-item-preview">
                   <p>
-                    {help.content.substring(0, 100)}
-                    {help.content.length > 100 ? "..." : ""}
+                    {(help.content || "내용 없음").substring(0, 100)}
+                    {(help.content || "").length > 100 ? "..." : ""}
                   </p>
                 </div>
                 <div className="help-item-footer">
