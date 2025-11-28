@@ -74,17 +74,23 @@ function App() {
     }
   }, []);
 
-  // 라우트 변경 시 스크롤 최상단으로 (필요한 경우만)
-  useEffect(() => {
-    // freeboard detail에서 detail로 이동할 때는 스크롤 유지
-    if (
-      location.pathname === "/freeboard" &&
-      location.search.includes("tab=detail")
-    ) {
-      return; // 스크롤 유지
-    }
+  // // 라우트 변경 시 스크롤 최상단으로 (필요한 경우만)
+  // useEffect(() => {
+  //   // freeboard detail에서 detail로 이동할 때는 스크롤 유지
+  //   if (
+  //     location.pathname === "/freeboard" &&
+  //     location.search.includes("tab=detail")
+  //   ) {
+  //     return; // 스크롤 유지
+  //   }
 
+  //   window.scrollTo(0, 0);
+  // }, [location.pathname, location.search]);
+
+  useEffect(() => {
     window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   }, [location.pathname, location.search]);
 
   // 사용자 확인

@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import "./CompatibilityResult.css";
+import { useEffect } from "react";
 
 function CompatibilityResult() {
   const cpuImage = process.env.REACT_APP_CPU_IMAGES_URL;
@@ -11,6 +12,28 @@ function CompatibilityResult() {
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  // 컴포넌트 마운트 시 강제로 최상단 스크롤
+  useEffect(() => {
+    // 즉시 실행
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    // DOM 렌더링 완료 후 다시 한번 실행
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }, 0);
+
+    // 안전하게 한번 더 (100ms 후)
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }, 100);
+  }, []);
 
   const raw = location.state?.results;
   let results = Array.isArray(raw) ? raw : [];

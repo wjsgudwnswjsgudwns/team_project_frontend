@@ -24,6 +24,10 @@ export default function InfoBoard() {
 
   const { currentUsername } = useAuth();
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // role 가져오기 (App.js에서 전달받거나 localStorage에서)
   const role = localStorage.getItem("role");
 

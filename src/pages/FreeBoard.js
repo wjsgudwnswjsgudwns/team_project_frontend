@@ -18,6 +18,10 @@ export default function FreeBoard() {
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState(null);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // ✅ 중복 navigate 방지용 ref
   const isNavigatingRef = useRef(false);
 

@@ -72,8 +72,10 @@ function Help() {
 
       // 회원이면 내 문의로, 비회원이면 홈으로
       if (token) {
+        alert("문의가 접수 되었습니다.");
         navigate("/myhelp");
       } else {
+        alert("문의가 접수 되었습니다.");
         navigate("/");
       }
     } catch (error) {
